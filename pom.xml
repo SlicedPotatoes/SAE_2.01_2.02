@@ -72,7 +72,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.batobleu.sae_201_202/com.batobleu.sae_201_202.HelloApplication</mainClass>
+              <mainClass>com.batobleu.sae_201_202/com.batobleu.sae_201_202.controller.MainApplication</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

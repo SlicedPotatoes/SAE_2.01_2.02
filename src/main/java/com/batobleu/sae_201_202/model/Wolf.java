@@ -1,0 +1,23 @@
+package com.batobleu.sae_201_202.model;
+
+import com.batobleu.sae_201_202.exception.IllegalMoveException;
+
+public class Wolf extends Entity {
+    private Simulation theSimulation;
+
+    public Wolf(int _x, int _y, int _speed, Simulation s) {
+        super(_x, _y, _speed);
+        this.theSimulation = s;
+    }
+
+    @Override
+    public void move(int dX, int dY) throws IndexOutOfBoundsException, IllegalMoveException {
+        super.move(dX, dY, this.theSimulation.getMap());
+
+        Sheep s = theSimulation.getSheep();
+
+        if(s.getX() == this.x && s.getY() == this.y) {
+            s.eaten();
+        }
+    }
+}

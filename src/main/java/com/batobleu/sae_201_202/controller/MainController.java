@@ -1,9 +1,9 @@
-package com.batobleu.sae_201_202;
+package com.batobleu.sae_201_202.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class MainController {
     @FXML
     private Label welcomeText;
 
