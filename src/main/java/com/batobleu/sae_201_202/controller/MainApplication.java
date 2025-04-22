@@ -1,5 +1,7 @@
 package com.batobleu.sae_201_202.controller;
 
+import com.batobleu.sae_201_202.model.Case;
+import com.batobleu.sae_201_202.model.Simulation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +20,39 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        Simulation s = new Simulation(6,6);
+        afficherMap(s);
+    }
+
+    public static void afficherMap(Simulation s){
+        StringBuilder out = new StringBuilder();
+        String str = "";
+        for (int i = 0; i < s.getNy(); i++) {
+            str += "+---";
+        }
+        str += "+\n";
+        out.append(str);
+        Case[][] map = s.getMap();
+        for(int i = 0; i < map.length; i++){
+            out.append("| ");
+            for(int j = 0; j < map[0].length; j++){
+                if (map[i][j] == Case.Grass) {
+                    out.append("\033[92mG\033[0m");
+                }
+                else if (map[i][j] == Case.Poppy) {
+                    out.append("\033[91mP\033[0m");
+                }
+                else if (map[i][j] == Case.Cactus) {
+                    out.append("\033[93mC\033[0m");
+                }
+                else if (map[i][j] == Case.Rock) {
+                    out.append("\033[90mR\033[0m");
+                }
+                out.append(" | ");
+            }
+            out.append("\n");
+            out.append(str);
+        }
+        System.out.println(out);
     }
 }
