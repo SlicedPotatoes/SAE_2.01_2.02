@@ -39,20 +39,14 @@ public class RectangleLateral {
         //Tout les Carrés des décors avec leurs label
         //Cactus
         Rectangle r1 = rectangle(0,"Cactus");
-        System.out.println("Passer");
-
         //Marguerite
         Rectangle r2 = rectangle(1,"Marguerite");
-        System.out.println("Passer");
         //Rocher
         Rectangle r3 = rectangle(2,"Rocher");
-        System.out.println("Passer");
         //Herbe
         Rectangle r4 = rectangle(3,"Herbe");
-        System.out.println("Passer");
         //sortie
-        Rectangle r5 = rectangle(4,"Sortie");
-        System.out.println("Passer");
+        Rectangle r5 = rectangle(4,"Exit");
         //Boutton Reset
         Button Reset = new Button();
         Reset.setText("Reset");
@@ -85,13 +79,11 @@ public class RectangleLateral {
         l.setTranslateY(95 + 70 * order);
         root.getChildren().add(l);
 
-        if (labelText != "Sortie") {
-            String path = "/Image/" + labelText + ".png";
-            System.out.println(path);
-            Image image = new Image(getClass().getResource(path).toExternalForm());
-            ImagePattern pattern = new ImagePattern(image);
-            r.setFill(pattern);
-        }
+        String path = "/Image/" + labelText + ".png";
+        System.out.println(path);
+        Image image = new Image(getClass().getResource(path).toExternalForm());
+        ImagePattern pattern = new ImagePattern(image);
+        r.setFill(pattern);
         return r;
     }
 }
