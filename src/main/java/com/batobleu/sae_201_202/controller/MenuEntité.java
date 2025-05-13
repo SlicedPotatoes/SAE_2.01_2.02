@@ -29,7 +29,7 @@ public class MenuEntité {
         rectangle.setStroke(Color.BLACK);
         root.getChildren().add(rectangle);
 
-        //Label décor
+        //Label Entité
         Label l1 = new Label("Entité");
         l1.setTranslateX(60);
         l1.setTranslateY(55);
