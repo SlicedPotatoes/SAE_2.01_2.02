@@ -1,5 +1,7 @@
 package com.batobleu.sae_201_202.controller;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,10 +15,12 @@ public class RectangleLateral {
 
     Scene scene;
     Group root;
+    Group g;
 
     public RectangleLateral(Scene s, Group r) {
         scene = s;
         root = r;
+        g = new Group();
     }
 
     public void ajoutElement(){
@@ -28,13 +32,13 @@ public class RectangleLateral {
         rectangle.setY(50);
         rectangle.setFill(Color.LIGHTBLUE);
         rectangle.setStroke(Color.BLACK);
-        root.getChildren().add(rectangle);
+        g.getChildren().add(rectangle);
 
         //Label décor
         Label l1 = new Label("Décor");
         l1.setTranslateX(60);
         l1.setTranslateY(55);
-        root.getChildren().add(l1);
+        g.getChildren().add(l1);
 
         //Tout les Carrés des décors avec leurs label
         //Cactus
@@ -54,7 +58,7 @@ public class RectangleLateral {
         Reset.setTranslateY(r5.getY()+70);
         Reset.setPrefHeight(30);
         Reset.setPrefWidth(110);
-        root.getChildren().add(Reset);
+        g.getChildren().add(Reset);
 
         //Boutton Valider
         Button Valider = new Button();
@@ -63,7 +67,14 @@ public class RectangleLateral {
         Valider.setTranslateY(r5.getY()+70);
         Valider.setPrefHeight(30);
         Valider.setPrefWidth(110);
-        root.getChildren().add(Valider);
+        g.getChildren().add(Valider);
+        root.getChildren().add(g);
+
+        Valider.setOnAction((ActionEvent e) ->{
+            root.getChildren().remove(g);
+            MenuEntité m = new MenuEntité(scene, root, this);
+            m.ajoutElement();
+        });
 
     }
 
@@ -72,12 +83,12 @@ public class RectangleLateral {
         r.setX(60);
         r.setY(80 + order * 70);
         r.setStroke(Color.BLACK);
-        root.getChildren().add(r);
+        g.getChildren().add(r);
 
         Label l = new Label(labelText);
         l.setTranslateX(120);
         l.setTranslateY(95 + 70 * order);
-        root.getChildren().add(l);
+        g.getChildren().add(l);
 
         String path = "/Image/" + labelText + ".png";
         System.out.println(path);
@@ -85,5 +96,9 @@ public class RectangleLateral {
         ImagePattern pattern = new ImagePattern(image);
         r.setFill(pattern);
         return r;
+    }
+
+    public Group getG() {
+        return g;
     }
 }
