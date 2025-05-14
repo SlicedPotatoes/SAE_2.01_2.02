@@ -1,7 +1,6 @@
 package com.batobleu.sae_201_202.controller;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,19 +10,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class RectangleLateral {
+public class MenuItems {
 
     Scene scene;
     Group root;
-    Group g;
+    Group group;
 
-    public RectangleLateral(Scene s, Group r) {
-        scene = s;
-        root = r;
-        g = new Group();
+    public MenuItems(Group r) {
+        this.root = r;
+        this.scene = r.getScene();
+        this.group = new Group();
     }
 
-    public void ajoutElement(){
+    public void addElement(){
         Rectangle rectangle = new Rectangle();
         //Rectangle Décor map (Cactus, Marguerite, ...)
         rectangle.setHeight(450);
@@ -32,13 +31,13 @@ public class RectangleLateral {
         rectangle.setY(50);
         rectangle.setFill(Color.LIGHTBLUE);
         rectangle.setStroke(Color.BLACK);
-        g.getChildren().add(rectangle);
+        group.getChildren().add(rectangle);
 
         //Label décor
         Label l1 = new Label("Décor");
         l1.setTranslateX(60);
         l1.setTranslateY(55);
-        g.getChildren().add(l1);
+        group.getChildren().add(l1);
 
         //Tout les Carrés des décors avec leurs label
         //Cactus
@@ -58,7 +57,7 @@ public class RectangleLateral {
         Reset.setTranslateY(r5.getY()+70);
         Reset.setPrefHeight(30);
         Reset.setPrefWidth(110);
-        g.getChildren().add(Reset);
+        group.getChildren().add(Reset);
 
         //Boutton Valider
         Button Valider = new Button();
@@ -67,13 +66,13 @@ public class RectangleLateral {
         Valider.setTranslateY(r5.getY()+70);
         Valider.setPrefHeight(30);
         Valider.setPrefWidth(110);
-        g.getChildren().add(Valider);
-        root.getChildren().add(g);
+        group.getChildren().add(Valider);
+        root.getChildren().add(group);
 
         Valider.setOnAction((ActionEvent e) ->{
-            root.getChildren().remove(g);
-            MenuEntité m = new MenuEntité(scene, root, this);
-            m.ajoutElement();
+            root.getChildren().remove(group);
+            MenuEntity m = new MenuEntity(root, this);
+            m.addElement();
         });
 
     }
@@ -83,15 +82,14 @@ public class RectangleLateral {
         r.setX(60);
         r.setY(80 + order * 70);
         r.setStroke(Color.BLACK);
-        g.getChildren().add(r);
+        group.getChildren().add(r);
 
         Label l = new Label(labelText);
         l.setTranslateX(120);
         l.setTranslateY(95 + 70 * order);
-        g.getChildren().add(l);
+        group.getChildren().add(l);
 
         String path = "/Image/" + labelText + ".png";
-        System.out.println(path);
         Image image = new Image(getClass().getResource(path).toExternalForm());
         ImagePattern pattern = new ImagePattern(image);
         r.setFill(pattern);
@@ -99,6 +97,6 @@ public class RectangleLateral {
     }
 
     public Group getG() {
-        return g;
+        return group;
     }
 }

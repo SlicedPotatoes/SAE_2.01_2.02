@@ -6,25 +6,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class MenuEntité {
+public class MenuEntity {
     Scene scene;
     Group root;
-    Group g;
-    RectangleLateral l;
+    Group group;
+    MenuItems menuItems;
 
-    public MenuEntité(Scene s, Group r, RectangleLateral rectangleLateral) {
-        scene = s;
-        root = r;
-        g = new Group();
-        l = rectangleLateral;
+    public MenuEntity(Group r, MenuItems menuItems) {
+        this.scene = r.getScene();
+        this.root = r;
+        this.group = new Group();
+        this.menuItems = menuItems;
     }
 
-    public void ajoutElement(){
+    public void addElement(){
         Rectangle rectangle = new Rectangle();
         //Rectangle Décor map (Cactus, Marguerite, ...)
         rectangle.setHeight(225);
@@ -33,13 +32,13 @@ public class MenuEntité {
         rectangle.setY(50);
         rectangle.setFill(Color.LIGHTBLUE);
         rectangle.setStroke(Color.BLACK);
-        g.getChildren().add(rectangle);
+        group.getChildren().add(rectangle);
 
         //Label décor
         Label l1 = new Label("Entité");
         l1.setTranslateX(60);
         l1.setTranslateY(55);
-        g.getChildren().add(l1);
+        group.getChildren().add(l1);
 
         //Tout les Carrés des décors avec leurs label
         //Loup
@@ -53,7 +52,7 @@ public class MenuEntité {
         Retour.setTranslateY(r2.getY()+70);
         Retour.setPrefHeight(30);
         Retour.setPrefWidth(110);
-        g.getChildren().add(Retour);
+        group.getChildren().add(Retour);
 
         //Boutton Valider
         Button Valider = new Button();
@@ -62,13 +61,13 @@ public class MenuEntité {
         Valider.setTranslateY(r2.getY()+70);
         Valider.setPrefHeight(30);
         Valider.setPrefWidth(110);
-        g.getChildren().add(Valider);
-        root.getChildren().add(g);
+        group.getChildren().add(Valider);
+        root.getChildren().add(group);
         scene.setRoot(root);
 
         Retour.setOnAction((ActionEvent e) -> {
-            root.getChildren().remove(g);
-            root.getChildren().add(l.getG());
+            root.getChildren().remove(group);
+            root.getChildren().add(menuItems.getG());
         });
 
     }
@@ -77,12 +76,12 @@ public class MenuEntité {
         r.setX(60);
         r.setY(80 + order * 70);
         r.setStroke(Color.BLACK);
-        g.getChildren().add(r);
+        group.getChildren().add(r);
 
         Label l = new Label(labelText);
         l.setTranslateX(120);
         l.setTranslateY(95 + 70 * order);
-        g.getChildren().add(l);
+        group.getChildren().add(l);
 
         String path = "/Image/" + labelText + ".png";
         System.out.println(path);
