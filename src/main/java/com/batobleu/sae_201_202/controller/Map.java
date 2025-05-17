@@ -1,6 +1,5 @@
 package com.batobleu.sae_201_202.controller;
 
-import com.batobleu.sae_201_202.model.Case;
 import com.batobleu.sae_201_202.model.Simulation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -12,54 +11,52 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Map {
+    private static String pathIconWolf = "/Image/loup.png";
+    private static String pathIconSheep = "/Image/mouton.png";
+
     Group root;
     Scene scene;
-    Simulation map;
+    Simulation simulation;
 
-    public Map(Group root, Simulation map) {
+    public Map(Group root, Simulation simulation) {
         this.root = root;
         this.scene = root.getScene();
-        this.map = map;
+        this.simulation = simulation;
     }
 
     public void addMap(){
         VBox v = new VBox();
         v.setTranslateX(400);
         v.setTranslateY(50);
-        for (int i = 0; i < map.getNx(); i++){
+
+        for (int i = 0; i < this.simulation.getNy(); i++){
             HBox h = new HBox();
-            for (int j = 0; j < map.getNy(); j++) {
-                Rectangle re = new Rectangle(50, 50);
-                if (map.getMap()[i][j] == Case.Cactus) {
-                    String path = "/Image/Cactus.png";
-                    Image image = new Image(getClass().getResource(path).toExternalForm());
-                    ImagePattern pattern = new ImagePattern(image);
-                    re.setFill(pattern);
-                    h.getChildren().add(re);
-                } else if (map.getMap()[i][j] == Case.Rock) {
-                    String path = "/Image/Rocher.png";
-                    Image image = new Image(getClass().getResource(path).toExternalForm());
-                    ImagePattern pattern = new ImagePattern(image);
-                    re.setFill(pattern);
-                    h.getChildren().add(re);
-                } else if (map.getMap()[i][j] == Case.Poppy) {
-                    String path = "/Image/Marguerite.png";
-                    Image image = new Image(getClass().getResource(path).toExternalForm());
-                    ImagePattern pattern = new ImagePattern(image);
-                    re.setFill(pattern);
-                    h.getChildren().add(re);
-                } else if (map.getMap()[i][j] == Case.Grass) {
-                    String path = "/Image/Herbe.png";
-                    Image image = new Image(getClass().getResource(path).toExternalForm());
-                    ImagePattern pattern = new ImagePattern(image);
-                    re.setFill(pattern);
-                    h.getChildren().add(re);
+            for (int j = 0; j < this.simulation.getNy(); j++) {
+                String imagePath;
+
+                if(this.simulation.getSheep() != null && this.simulation.getSheep().getY() == i && this.simulation.getSheep().getX() == j) {
+                    imagePath = pathIconSheep;
                 }
+                else if(this.simulation.getWolf() != null && this.simulation.getWolf().getY() == i && this.simulation.getWolf().getX() == j) {
+                    imagePath = pathIconWolf;
+                }
+                else {
+                    imagePath = this.simulation.getMap()[i][j].getPathIcon();
+                }
+
+                Rectangle re = new Rectangle(50, 50);
+                Image image = new Image(getClass().getResource(imagePath).toExternalForm());
+                ImagePattern pattern = new ImagePattern(image);
+                re.setFill(pattern);
+                h.getChildren().add(re);
                 re.setStroke(Color.BLACK);
                 re.setStrokeWidth(1);
+
             }
             v.getChildren().add(h);
         }
+
+
         root.getChildren().add(v);
     }
 }

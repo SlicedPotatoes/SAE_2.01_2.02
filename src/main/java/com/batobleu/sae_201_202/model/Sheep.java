@@ -44,6 +44,8 @@ public class Sheep extends Entity {
     }
 
     private void eat() {
-        this.speedModifier = this.theSimulation.getMap()[super.y][super.x].getNumericValue();
+        if(this.theSimulation.getMap()[super.y][super.x] instanceof TileHerb t) {
+            this.speedModifier = t.getSpeedModifier();
+        }
     }
 }

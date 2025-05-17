@@ -25,7 +25,7 @@ public abstract class Entity {
 
     abstract public void move(int dX, int dY) throws IndexOutOfBoundsException, IllegalMoveException;
 
-    public void move(int dX, int dY, Case[][] map) throws IndexOutOfBoundsException, IllegalMoveException {
+    public void move(int dX, int dY, MapTile[][] map) throws IndexOutOfBoundsException, IllegalMoveException {
         int x = this.x + dX;
         int y = this.y + dY;
 
@@ -33,7 +33,7 @@ public abstract class Entity {
             throw new IndexOutOfBoundsException("Sortie de la map");
         }
 
-        if(map[y][x] == Case.Rock) {
+        if(map[y][x] instanceof TileNotReachable) {
             throw new IllegalMoveException("Deplacement sur un rocher");
         }
 
