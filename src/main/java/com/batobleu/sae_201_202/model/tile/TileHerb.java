@@ -11,4 +11,9 @@ public class TileHerb extends MapTile {
     public float getSpeedModifier() {
         return this.speedModifier;
     }
+
+    @Override
+    public boolean isValidPosition(int x, int y, int nx, int ny, MapTile mt) {
+        return x > 0 && x < nx-1 && y > 0 && y < ny-1;
+    }
 }

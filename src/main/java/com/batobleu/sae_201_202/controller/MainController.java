@@ -1,15 +1,13 @@
 package com.batobleu.sae_201_202.controller;
 
 import com.batobleu.sae_201_202.model.Simulation;
-import com.batobleu.sae_201_202.model.tile.MapTile;
-import com.batobleu.sae_201_202.model.tile.TileExit;
-import com.batobleu.sae_201_202.model.tile.TileHerb;
-import com.batobleu.sae_201_202.model.tile.TileNotReachable;
+import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.Map;
 import com.batobleu.sae_201_202.view.MenuSelectItems;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MainController extends Application {
@@ -18,8 +16,8 @@ public class MainController extends Application {
     public static MapTile Herb = new TileHerb("/Image/Herb.png", "Herbe", 1f);
     public static MapTile Poppy = new TileHerb("/Image/Flower.png", "Marguerite", 2f);
     public static MapTile Exit = new TileExit("/Image/Exit.png", "Sortie");
-    public static MapTile Wolf = new MapTile("/Image/Wolf.png", "Loup");
-    public static MapTile Sheep = new MapTile("/Image/Sheep.png", "Mouton");
+    public static MapTile Wolf = new TileEntity("/Image/Wolf.png", "Loup");
+    public static MapTile Sheep = new TileEntity("/Image/Sheep.png", "Mouton");
 
     @Override
     public void start(Stage stage) {
@@ -32,10 +30,22 @@ public class MainController extends Application {
         stage.setScene(scene);
 
         MenuSelectItems msi = new MenuSelectItems(root);
-        msi.switchToMenuDecor();
-
         Map m = new Map(root, s);
         m.addMap();
+
+        msi.currSelectedProperty().addListener((observable, oldValue, newValue) -> {
+            for(int y = 0; y < s.getNy(); y++) {
+                for(int x = 0; x < s.getNx(); x++) {
+                    if(newValue.isValidPosition(x, y, s.getNx(), s.getNy(), s.getMap()[y][x])) {
+                        m.getValidPositionIndicator(x, y).setFill(new Color(0, 0.78, 0.33, 0.5));
+                    }
+                    else {
+                        m.getValidPositionIndicator(x, y).setFill(new Color(0.83, 0.18, 0.18, 0.5));
+                    }
+                }
+            }
+        });
+        msi.switchToMenuDecor();
 
         stage.show();
     }

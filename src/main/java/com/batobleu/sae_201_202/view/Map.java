@@ -14,14 +14,16 @@ public class Map {
     private static String pathIconWolf = "/Image/Wolf.png";
     private static String pathIconSheep = "/Image/Sheep.png";
 
-    Group root;
-    Scene scene;
-    Simulation simulation;
+    private Group root;
+    private Scene scene;
+    private Simulation simulation;
+    private Rectangle[][] validPositionIndicators;
 
     public Map(Group root, Simulation simulation) {
         this.root = root;
         this.scene = root.getScene();
         this.simulation = simulation;
+        validPositionIndicators = new Rectangle[this.simulation.getNy()][this.simulation.getNx()];
     }
 
     public void addMap(){
@@ -32,34 +34,46 @@ public class Map {
         double width = 500 / (double)this.simulation.getNx();
         double height = 500 / (double)this.simulation.getNy();
 
-        for (int i = 0; i < this.simulation.getNy(); i++){
+        for (int y = 0; y < this.simulation.getNy(); y++){
             HBox h = new HBox();
-            for (int j = 0; j < this.simulation.getNx(); j++) {
+            for (int x = 0; x < this.simulation.getNx(); x++) {
                 String imagePath;
 
-                if(this.simulation.getSheep() != null && this.simulation.getSheep().getY() == i && this.simulation.getSheep().getX() == j) {
+                if(this.simulation.getSheep() != null && this.simulation.getSheep().getY() == y && this.simulation.getSheep().getX() == x) {
                     imagePath = pathIconSheep;
                 }
-                else if(this.simulation.getWolf() != null && this.simulation.getWolf().getY() == i && this.simulation.getWolf().getX() == j) {
+                else if(this.simulation.getWolf() != null && this.simulation.getWolf().getY() == y && this.simulation.getWolf().getX() == x) {
                     imagePath = pathIconWolf;
                 }
                 else {
-                    imagePath = this.simulation.getMap()[i][j].getPathIcon();
+                    imagePath = this.simulation.getMap()[y][x].getPathIcon();
                 }
 
-                Rectangle re = new Rectangle(width, height);
+                Group tile = new Group();
+
+                Rectangle validPossitionRectangle = new Rectangle(width, height);
+
+                Rectangle imageRectangle = new Rectangle(width, height);
                 Image image = new Image(getClass().getResource(imagePath).toExternalForm());
                 ImagePattern pattern = new ImagePattern(image);
-                re.setFill(pattern);
-                h.getChildren().add(re);
-                re.setStroke(Color.BLACK);
-                re.setStrokeWidth(1);
+                imageRectangle.setFill(pattern);
+                imageRectangle.setStroke(Color.BLACK);
+                imageRectangle.setStrokeWidth(1);
 
+                tile.getChildren().addAll(validPossitionRectangle, imageRectangle);
+
+                h.getChildren().addAll(tile);
+
+                this.validPositionIndicators[y][x] = validPossitionRectangle;
             }
             v.getChildren().add(h);
         }
 
 
         root.getChildren().add(v);
+    }
+
+    public Rectangle getValidPositionIndicator(int x, int y) {
+        return this.validPositionIndicators[y][x];
     }
 }

@@ -1,6 +1,6 @@
 package com.batobleu.sae_201_202.model.tile;
 
-public class MapTile {
+public abstract class MapTile {
     private String pathIcon;
     private String label;
 
@@ -16,4 +16,6 @@ public class MapTile {
     public String getLabel() {
         return this.label;
     }
+
+    public abstract boolean isValidPosition(int x, int y, int nx, int ny, MapTile mt);
 }
