@@ -1,6 +1,8 @@
-package com.batobleu.sae_201_202.model;
+package com.batobleu.sae_201_202.model.entity;
 
 import com.batobleu.sae_201_202.exception.IllegalMoveException;
+import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 
 public abstract class Entity {
     protected int x, y, speed;

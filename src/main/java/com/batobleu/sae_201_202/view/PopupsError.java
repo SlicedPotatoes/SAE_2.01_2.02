@@ -1,7 +1,6 @@
-package com.batobleu.sae_201_202.controller;
+package com.batobleu.sae_201_202.view;
 
 import javafx.event.ActionEvent;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

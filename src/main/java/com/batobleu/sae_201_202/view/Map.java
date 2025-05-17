@@ -1,4 +1,4 @@
-package com.batobleu.sae_201_202.controller;
+package com.batobleu.sae_201_202.view;
 
 import com.batobleu.sae_201_202.model.Simulation;
 import javafx.scene.Group;
@@ -11,8 +11,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Map {
-    private static String pathIconWolf = "/Image/loup.png";
-    private static String pathIconSheep = "/Image/mouton.png";
+    private static String pathIconWolf = "/Image/Wolf.png";
+    private static String pathIconSheep = "/Image/Sheep.png";
 
     Group root;
     Scene scene;
@@ -29,9 +29,12 @@ public class Map {
         v.setTranslateX(400);
         v.setTranslateY(50);
 
+        double width = 500 / (double)this.simulation.getNx();
+        double height = 500 / (double)this.simulation.getNy();
+
         for (int i = 0; i < this.simulation.getNy(); i++){
             HBox h = new HBox();
-            for (int j = 0; j < this.simulation.getNy(); j++) {
+            for (int j = 0; j < this.simulation.getNx(); j++) {
                 String imagePath;
 
                 if(this.simulation.getSheep() != null && this.simulation.getSheep().getY() == i && this.simulation.getSheep().getX() == j) {
@@ -44,7 +47,7 @@ public class Map {
                     imagePath = this.simulation.getMap()[i][j].getPathIcon();
                 }
 
-                Rectangle re = new Rectangle(50, 50);
+                Rectangle re = new Rectangle(width, height);
                 Image image = new Image(getClass().getResource(imagePath).toExternalForm());
                 ImagePattern pattern = new ImagePattern(image);
                 re.setFill(pattern);

@@ -1,12 +1,13 @@
 package com.batobleu.sae_201_202.model;
 
-public class Simulation {
-    public static MapTile Rock = new TileNotReachable("/Image/Rocher.png");
-    public static MapTile Cactus = new TileHerb("/Image/Cactus.png", 0.5f);
-    public static MapTile Grass = new TileHerb("/Image/Herbe.png", 1f);
-    public static MapTile Poppy = new TileHerb("/Image/Marguerite.png", 2f);
-    public static MapTile Exit = new TileExit("/Image/Exit.png");
+import com.batobleu.sae_201_202.model.entity.Sheep;
+import com.batobleu.sae_201_202.model.entity.Wolf;
+import com.batobleu.sae_201_202.model.tile.MapTile;
 
+import static com.batobleu.sae_201_202.controller.MainController.Herb;
+import static com.batobleu.sae_201_202.controller.MainController.Rock;
+
+public class Simulation {
     private int nx, ny;
     private MapTile[][] map;
     private boolean chaseMod;
@@ -24,7 +25,7 @@ public class Simulation {
                 if (row == 0 || col == 0 || row == ny - 1 || col == nx - 1) {
                     this.map[row][col] = Rock;
                 } else {
-                    this.map[row][col] = Grass;
+                    this.map[row][col] = Herb;
                 }
             }
         }
