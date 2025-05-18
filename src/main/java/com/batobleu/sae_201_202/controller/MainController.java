@@ -12,6 +12,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainController extends Application {
     public static MapTile Rock = new TileNotReachable("/Image/Rock.png", "Rocher");
     public static MapTile Cactus = new TileHerb("/Image/Cactus.png", "Cactus", 0.5f);
@@ -24,6 +27,10 @@ public class MainController extends Application {
     private Simulation s;
     private MenuSelectItems msi;
     private Map map;
+
+    public static void main(String[] args) {
+        launch();
+    }
 
     @Override
     public void start(Stage stage) {
@@ -70,6 +77,22 @@ public class MainController extends Application {
         stage.show();
     }
 
+    private List<Integer> findExitMapTile() {
+        for(int y = 0; y < this.s.getNy(); y++) {
+            for(int x = 0; x < this.s.getNx(); x++) {
+                if(this.s.getMap()[y][x] == Exit) {
+                    List<Integer> pos = new ArrayList<>();
+                    pos.add(x);
+                    pos.add(y);
+
+                    return pos;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
         if(!selectedItem.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
             throw new InvalidPositionException();
@@ -112,6 +135,15 @@ public class MainController extends Application {
             else if(entity2 != null && x == entity2.getX() && y == entity2.getY()){
                 this.s.killEntity(entity2);
             }
+
+            // Cas de la sortie
+            if(selectedItem instanceof TileExit) {
+                List<Integer> pos = findExitMapTile();
+
+                if(pos != null) {
+                    this.s.getMap()[pos.get(1)][pos.get(0)] = Rock;
+                }
+            }
         }
 
         // On met a jour l'affichage
@@ -134,6 +166,15 @@ public class MainController extends Application {
                 if(entity2 != null && entity2.getX() == x && entity2.getY() == y) {
                     // Popup pour demander le remplacement
                     System.out.println("Demander le remplacement 2");
+                    return;
+                }
+            }
+            else if(selectedItem instanceof TileExit) {
+                List<Integer> pos = findExitMapTile();
+
+                if(pos != null) {
+                    // Popup pour demander le remplacement
+                    System.out.println("Demander le remplacement 3");
                     return;
                 }
             }
