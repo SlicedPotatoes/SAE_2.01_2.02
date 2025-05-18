@@ -21,6 +21,7 @@ public class PopupNewLabyrinth {
 
     private void showLabyrintheDialog() {
         Stage dialog = new Stage();
+        dialog.setResizable(false);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Nouveau Labyrinthe");
 

@@ -21,6 +21,7 @@ public class PopupTypeSimulation {
 
     private void showTypeSimulationDialog() {
         Stage dialog = new Stage();
+        dialog.setResizable(false);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Choix du type de simulation");
 
@@ -32,8 +33,9 @@ public class PopupTypeSimulation {
 
         Button manual = new Button("manuelle");
         Button auto = new Button("automatique");
+        Button annuler = new Button("annuler");
 
-        HBox buttonBox = new HBox(10, manual, auto);
+        HBox buttonBox = new HBox(10, manual, auto, annuler);
         buttonBox.setAlignment(Pos.CENTER);
 
         VBox layout = new VBox(grid, buttonBox);
@@ -44,6 +46,10 @@ public class PopupTypeSimulation {
         });
 
         auto.setOnAction(e -> {
+            dialog.close();
+        });
+
+        annuler.setOnAction(e ->{
             dialog.close();
         });
 

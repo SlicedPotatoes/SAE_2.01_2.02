@@ -60,7 +60,8 @@ public class MenuSelectItems {
         });
 
         this.button2.setOnAction((ActionEvent e) -> {
-
+            PopupTypeSimulation p = new PopupTypeSimulation();
+            p.PopupTypeSimulation();
         });
     }
 
