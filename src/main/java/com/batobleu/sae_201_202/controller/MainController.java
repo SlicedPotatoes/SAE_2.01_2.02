@@ -43,9 +43,10 @@ public class MainController extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
 
-        this.msi = new MenuSelectItems(root);
+
         this.map = new Map(root, s);
         this.map.addMap();
+        this.msi = new MenuSelectItems(root, stage);
 
         MenuBarUp t = new MenuBarUp(root);
         t.addMenuBar();
