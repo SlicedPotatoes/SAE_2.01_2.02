@@ -4,6 +4,7 @@ import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.Map;
 import com.batobleu.sae_201_202.view.MenuSelectItems;
+import com.batobleu.sae_201_202.view.MenuBarUp;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -32,6 +33,9 @@ public class MainController extends Application {
         MenuSelectItems msi = new MenuSelectItems(root);
         Map m = new Map(root, s);
         m.addMap();
+
+        MenuBarUp t = new MenuBarUp(root);
+        t.addMenuBar();
 
         msi.currSelectedProperty().addListener((observable, oldValue, newValue) -> {
             for(int y = 0; y < s.getNy(); y++) {
