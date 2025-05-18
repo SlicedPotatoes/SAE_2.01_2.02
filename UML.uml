@@ -430,13 +430,13 @@
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="Left" type="integer">16</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">120</XPD:ATTR>
-<XPD:ATTR name="Width" type="integer">98</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">149</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">56</XPD:ATTR>
 <XPD:REF name="Model">vURbJhOZf0S83olTSjOc5gAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="AOSR6aNsHkOdE8iQ4blAowAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="ER3vEBwLVEaONQ+lI0dffwAA">
 <XPD:ATTR name="FontStyle" type="integer">1</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">IllegalInitialPos</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">InvalidPositionException</XPD:ATTR>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="LabelView" guid="dUJhRIhI2UidBrOkVQ+mWwAA">
 <XPD:ATTR name="Text" type="string">&lt;&lt;exception&gt;&gt;</XPD:ATTR>
@@ -1518,7 +1518,7 @@
 <XPD:REF name="Views[2]">sz9doiMzNkSRac1lusA7VgAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="OwnedElements[11]" type="UMLException" guid="vURbJhOZf0S83olTSjOc5gAA">
-<XPD:ATTR name="Name" type="string">IllegalInitialPos</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">InvalidPositionException</XPD:ATTR>
 <XPD:REF name="Namespace">araBYjuwqEG1OckwHjE1TQAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">3</XPD:ATTR>
 <XPD:REF name="Views[0]">8BegAEHlHki2kt9NDBgwAQAA</XPD:REF>
@@ -1796,8 +1796,8 @@
 <XPD:REF name="Participant">lHomruSsG0eo+TFbuxUU5wAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">+uTdvs4p10G8aqNn3fVDpQAA</XPD:REF>
-<XPD:REF name="Views[1]">PpHkpV6nikumIXqBt0uWbwAA</XPD:REF>
-<XPD:REF name="Views[2]">2YpcCfkYqEC6+A4bJGLn9AAA</XPD:REF>
+<XPD:REF name="Views[1]">2YpcCfkYqEC6+A4bJGLn9AAA</XPD:REF>
+<XPD:REF name="Views[2]">PpHkpV6nikumIXqBt0uWbwAA</XPD:REF>
 <XPD:REF name="Views[3]">yNYe7F3RuUydDrLWmnX1xQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Connections[1]" type="UMLAssociationEnd" guid="MUq6tTACIEO+OQuDatDXnAAA">
@@ -1806,8 +1806,8 @@
 <XPD:REF name="Participant">qwtHQy0Iqk28RAQnk9cmfwAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">Ytbv7bLjzEu/Rq+CP9ZfogAA</XPD:REF>
-<XPD:REF name="Views[1]">OsAMIWzfnESAzhbNuVaaSwAA</XPD:REF>
-<XPD:REF name="Views[2]">3D/HUqMMqUyFn9vRv02MQQAA</XPD:REF>
+<XPD:REF name="Views[1]">3D/HUqMMqUyFn9vRv02MQQAA</XPD:REF>
+<XPD:REF name="Views[2]">OsAMIWzfnESAzhbNuVaaSwAA</XPD:REF>
 <XPD:REF name="Views[3]">hXT3btNSqUy7Vw3YNmmUkgAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>

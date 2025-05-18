@@ -1,12 +1,15 @@
 package com.batobleu.sae_201_202.controller;
 
+import com.batobleu.sae_201_202.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.Simulation;
+import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.Map;
 import com.batobleu.sae_201_202.view.MenuSelectItems;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -19,9 +22,13 @@ public class MainController extends Application {
     public static MapTile Wolf = new TileEntity("/Image/Wolf.png", "Loup");
     public static MapTile Sheep = new TileEntity("/Image/Sheep.png", "Mouton");
 
+    private Simulation s;
+    private MenuSelectItems msi;
+    private Map map;
+
     @Override
     public void start(Stage stage) {
-        Simulation s = new Simulation(10,10);
+        this.s = new Simulation(10,10);
 
         Group root = new Group();
 
@@ -29,24 +36,112 @@ public class MainController extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
 
-        MenuSelectItems msi = new MenuSelectItems(root);
-        Map m = new Map(root, s);
-        m.addMap();
+        this.msi = new MenuSelectItems(root);
+        this.map = new Map(root, s);
+        this.map.addMap();
 
-        msi.currSelectedProperty().addListener((observable, oldValue, newValue) -> {
+        // Ajout des événements pour détecter un changement d'éléments sélectionnés
+        this.msi.currSelectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Old: " + (oldValue == null ? "null" : oldValue.getLabel()));
+            System.out.println("New: " + newValue.getLabel());
+
             for(int y = 0; y < s.getNy(); y++) {
                 for(int x = 0; x < s.getNx(); x++) {
-                    if(newValue.isValidPosition(x, y, s.getNx(), s.getNy(), s.getMap()[y][x])) {
-                        m.getValidPositionIndicator(x, y).setFill(new Color(0, 0.78, 0.33, 0.5));
+                    if(newValue.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
+                        this.map.getValidPositionIndicator(x, y).setFill(new Color(0, 0.78, 0.33, 0.5));
                     }
                     else {
-                        m.getValidPositionIndicator(x, y).setFill(new Color(0.83, 0.18, 0.18, 0.5));
+                        this.map.getValidPositionIndicator(x, y).setFill(new Color(0.83, 0.18, 0.18, 0.5));
                     }
                 }
             }
         });
-        msi.switchToMenuDecor();
+        this.msi.switchToMenuDecor();
+
+        for (int y = 0; y < s.getNy(); y++) {
+            for(int x = 0; x < s.getNx(); x++) {
+                this.addEventOnClickMap(x, y);
+            }
+        }
 
         stage.show();
+    }
+
+    private void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
+        if(!selectedItem.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
+            throw new InvalidPositionException();
+        }
+
+        /*
+        * Dans le cas ou selectedItem représente une entité:
+        *  - entity1 sera l'entité, dans simulation, qui correspond a l'entité dans selectedItem
+        *  - entity2 sera l'autre
+        * Sinon:
+        *  - entity1 sera l'entité, dans la simulation, qui correspond au loup
+        *  - entity2 sera le mouton
+        */
+        Entity entity1 = selectedItem instanceof TileEntity ? (selectedItem == Wolf ? this.s.getWolf() : this.s.getSheep()) : this.s.getWolf();
+        Entity entity2 = selectedItem instanceof TileEntity ? (selectedItem == Wolf ? this.s.getSheep() : this.s.getWolf()) : this.s.getSheep();
+
+        // Si on a selectionné une entité
+        if(selectedItem instanceof TileEntity) {
+            // Si on positionne une entité sur une autre, on supprime la seconde entité
+            if(entity2 != null && x == entity2.getX() && y == entity2.getY()) {
+                this.s.killEntity(entity2);
+            }
+            // Si on déplace une entité, on fait apparaitre l'image du décort correspondant
+            if(entity1 != null) {
+                int _x = entity1.getX(), _y = entity1.getY();
+                this.map.updateImage(_x, _y, this.s.getMap()[_y][_x]);
+            }
+
+            // On met a jour l'entité dans la simulation
+            this.s.setEntity(selectedItem, x, y);
+        }
+        else {
+            // On met a jour la map avec le décort correspondant
+            this.s.getMap()[y][x] = selectedItem;
+
+            // Si le décort ce trouve sur une entité, on supprime l'entité correspondant
+            if(x == entity1.getX() && y == entity1.getY()){
+                this.s.killEntity(entity1);
+            }
+            else if(x == entity2.getX() && y == entity2.getY()){
+                this.s.killEntity(entity2);
+            }
+        }
+
+        // On met a jour l'affichage
+        this.map.updateImage(x, y, selectedItem);
+    }
+
+    private void addEventOnClickMap(int x, int y) {
+        this.map.getImages()[y][x].setOnMouseClicked((MouseEvent e) -> {
+            MapTile selectedItem = this.msi.currSelectedProperty().get();
+
+            if(selectedItem instanceof TileEntity) {
+                Entity entity1 = selectedItem == Wolf ? this.s.getWolf() : this.s.getSheep();
+                Entity entity2 = selectedItem == Wolf ? this.s.getSheep() : this.s.getWolf();
+
+                if(entity1 != null) {
+                    // Popup pour demander le remplacement
+                    System.out.println("Demander le remplacement");
+                    return;
+                }
+                if(entity2 != null && entity2.getX() == x && entity2.getY() == y) {
+                    // Popup pour demander le remplacement
+                    System.out.println("Demander le remplacement 2");
+                    return;
+                }
+            }
+
+            try {
+                this.updateMapAndSimulation(x, y, selectedItem);
+            }
+            catch (InvalidPositionException ex) {
+                System.out.println(ex);
+            }
+
+        });
     }
 }

@@ -1,5 +1,7 @@
 package com.batobleu.sae_201_202.model;
 
+import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.MapTile;
@@ -43,12 +45,23 @@ public class Simulation {
         return this.theWolf;
     }
 
-    public void setSheep(int x, int y) {
-        this.theSheep = new Sheep(x, y, 2, this);
+    // poor entity 😢
+    public void killEntity(Entity entity) {
+        if(entity == this.theWolf) {
+            this.theWolf = null;
+        }
+        else {
+            this.theSheep = null;
+        }
     }
 
-    public void setWolf(int x, int y) {
-        this.theWolf = new Wolf(x, y, 3, this);
+    public void setEntity(MapTile entity, int x, int y) {
+        if(entity == MainController.Wolf) {
+            this.theWolf = new Wolf(x, y, 3, this);
+        }
+        else {
+            this.theSheep = new Sheep(x, y, 2, this);
+        }
     }
 
     public int getNx() {

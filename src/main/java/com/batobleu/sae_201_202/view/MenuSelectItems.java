@@ -32,7 +32,6 @@ public class MenuSelectItems {
         this.button2 = createButton("Valider", 180, 510);
 
         this.currSelected = new SimpleObjectProperty<>();
-        this.currSelected.set(MainController.Wolf);
     }
 
     public void switchToMenuDecor() {
