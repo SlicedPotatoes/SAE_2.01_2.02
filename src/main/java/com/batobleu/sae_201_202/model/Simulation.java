@@ -72,4 +72,7 @@ public class Simulation {
         return this.ny;
     }
 
+    public void setMap(MapTile[][] map) {
+        this.map = map;
+    }
 }

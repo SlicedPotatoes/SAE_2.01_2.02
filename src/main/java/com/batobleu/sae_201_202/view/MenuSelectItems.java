@@ -1,6 +1,7 @@
 package com.batobleu.sae_201_202.view;
 
 import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.ObjectProperty;
@@ -12,10 +13,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import static com.batobleu.sae_201_202.controller.MainController.Herb;
+import static com.batobleu.sae_201_202.controller.MainController.Rock;
 
 public class MenuSelectItems {
     private Group root;
@@ -27,7 +33,7 @@ public class MenuSelectItems {
     private ObjectProperty<MapTile> currSelected;
     private Rectangle currSelectedRectangle;
 
-    public MenuSelectItems(Group r) {
+    public MenuSelectItems(Group r, Stage s) {
         this.root = r;
         this.group = new Group();
 
@@ -35,6 +41,12 @@ public class MenuSelectItems {
         this.button2 = createButton("Valider", 180, 510);
 
         this.currSelected = new SimpleObjectProperty<>();
+
+        this.button1.setOnMouseClicked(e-> {
+            s.close();
+            MainController mainController = new MainController();
+            mainController.start(new Stage());
+        });
     }
 
     public void switchToMenuDecor() {

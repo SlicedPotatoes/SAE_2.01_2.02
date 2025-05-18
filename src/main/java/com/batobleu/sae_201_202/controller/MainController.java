@@ -36,9 +36,10 @@ public class MainController extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
 
-        this.msi = new MenuSelectItems(root);
+
         this.map = new Map(root, s);
         this.map.addMap();
+        this.msi = new MenuSelectItems(root, stage);
 
         MenuBarUp t = new MenuBarUp(root);
         t.addMenuBar();
@@ -106,10 +107,10 @@ public class MainController extends Application {
             this.s.getMap()[y][x] = selectedItem;
 
             // Si le décort ce trouve sur une entité, on supprime l'entité correspondant
-            if(x == entity1.getX() && y == entity1.getY()){
+            if(entity1 != null && x == entity1.getX() && y == entity1.getY()){
                 this.s.killEntity(entity1);
             }
-            else if(x == entity2.getX() && y == entity2.getY()){
+            else if(entity2 != null && x == entity2.getX() && y == entity2.getY()){
                 this.s.killEntity(entity2);
             }
         }
