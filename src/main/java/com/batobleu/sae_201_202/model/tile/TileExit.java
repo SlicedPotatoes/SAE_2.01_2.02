@@ -7,6 +7,6 @@ public class TileExit extends MapTile {
 
     @Override
     public boolean isValidPosition(int x, int y, int nx, int ny, MapTile mt) {
-        return x == 0 || y == 0 || x == nx - 1 || y == ny - 1;
+        return (x == 0 || y == 0 || x == nx - 1 || y == ny - 1) && !((x == y) || (x == 0 && y == ny -1) || (x == nx -1 && y == 0));
     }
 }
