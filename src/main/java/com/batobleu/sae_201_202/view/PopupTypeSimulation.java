@@ -1,0 +1,53 @@
+package com.batobleu.sae_201_202.view;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+public class PopupTypeSimulation {
+
+    public void PopupTypeSimulation(){
+        showTypeSimulationDialog();
+    }
+
+
+    private void showTypeSimulationDialog() {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle("Choix du type de simulation");
+
+
+
+        GridPane grid = new GridPane();
+        grid.setVgap(10);
+        grid.setHgap(10);
+
+        Button manual = new Button("manuelle");
+        Button auto = new Button("automatique");
+
+        HBox buttonBox = new HBox(10, manual, auto);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        VBox layout = new VBox(grid, buttonBox);
+        layout.setPadding(new Insets(10));
+
+        manual.setOnAction(e -> {
+            dialog.close();
+        });
+
+        auto.setOnAction(e -> {
+            dialog.close();
+        });
+
+        dialog.setScene(new Scene(layout));
+        dialog.showAndWait();
+    }
+}
