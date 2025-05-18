@@ -2,17 +2,20 @@ package com.batobleu.sae_201_202.view;
 
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class MenuSelectItems {
     private Group root;
@@ -56,7 +59,8 @@ public class MenuSelectItems {
         });
 
         this.button2.setOnAction((ActionEvent e) -> {
-
+            PopupTypeSimulation p = new PopupTypeSimulation();
+            p.PopupTypeSimulation();
         });
     }
 
@@ -112,11 +116,7 @@ public class MenuSelectItems {
         this.root.getChildren().remove(this.group);
         this.group = new Group();
 
-        Rectangle container = new Rectangle();
-        container.setHeight(500);
-        container.setWidth(300);
-        container.setX(50);
-        container.setY(50);
+        Rectangle container = new Rectangle(50,50,300,500);
         container.setFill(Color.LIGHTBLUE);
         container.setStroke(Color.BLACK);
 
@@ -124,7 +124,20 @@ public class MenuSelectItems {
         titleLabel.setTranslateX(60);
         titleLabel.setTranslateY(55);
 
-        this.group.getChildren().addAll(container, titleLabel, this.button1, this.button2);
+        //Rectangle des aides
+        Rectangle help = new Rectangle(315,55,25,25);
+        help.setMouseTransparent(false);
+        help.setFill(new ImagePattern(new Image(getClass().getResource("/Image/Help.png").toExternalForm())));
+        Tooltip t = new Tooltip("Selectionner un objet et cliquer sur la grille pour le positionner");
+        Tooltip.install(help, t);
+        help.setOnMouseEntered(e -> {
+            t.show(help, e.getScreenX(),e.getScreenY()-50);
+        });
+        help.setOnMouseExited(e -> {
+            t.hide();
+        });
+
+        this.group.getChildren().addAll(container, help, titleLabel, this.button1, this.button2);
 
         for(int i = 0; i < mapTiles.length; i++) {
             Rectangle r = this.createRectangle(i, mapTiles[i]);

@@ -4,8 +4,7 @@ import com.batobleu.sae_201_202.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
-import com.batobleu.sae_201_202.view.Map;
-import com.batobleu.sae_201_202.view.MenuSelectItems;
+import com.batobleu.sae_201_202.view.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -35,10 +34,14 @@ public class MainController extends Application {
         Scene scene = new Scene(root, 1280, 720);
         stage.setTitle("Hello!");
         stage.setScene(scene);
+        stage.setResizable(false);
 
         this.msi = new MenuSelectItems(root);
         this.map = new Map(root, s);
         this.map.addMap();
+
+        MenuBarUp t = new MenuBarUp(root);
+        t.addMenuBar();
 
         // Ajout des événements pour détecter un changement d'éléments sélectionnés
         this.msi.currSelectedProperty().addListener((observable, oldValue, newValue) -> {
