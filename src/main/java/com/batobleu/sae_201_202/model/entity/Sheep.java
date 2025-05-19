@@ -1,6 +1,8 @@
-package com.batobleu.sae_201_202.model;
+package com.batobleu.sae_201_202.model.entity;
 
 import com.batobleu.sae_201_202.exception.IllegalMoveException;
+import com.batobleu.sae_201_202.model.Simulation;
+import com.batobleu.sae_201_202.model.tile.TileHerb;
 
 public class Sheep extends Entity {
     private Simulation theSimulation;
@@ -44,6 +46,8 @@ public class Sheep extends Entity {
     }
 
     private void eat() {
-        this.speedModifier = this.theSimulation.getMap()[super.y][super.x].getNumericValue();
+        if(this.theSimulation.getMap()[super.y][super.x] instanceof TileHerb t) {
+            this.speedModifier = t.getSpeedModifier();
+        }
     }
 }

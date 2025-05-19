@@ -1,6 +1,8 @@
-package com.batobleu.sae_201_202.model;
+package com.batobleu.sae_201_202.model.entity;
 
 import com.batobleu.sae_201_202.exception.IllegalMoveException;
+import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 
 public abstract class Entity {
     protected int x, y, speed;
@@ -25,7 +27,7 @@ public abstract class Entity {
 
     abstract public void move(int dX, int dY) throws IndexOutOfBoundsException, IllegalMoveException;
 
-    public void move(int dX, int dY, Case[][] map) throws IndexOutOfBoundsException, IllegalMoveException {
+    public void move(int dX, int dY, MapTile[][] map) throws IndexOutOfBoundsException, IllegalMoveException {
         int x = this.x + dX;
         int y = this.y + dY;
 
@@ -33,7 +35,7 @@ public abstract class Entity {
             throw new IndexOutOfBoundsException("Sortie de la map");
         }
 
-        if(map[y][x] == Case.Rock) {
+        if(map[y][x] instanceof TileNotReachable) {
             throw new IllegalMoveException("Deplacement sur un rocher");
         }
 

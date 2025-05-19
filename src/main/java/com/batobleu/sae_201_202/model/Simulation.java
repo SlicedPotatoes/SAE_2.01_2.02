@@ -1,8 +1,17 @@
 package com.batobleu.sae_201_202.model;
 
+import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.entity.Entity;
+import com.batobleu.sae_201_202.model.entity.Sheep;
+import com.batobleu.sae_201_202.model.entity.Wolf;
+import com.batobleu.sae_201_202.model.tile.MapTile;
+
+import static com.batobleu.sae_201_202.controller.MainController.Herb;
+import static com.batobleu.sae_201_202.controller.MainController.Rock;
+
 public class Simulation {
     private int nx, ny;
-    private Case[][] map;
+    private MapTile[][] map;
     private boolean chaseMod;
     private Wolf theWolf;
     private Sheep theSheep;
@@ -11,20 +20,20 @@ public class Simulation {
         this.nx = nx;
         this.ny = ny;
 
-        this.map = new Case[ny][nx];
+        this.map = new MapTile[ny][nx];
 
         for (int row = 0; row < ny; row++) {
             for (int col = 0; col < nx; col++) {
                 if (row == 0 || col == 0 || row == ny - 1 || col == nx - 1) {
-                    this.map[row][col] = Case.Rock;
+                    this.map[row][col] = Rock;
                 } else {
-                    this.map[row][col] = Case.Grass;
+                    this.map[row][col] = Herb;
                 }
             }
         }
     }
 
-    public Case[][] getMap() {
+    public MapTile[][] getMap() {
         return this.map;
     }
 
@@ -36,12 +45,23 @@ public class Simulation {
         return this.theWolf;
     }
 
-    public void setSheep(int x, int y) {
-        this.theSheep = new Sheep(x, y, 2, this);
+    // poor entity 😢
+    public void killEntity(Entity entity) {
+        if(entity == this.theWolf) {
+            this.theWolf = null;
+        }
+        else {
+            this.theSheep = null;
+        }
     }
 
-    public void setWolf(int x, int y) {
-        this.theWolf = new Wolf(x, y, 3, this);
+    public void setEntity(MapTile entity, int x, int y) {
+        if(entity == MainController.Wolf) {
+            this.theWolf = new Wolf(x, y, 3, this);
+        }
+        else {
+            this.theSheep = new Sheep(x, y, 2, this);
+        }
     }
 
     public int getNx() {
@@ -52,4 +72,7 @@ public class Simulation {
         return this.ny;
     }
 
+    public void setMap(MapTile[][] map) {
+        this.map = map;
+    }
 }
