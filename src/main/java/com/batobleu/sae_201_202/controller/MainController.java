@@ -29,12 +29,16 @@ public class MainController extends Application {
     private Map map;
 
     public static void main(String[] args) {
+
         launch();
     }
 
     @Override
     public void start(Stage stage) {
-        this.s = new Simulation(10,10);
+        PopupNewLabyrinth p = new PopupNewLabyrinth();
+        p.popupNewLabyrinth();
+
+        this.s = new Simulation(p.getHauteur(), p.getLargeur());
 
         Group root = new Group();
 
