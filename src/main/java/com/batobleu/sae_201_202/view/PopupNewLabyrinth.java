@@ -14,6 +14,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PopupNewLabyrinth {
+    private int hauteur;
+    private int largeur;
 
     public void popupNewLabyrinth(){
         showLabyrintheDialog();
@@ -27,8 +29,8 @@ public class PopupNewLabyrinth {
 
         Label label = new Label("Définissez la taille du labyrinthe:");
 
-        Spinner<Integer> largeur = new Spinner<>(1, 100, 10);
-        Spinner<Integer> hauteur = new Spinner<>(1, 100, 10);
+        Spinner<Integer> largeur = new Spinner<>(4, 15, 10);
+        Spinner<Integer> hauteur = new Spinner<>(4, 15, 10);
 
         largeur.setEditable(true);
         hauteur.setEditable(true);
@@ -51,15 +53,36 @@ public class PopupNewLabyrinth {
         VBox layout = new VBox(10, label, grid, buttonBox);
         layout.setPadding(new Insets(10));
 
+        System.out.println(hauteur.getValue());
+        System.out.println(largeur.getValue());
+
+
         okBtn.setOnAction(e -> {
-            int w = largeur.getValue();
-            int h = hauteur.getValue();
+            this.setHauteur(hauteur.getValue());
+            this.setLargeur(largeur.getValue());
             dialog.close();
         });
+
+
 
         cancelBtn.setOnAction(e -> dialog.close());
 
         dialog.setScene(new Scene(layout));
         dialog.showAndWait();
+
+    }
+
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    public int getLargeur() {
+        return largeur;
+    }
+    public void setHauteur(int hauteur) {
+        this.hauteur = hauteur;
+    }
+    public void setLargeur(int largeur) {
+        this.largeur = largeur;
     }
 }
