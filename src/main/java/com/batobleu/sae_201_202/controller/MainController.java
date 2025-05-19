@@ -8,11 +8,8 @@ import com.batobleu.sae_201_202.view.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainController extends Application {
@@ -28,8 +25,9 @@ public class MainController extends Application {
     private MenuSelectItems msi;
     private Map map;
 
-    public static void main(String[] args) {
+    private Group root;
 
+    public static void main(String[] args) {
         launch();
     }
 
@@ -40,62 +38,39 @@ public class MainController extends Application {
 
         this.s = new Simulation(p.getHauteur(), p.getLargeur());
 
-        Group root = new Group();
+        this.root = new Group();
 
         Scene scene = new Scene(root, 1280, 720);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setResizable(false);
 
-
-        this.map = new Map(root, s);
-        this.map.addMap();
-        this.msi = new MenuSelectItems(root, stage);
+        this.map = new Map(this);
+        this.msi = new MenuSelectItems(this);
 
         MenuBarUp t = new MenuBarUp(root);
         t.addMenuBar();
 
-        // Ajout des événements pour détecter un changement d'éléments sélectionnés
-        this.msi.currSelectedProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Old: " + (oldValue == null ? "null" : oldValue.getLabel()));
-            System.out.println("New: " + newValue.getLabel());
-
-            for(int y = 0; y < s.getNy(); y++) {
-                for(int x = 0; x < s.getNx(); x++) {
-                    if(newValue.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
-                        this.map.getValidPositionIndicator(x, y).setFill(new Color(0, 0.78, 0.33, 0.5));
-                    }
-                    else {
-                        this.map.getValidPositionIndicator(x, y).setFill(new Color(0.83, 0.18, 0.18, 0.5));
-                    }
-                }
-            }
-        });
+        this.map.addMap();
         this.msi.switchToMenuDecor();
-
-        for (int y = 0; y < s.getNy(); y++) {
-            for(int x = 0; x < s.getNx(); x++) {
-                this.addEventOnClickMap(x, y);
-            }
-        }
 
         stage.show();
     }
 
-    private List<Integer> findExitMapTile() {
-        for(int y = 0; y < this.s.getNy(); y++) {
-            for(int x = 0; x < this.s.getNx(); x++) {
-                if(this.s.getMap()[y][x] == Exit) {
-                    List<Integer> pos = new ArrayList<>();
-                    pos.add(x);
-                    pos.add(y);
+    public Simulation getSimulation() {
+        return this.s;
+    }
 
-                    return pos;
-                }
-            }
-        }
+    public Group getRoot() {
+        return this.root;
+    }
 
-        return null;
+    public Map getMap() {
+        return this.map;
+    }
+
+    public MenuSelectItems getMsi() {
+        return this.msi;
     }
 
     public void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
@@ -140,7 +115,7 @@ public class MainController extends Application {
 
             // Cas de la sortie
             if(selectedItem instanceof TileExit) {
-                List<Integer> pos = findExitMapTile();
+                List<Integer> pos = this.s.findExitMapTile();
 
                 if(pos != null) {
                     this.s.getMap()[pos.get(1)][pos.get(0)] = Rock;
@@ -156,17 +131,5 @@ public class MainController extends Application {
         this.map.updateImage(x, y, selectedItem);
     }
 
-    private void addEventOnClickMap(int x, int y) {
-        this.map.getImages()[y][x].setOnMouseClicked((MouseEvent e) -> {
-            MapTile selectedItem = this.msi.currSelectedProperty().get();
 
-            try {
-                this.updateMapAndSimulation(x, y, selectedItem);
-            }
-            catch (InvalidPositionException ex) {
-                System.out.println(ex);
-            }
-
-        });
-    }
 }
