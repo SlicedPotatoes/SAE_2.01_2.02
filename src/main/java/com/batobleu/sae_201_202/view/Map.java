@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import static java.lang.Math.min;
+
 public class Map {
     private static String pathIconWolf = "/Image/Wolf.png";
     private static String pathIconSheep = "/Image/Sheep.png";
@@ -37,14 +39,16 @@ public class Map {
         double width = 500 / (double)this.simulation.getNx();
         double height = 500 / (double)this.simulation.getNy();
 
+        double sizeSquare = min(width, height);
+
         for (int y = 0; y < this.simulation.getNy(); y++){
             HBox h = new HBox();
             for (int x = 0; x < this.simulation.getNx(); x++) {
                 Group tile = new Group();
 
-                Rectangle validPossitionRectangle = new Rectangle(width, height);
+                Rectangle validPossitionRectangle = new Rectangle(sizeSquare, sizeSquare);
 
-                Rectangle imageRectangle = new Rectangle(width, height);
+                Rectangle imageRectangle = new Rectangle(sizeSquare, sizeSquare);
                 imageRectangle.setStroke(Color.BLACK);
                 imageRectangle.setStrokeWidth(1);
 
