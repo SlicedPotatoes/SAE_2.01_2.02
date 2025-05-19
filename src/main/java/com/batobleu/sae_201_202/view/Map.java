@@ -1,5 +1,7 @@
 package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.controller.EventManager;
+import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import javafx.scene.Group;
@@ -14,36 +16,36 @@ import javafx.scene.shape.Rectangle;
 import static java.lang.Math.min;
 
 public class Map {
-    private static String pathIconWolf = "/Image/Wolf.png";
-    private static String pathIconSheep = "/Image/Sheep.png";
+    private MainController mc;
 
-    private Group root;
-    private Scene scene;
-    private Simulation simulation;
     private Rectangle[][] validPositionIndicators;
     private Rectangle[][] images;
 
-    public Map(Group root, Simulation simulation) {
-        this.root = root;
-        this.scene = root.getScene();
-        this.simulation = simulation;
-        validPositionIndicators = new Rectangle[this.simulation.getNy()][this.simulation.getNx()];
-        images = new Rectangle[this.simulation.getNy()][this.simulation.getNx()];
+    private VBox container;
+
+    public Map(MainController mc) {
+        this.mc = mc;
+        this.validPositionIndicators = new Rectangle[this.mc.getSimulation().getNy()][this.mc.getSimulation().getNx()];
+        this.images = new Rectangle[this.mc.getSimulation().getNy()][this.mc.getSimulation().getNx()];
     }
 
     public void addMap(){
-        VBox v = new VBox();
-        v.setTranslateX(400);
-        v.setTranslateY(50);
+        if(this.container != null) {
+            this.mc.getRoot().getChildren().remove(this.container);
+        }
 
-        double width = 500 / (double)this.simulation.getNx();
-        double height = 500 / (double)this.simulation.getNy();
+        this.container = new VBox();
+        this.container.setTranslateX(400);
+        this.container.setTranslateY(50);
+
+        double width = 500 / (double)this.mc.getSimulation().getNx();
+        double height = 500 / (double)this.mc.getSimulation().getNy();
 
         double sizeSquare = min(width, height);
 
-        for (int y = 0; y < this.simulation.getNy(); y++){
+        for (int y = 0; y < this.mc.getSimulation().getNy(); y++){
             HBox h = new HBox();
-            for (int x = 0; x < this.simulation.getNx(); x++) {
+            for (int x = 0; x < this.mc.getSimulation().getNx(); x++) {
                 Group tile = new Group();
 
                 Rectangle validPossitionRectangle = new Rectangle(sizeSquare, sizeSquare);
@@ -59,12 +61,15 @@ public class Map {
                 this.validPositionIndicators[y][x] = validPossitionRectangle;
                 this.images[y][x] = imageRectangle;
 
-                this.updateImage(x, y, this.simulation.getMap()[y][x]);
+                this.updateImage(x, y, this.mc.getSimulation().getMap()[y][x]);
             }
-            v.getChildren().add(h);
+            this.container.getChildren().add(h);
         }
 
-        root.getChildren().add(v);
+        this.mc.getRoot().getChildren().add(this.container);
+
+        EventManager.addValidPositionEventOnMap(this.mc);
+        EventManager.addEventOnClickMap(this.mc);
     }
 
     public Rectangle getValidPositionIndicator(int x, int y) {

@@ -16,6 +16,7 @@ import com.batobleu.sae_201_202.view.Map;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+import com.batobleu.sae_201_202.view.MenuSelectItems;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -26,10 +27,13 @@ import org.junit.jupiter.api.*;
 
 class TestUpdateMapAndSimulation {
     private static MainController mc;
-    private static Field simulationField;
-    private static Field mapField;
     private static Simulation simulation;
     private static Map map;
+
+    private static Field simulationField;
+    private static Field mapField;
+    private static Field rootField;
+    private static Field msiField;
 
     @BeforeAll
     public static void beforeAll() throws NoSuchFieldException {
@@ -41,24 +45,29 @@ class TestUpdateMapAndSimulation {
         // Récupération des attributs de classe privée
         simulationField = MainController.class.getDeclaredField("s");
         mapField = MainController.class.getDeclaredField("map");
+        rootField = MainController.class.getDeclaredField("root");
+        msiField = MainController.class.getDeclaredField("msi");
 
         // Les rendre accessibles
         simulationField.setAccessible(true);
         mapField.setAccessible(true);
+        rootField.setAccessible(true);
+        msiField.setAccessible(true);
     }
 
     @BeforeEach
     public void beforeEach() throws IllegalAccessException {
-        // Créer de nouvelles instances des attributs
+        // Reproduire le comportement de la methode start
         mc = new MainController();
         simulation = new Simulation(5, 5);
-        map = new Map(new Group(), simulation);
 
-        map.addMap();
-
-        // Définir les attributs de classe avec les nouvelles instances
         simulationField.set(mc, simulation);
+        rootField.set(mc, new Group());
+
+        map = new Map(mc);
         mapField.set(mc, map);
+        msiField.set(mc, new MenuSelectItems(mc));
+        map.addMap();
     }
 
     @AfterEach

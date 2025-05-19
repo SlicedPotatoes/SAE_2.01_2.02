@@ -1,9 +1,10 @@
 package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.controller.EventManager;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
-import javafx.animation.PauseTransition;
+import com.sun.tools.javac.Main;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -13,18 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import static com.batobleu.sae_201_202.controller.MainController.Herb;
-import static com.batobleu.sae_201_202.controller.MainController.Rock;
+import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class MenuSelectItems {
-    private Group root;
+    private MainController mc;
     private Group group;
 
     private Button button1;
@@ -33,54 +31,38 @@ public class MenuSelectItems {
     private ObjectProperty<MapTile> currSelected;
     private Rectangle currSelectedRectangle;
 
-    public MenuSelectItems(Group r, Stage s) {
-        this.root = r;
-        this.group = new Group();
+    public MenuSelectItems(MainController mc) {
+        this.mc = mc;
 
         this.button1 = createButton("Reset", 60, 510);
         this.button2 = createButton("Valider", 180, 510);
 
         this.currSelected = new SimpleObjectProperty<>();
-
-        this.button1.setOnMouseClicked(e-> {
-            s.close();
-            MainController mainController = new MainController();
-            mainController.start(new Stage());
-        });
     }
 
     public void switchToMenuDecor() {
-        this.changeMenu("Décor", MainController.Cactus, MainController.Cactus, MainController.Poppy, MainController.Rock, MainController.Herb, MainController.Exit);
+        this.changeMenu("Décor", Cactus, Cactus, Poppy, Rock, Herb, Exit);
 
         this.button1.setText("Reset");
-        this.button1.setOnAction((ActionEvent e) -> {
 
-        });
-
-        this.button2.setOnAction((ActionEvent e) -> {
-            this.switchToMenuEntity();
-        });
+        EventManager.addEventResetButton(this.button1, this.mc, this.currSelected);
+        EventManager.addEventSwitchMenuEntity(this.button2, this);
     }
 
     public void switchToMenuEntity() {
-        this.changeMenu("Entité", MainController.Wolf, MainController.Wolf, MainController.Sheep);
+        this.changeMenu("Entité", Wolf, Wolf, Sheep);
 
         this.button1.setText("Retour");
-        this.button1.setOnAction((ActionEvent e) -> {
-            this.switchToMenuDecor();
-        });
 
-        this.button2.setOnAction((ActionEvent e) -> {
-            PopupTypeSimulation p = new PopupTypeSimulation();
-            p.PopupTypeSimulation();
-        });
+        EventManager.addEventSwitchMenuDecor(this.button1, this);
+        EventManager.addEventSwitchToSimulation(this.button2);
     }
 
     public ObjectProperty<MapTile> currSelectedProperty() {
         return this.currSelected;
     }
 
-    private void setSelected(Rectangle r, MapTile mt) {
+    public void setSelected(Rectangle r, MapTile mt) {
         if(currSelectedRectangle != null) {
             currSelectedRectangle.setStroke(Color.BLACK);
         }
@@ -115,17 +97,14 @@ public class MenuSelectItems {
         ImagePattern pattern = new ImagePattern(image);
         r.setFill(pattern);
 
-        r.setOnMouseClicked((MouseEvent e) -> {
-            this.setSelected(r, mt);
-        });
-
         this.group.getChildren().addAll(r, l);
+        EventManager.addEventClickSelection(r, mt, this);
 
         return r;
     }
 
     private void changeMenu(String titleString, MapTile defaultSelected, MapTile... mapTiles){
-        this.root.getChildren().remove(this.group);
+        this.mc.getRoot().getChildren().remove(this.group);
         this.group = new Group();
 
         Rectangle container = new Rectangle(50,50,300,500);
@@ -140,14 +119,12 @@ public class MenuSelectItems {
         Rectangle help = new Rectangle(315,55,25,25);
         help.setMouseTransparent(false);
         help.setFill(new ImagePattern(new Image(getClass().getResource("/Image/Help.png").toExternalForm())));
+
         Tooltip t = new Tooltip("Selectionner un objet et cliquer sur la grille pour le positionner");
         Tooltip.install(help, t);
-        help.setOnMouseEntered(e -> {
-            t.show(help, e.getScreenX(),e.getScreenY()-50);
-        });
-        help.setOnMouseExited(e -> {
-            t.hide();
-        });
+
+        EventManager.addEventTooltipShow(help, t);
+        EventManager.addEventTooltipHide(help, t);
 
         this.group.getChildren().addAll(container, help, titleLabel, this.button1, this.button2);
 
@@ -159,6 +136,6 @@ public class MenuSelectItems {
             }
         }
 
-        this.root.getChildren().add(this.group);
+        this.mc.getRoot().getChildren().add(this.group);
     }
 }

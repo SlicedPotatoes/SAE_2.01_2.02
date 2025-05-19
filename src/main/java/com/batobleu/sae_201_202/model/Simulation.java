@@ -5,9 +5,13 @@ import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 
-import static com.batobleu.sae_201_202.controller.MainController.Herb;
-import static com.batobleu.sae_201_202.controller.MainController.Rock;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class Simulation {
     private int nx, ny;
@@ -20,7 +24,13 @@ public class Simulation {
         this.nx = nx;
         this.ny = ny;
 
+        init();
+    }
+
+    public void init() {
         this.map = new MapTile[ny][nx];
+        this.theSheep = null;
+        this.theWolf = null;
 
         for (int row = 0; row < ny; row++) {
             for (int col = 0; col < nx; col++) {
@@ -72,7 +82,56 @@ public class Simulation {
         return this.ny;
     }
 
-    public void setMap(MapTile[][] map) {
-        this.map = map;
+    public List<Integer> findExitMapTile() {
+        for(int y = 0; y < this.ny; y++) {
+            for(int x = 0; x < this.nx; x++) {
+                if(this.map[y][x] == Exit) {
+                    List<Integer> pos = new ArrayList<>();
+                    pos.add(x);
+                    pos.add(y);
+
+                    return pos;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private int countReachableTile() {
+        int count = 0;
+
+        for(int y = 0; y < this.ny; y++) {
+            for(int x = 0; x < this.nx; x++) {
+                if(! (this.map[y][x] instanceof TileNotReachable)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private int countWithDFSReachableTile(int x, int y, Set<Integer[]> visited) {
+        visited.add(new Integer[]{x, y});
+
+        int count = 1;
+
+        int[] dx = new int[]{0, 1, 0, -1};
+        int[] dy = new int[]{1, 0, -1, 0};
+
+        for(int d = 0; d < 4; d++) {
+            int _x = x + dx[d], _y = y + dy[d];
+
+            if(visited.contains(new Integer[]{_x, _y})) {
+
+            }
+        }
+
+        return 0;
+    }
+
+    public boolean isValidMap() {
+        return true;
     }
 }
