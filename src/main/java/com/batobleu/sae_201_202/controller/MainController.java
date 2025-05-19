@@ -94,7 +94,7 @@ public class MainController extends Application {
         return null;
     }
 
-    private void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
+    public void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
         if(!selectedItem.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
             throw new InvalidPositionException();
         }
@@ -126,9 +126,6 @@ public class MainController extends Application {
             this.s.setEntity(selectedItem, x, y);
         }
         else {
-            // On met a jour la map avec le décort correspondant
-            this.s.getMap()[y][x] = selectedItem;
-
             // Si le décort ce trouve sur une entité, on supprime l'entité correspondant
             if(entity1 != null && x == entity1.getX() && y == entity1.getY()){
                 this.s.killEntity(entity1);
@@ -143,8 +140,12 @@ public class MainController extends Application {
 
                 if(pos != null) {
                     this.s.getMap()[pos.get(1)][pos.get(0)] = Rock;
+                    this.map.updateImage(pos.get(0), pos.get(1), Rock);
                 }
             }
+
+            // On met a jour la map avec le décort correspondant
+            this.s.getMap()[y][x] = selectedItem;
         }
 
         // On met a jour l'affichage
