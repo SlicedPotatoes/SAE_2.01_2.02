@@ -160,31 +160,6 @@ public class MainController extends Application {
         this.map.getImages()[y][x].setOnMouseClicked((MouseEvent e) -> {
             MapTile selectedItem = this.msi.currSelectedProperty().get();
 
-            if(selectedItem instanceof TileEntity) {
-                Entity entity1 = selectedItem == Wolf ? this.s.getWolf() : this.s.getSheep();
-                Entity entity2 = selectedItem == Wolf ? this.s.getSheep() : this.s.getWolf();
-
-                if(entity1 != null) {
-                    // Popup pour demander le remplacement
-                    System.out.println("Demander le remplacement");
-                    return;
-                }
-                if(entity2 != null && entity2.getX() == x && entity2.getY() == y) {
-                    // Popup pour demander le remplacement
-                    System.out.println("Demander le remplacement 2");
-                    return;
-                }
-            }
-            else if(selectedItem instanceof TileExit) {
-                List<Integer> pos = findExitMapTile();
-
-                if(pos != null) {
-                    // Popup pour demander le remplacement
-                    System.out.println("Demander le remplacement 3");
-                    return;
-                }
-            }
-
             try {
                 this.updateMapAndSimulation(x, y, selectedItem);
             }
