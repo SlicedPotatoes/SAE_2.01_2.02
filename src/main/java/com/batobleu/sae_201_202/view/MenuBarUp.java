@@ -7,12 +7,10 @@ public class MenuBarUp {
     private Group root;
     private MenuBar t;
 
-
     public MenuBarUp(Group root) {
         this.root = root;
         this.t = addMenuBar();
     }
-
 
     public MenuBar addMenuBar(){
         Menu Fichier = new Menu("Fichier");
@@ -23,7 +21,7 @@ public class MenuBarUp {
         MenuItem m3 = new MenuItem("Exporter");
 
 
-        //à changer avec l'historique des labyrinthe
+        //à changer avec l'historique des labyrinthes
         Menu m4 = new Menu("Recent");
         MenuItem m5 = new MenuItem("C:\\...\\labyrinthe1.txt");
         m4.getItems().add(m5);
