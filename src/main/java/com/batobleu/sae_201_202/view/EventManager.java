@@ -1,9 +1,8 @@
-package com.batobleu.sae_201_202.controller;
+package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.tile.MapTile;
-import com.batobleu.sae_201_202.view.MenuSelectItems;
-import com.batobleu.sae_201_202.view.PopupTypeSimulation;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

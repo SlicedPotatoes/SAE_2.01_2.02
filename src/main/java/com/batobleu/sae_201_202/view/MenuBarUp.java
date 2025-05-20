@@ -1,19 +1,19 @@
 package com.batobleu.sae_201_202.view;
 
-import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 
 public class MenuBarUp {
-    private Group root;
+    private BorderPane root;
     private MenuBar t;
 
-    public MenuBarUp(Group root) {
+    public MenuBarUp(BorderPane root) {
         this.root = root;
         this.t = addMenuBar();
     }
 
     public MenuBar addMenuBar(){
-        Menu Fichier = new Menu("Fichier");
+        Menu fichier = new Menu("Fichier");
         Menu propos = new Menu("A Propos");
 
         MenuItem m1 = new MenuItem("Nouveau");
@@ -30,9 +30,6 @@ public class MenuBarUp {
             InformationDebug.AddDebug("Pas encore implémenter ! ");
         });
 
-
-
-
         //à changer avec l'historique des labyrinthes
         Menu m4 = new Menu("Recent");
         MenuItem m5 = new MenuItem("C:\\...\\labyrinthe1.txt");
@@ -42,12 +39,10 @@ public class MenuBarUp {
             InformationDebug.AddDebug("Pas encore implémenter ! ");
         });
 
+        fichier.getItems().addAll(m1,m2,m3,m4);
 
-
-        Fichier.getItems().addAll(m1,m2,m3,m4);
-
-        MenuBar a = new MenuBar(Fichier, propos);
-        root.getChildren().add(a);
+        MenuBar a = new MenuBar(fichier, propos);
+        root.setTop(this.t);
         return a;
     }
 

@@ -1,29 +1,25 @@
 package com.batobleu.sae_201_202.view;
 
-import com.batobleu.sae_201_202.controller.EventManager;
 import com.batobleu.sae_201_202.controller.MainController;
-import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
-import com.sun.tools.javac.Main;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
-import javafx.scene.Group;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class MenuSelectItems {
     private MainController mc;
-    private Group group;
+    private VBox container;
 
     private Button button1;
     private Button button2;
@@ -75,74 +71,78 @@ public class MenuSelectItems {
     private Button createButton(String text, double x, double y) {
         Button b = new Button();
         b.setText(text);
-        b.setTranslateX(x);
-        b.setTranslateY(y);
         b.setPrefHeight(30);
-        b.setPrefWidth(110);
+        b.setPrefWidth(130);
 
         return b;
     }
 
-    private Rectangle createRectangle(int order, MapTile mt) {
-        Rectangle r = new Rectangle(50, 50);
-        r.setX(60);
-        r.setY(80 + order * 70);
-        r.setStroke(Color.BLACK);
-
-        Label l = new Label(mt.getLabel());
-        l.setTranslateX(120);
-        l.setTranslateY(95 + 70 * order);
-
-        Image image = new Image(getClass().getResource(mt.getPathIcon()).toExternalForm());
-        ImagePattern pattern = new ImagePattern(image);
-        r.setFill(pattern);
-
-        this.group.getChildren().addAll(r, l);
-        EventManager.addEventClickSelection(r, mt, this);
-
-        return r;
-    }
-
     private void changeMenu(String titleString, MapTile defaultSelected, MapTile... mapTiles){
-        this.mc.getRoot().getChildren().remove(this.group);
-        this.group = new Group();
+        this.mc.getRoot().getChildren().remove(this.container);
+        this.container = new VBox();
+        this.container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), new BorderWidths(1))));
+        this.container.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+        this.container.prefWidthProperty().bind(this.mc.getStage().widthProperty().multiply(0.25));
+        this.container.setPadding(new Insets(15));
+        this.container.setSpacing(15);
 
-        Rectangle container = new Rectangle(50,50,300,500);
-        container.setFill(Color.LIGHTBLUE);
-        container.setStroke(Color.BLACK);
-
+        BorderPane titleContainer = new BorderPane();
         Label titleLabel = new Label(titleString);
-        titleLabel.setTranslateX(60);
-        titleLabel.setTranslateY(55);
 
         //Rectangle des aides
-        Rectangle help = new Rectangle(315,55,25,25);
+        Rectangle help = new Rectangle(25,25);
         help.setMouseTransparent(false);
         help.setFill(new ImagePattern(new Image(getClass().getResource("/Image/Help.png").toExternalForm())));
-
+        // Tooltip
         Tooltip t = new Tooltip("Selectionner un objet et cliquer sur la grille pour le positionner");
         Tooltip.install(help, t);
-
         EventManager.addEventTooltipShow(help, t);
         EventManager.addEventTooltipHide(help, t);
 
-        this.group.getChildren().addAll(container, help, titleLabel, this.button1, this.button2);
+        titleContainer.setLeft(titleLabel);
+        titleContainer.setRight(help);
+        this.container.getChildren().add(titleContainer);
 
-        for(int i = 0; i < mapTiles.length; i++) {
-            Rectangle r = this.createRectangle(i, mapTiles[i]);
+        for(MapTile mt : mapTiles) {
+            HBox selectContainer = new HBox();
+            selectContainer.setSpacing(10);
+            selectContainer.setAlignment(Pos.CENTER_LEFT);
+            //selectContainer.setAlignment(Pos.CENTER);
 
-            if(mapTiles[i].equals(defaultSelected)) {
-                this.setSelected(r, defaultSelected);
+            Rectangle imageSelect = new Rectangle(50, 50);
+            imageSelect.setStroke(Color.BLACK);
+
+            Label labelSelect = new Label(mt.getLabel());
+
+            Image image = new Image(getClass().getResource(mt.getPathIcon()).toExternalForm());
+            ImagePattern pattern = new ImagePattern(image);
+            imageSelect.setFill(pattern);
+
+            selectContainer.getChildren().addAll(imageSelect, labelSelect);
+
+            this.container.getChildren().add(selectContainer);
+            EventManager.addEventClickSelection(imageSelect, mt, this);
+
+            if(mt.equals(defaultSelected)) {
+                this.setSelected(imageSelect, defaultSelected);
             }
         }
 
-        this.mc.getRoot().getChildren().add(this.group);
+        HBox buttonContainer = new HBox();
+        buttonContainer.setAlignment(Pos.BOTTOM_LEFT);
+        buttonContainer.setSpacing(10);
+        buttonContainer.getChildren().addAll(this.button1, this.button2);
+
+        VBox.setVgrow(buttonContainer, Priority.ALWAYS);
+
+        this.container.getChildren().add(buttonContainer);
+        this.mc.getRoot().setLeft(this.container);
     }
     public void show(){
-        this.group.setVisible(true);
+        this.container.setVisible(true);
     }
 
     public void hide(){
-        this.group.setVisible(false);
+        this.container.setVisible(false);
     }
 }

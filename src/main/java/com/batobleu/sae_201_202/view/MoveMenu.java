@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -12,7 +13,7 @@ import javafx.scene.text.TextAlignment;
 
 public class MoveMenu {
 
-    Group root;
+    BorderPane root;
     Group group;
     int numberMoveLeft = 0;
     int numberRound = 0;

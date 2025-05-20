@@ -25,8 +25,6 @@ public class PopupTypeSimulation {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Choix du type de simulation");
 
-
-
         GridPane grid = new GridPane();
         grid.setVgap(10);
         grid.setHgap(10);

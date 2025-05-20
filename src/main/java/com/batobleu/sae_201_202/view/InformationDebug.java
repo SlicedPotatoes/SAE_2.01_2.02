@@ -1,12 +1,8 @@
 package com.batobleu.sae_201_202.view;
 
 import com.batobleu.sae_201_202.controller.MainController;
-import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.StackPane;
 
 public class InformationDebug {
 
@@ -15,24 +11,27 @@ public class InformationDebug {
 
     public InformationDebug(MainController controller) {
         this.controller = controller;
-        bugs = init();
-        this.controller.getRoot().getChildren().add(bugs);
+
+        StackPane container = new StackPane();
+        container.prefWidthProperty().bind(this.controller.getStage().widthProperty().multiply(0.25));
+
+        bugs = init(container);
+        this.controller.getRoot().setRight(container);
     }
 
-    public TextArea init(){
+    public TextArea init(StackPane g){
         TextArea t = new TextArea("Information Debug\n\n");
-        t.setTranslateX(950);
-        t.setTranslateY(50);
-        t.setPrefSize(300,510);
+
+        t.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
         t.setScrollTop(1);
         t.setEditable(false);
+
+        g.getChildren().add(t);
         return t;
     }
-
-
 
     public static void AddDebug(String bug){
         bugs.appendText(bug + "\n\n");
     }
-
 }

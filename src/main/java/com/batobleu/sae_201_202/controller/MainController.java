@@ -6,8 +6,8 @@ import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.*;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -24,8 +24,9 @@ public class MainController extends Application {
     private Simulation s;
     private MenuSelectItems msi;
     private Map map;
+    private Stage stage;
 
-    private Group root;
+    private BorderPane root;
 
     public static void main(String[] args) {
         launch();
@@ -33,17 +34,19 @@ public class MainController extends Application {
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
+
         PopupNewLabyrinth p = new PopupNewLabyrinth();
         p.popupNewLabyrinth();
 
         this.s = new Simulation(p.getHauteur(), p.getLargeur());
 
-        this.root = new Group();
+        this.root = new BorderPane();
 
-        InformationDebug informationDebug = new InformationDebug(this);
+        new InformationDebug(this);
 
         Scene scene = new Scene(root, 1280, 720);
-        stage.setTitle("Hello!");
+        stage.setTitle("Mange moi si tu peux !");
         stage.setScene(scene);
         stage.setResizable(false);
 
@@ -63,7 +66,7 @@ public class MainController extends Application {
         return this.s;
     }
 
-    public Group getRoot() {
+    public BorderPane getRoot() {
         return this.root;
     }
 
@@ -74,6 +77,8 @@ public class MainController extends Application {
     public MenuSelectItems getMsi() {
         return this.msi;
     }
+
+    public Stage getStage() { return this.stage; }
 
     public void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
         if(!selectedItem.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {

@@ -1,14 +1,11 @@
 package com.batobleu.sae_201_202.view;
 
-import com.batobleu.sae_201_202.controller.EventManager;
 import com.batobleu.sae_201_202.controller.MainController;
-import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -35,8 +32,7 @@ public class Map {
         }
 
         this.container = new VBox();
-        this.container.setTranslateX(400);
-        this.container.setTranslateY(50);
+        this.container.setAlignment(Pos.CENTER);
 
         double width = 500 / (double)this.mc.getSimulation().getNx();
         double height = 500 / (double)this.mc.getSimulation().getNy();
@@ -45,8 +41,9 @@ public class Map {
 
         for (int y = 0; y < this.mc.getSimulation().getNy(); y++){
             HBox h = new HBox();
+            h.setAlignment(Pos.CENTER);
             for (int x = 0; x < this.mc.getSimulation().getNx(); x++) {
-                Group tile = new Group();
+                StackPane tile = new StackPane();
 
                 Rectangle validPossitionRectangle = new Rectangle(sizeSquare, sizeSquare);
 
@@ -66,7 +63,7 @@ public class Map {
             this.container.getChildren().add(h);
         }
 
-        this.mc.getRoot().getChildren().add(this.container);
+        this.mc.getRoot().setCenter(this.container);
 
         EventManager.addValidPositionEventOnMap(this.mc);
         EventManager.addEventOnClickMap(this.mc);
