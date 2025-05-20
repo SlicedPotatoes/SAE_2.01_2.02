@@ -1,88 +1,44 @@
 package com.batobleu.sae_201_202.view;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.util.Pair;
 
-public class PopupNewLabyrinth {
-    private int hauteur;
-    private int largeur;
+public class PopupNewLabyrinth extends Dialog<Pair<Integer, Integer>> {
+    public PopupNewLabyrinth(){
+        super();
 
-    public void popupNewLabyrinth(){
-        showLabyrintheDialog();
-    }
+        super.setTitle("Nouveau Labyrinthe");
+        super.setHeaderText(null);
 
-    private void showLabyrintheDialog() {
-        Stage dialog = new Stage();
-        dialog.setResizable(false);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setTitle("Nouveau Labyrinthe");
+        ButtonType okButtonType = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        Label label = new Label("Définissez la taille du labyrinthe:");
-
-        Spinner<Integer> largeur = new Spinner<>(4, 15, 10);
-        Spinner<Integer> hauteur = new Spinner<>(4, 15, 10);
-
-        largeur.setEditable(true);
-        hauteur.setEditable(true);
+        super.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
 
         GridPane grid = new GridPane();
-        grid.setVgap(10);
         grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20));
+
+        Spinner<Integer> width = new Spinner<>(4, 15, 10);
+        Spinner<Integer> height = new Spinner<>(4, 15, 10);
+        width.setEditable(true);
+        height.setEditable(true);
+
         grid.add(new Label("Largeur:"), 0, 0);
-        grid.add(largeur, 1, 0);
+        grid.add(width, 1, 0);
         grid.add(new Label("Hauteur:"), 0, 1);
-        grid.add(hauteur, 1, 1);
+        grid.add(height, 1, 1);
 
-        Button okBtn = new Button("Ok");
-        Button cancelBtn = new Button("Annuler");
+        super.getDialogPane().setContent(grid);
 
-        HBox buttonBox = new HBox(10, cancelBtn, okBtn);
-        buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.setPadding(new Insets(10));
-
-        VBox layout = new VBox(10, label, grid, buttonBox);
-        layout.setPadding(new Insets(10));
-
-        System.out.println(hauteur.getValue());
-        System.out.println(largeur.getValue());
-
-
-        okBtn.setOnAction(e -> {
-            this.setHauteur(hauteur.getValue());
-            this.setLargeur(largeur.getValue());
-            dialog.close();
+        super.setResultConverter(dialogButton -> {
+            if(dialogButton == okButtonType) {
+                return new Pair<>(width.getValue(), height.getValue());
+            }
+            return null;
         });
-
-
-
-        cancelBtn.setOnAction(e -> dialog.close());
-
-        dialog.setScene(new Scene(layout));
-        dialog.showAndWait();
-
-    }
-
-    public int getHauteur() {
-        return hauteur;
-    }
-
-    public int getLargeur() {
-        return largeur;
-    }
-    public void setHauteur(int hauteur) {
-        this.hauteur = hauteur;
-    }
-    public void setLargeur(int largeur) {
-        this.largeur = largeur;
     }
 }

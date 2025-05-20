@@ -7,10 +7,13 @@ import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MainController extends Application {
     public static MapTile Rock = new TileNotReachable("/Image/Rock.png", "Rocher");
@@ -37,9 +40,13 @@ public class MainController extends Application {
         this.stage = stage;
 
         PopupNewLabyrinth p = new PopupNewLabyrinth();
-        p.popupNewLabyrinth();
 
-        this.s = new Simulation(p.getHauteur(), p.getLargeur());
+        Optional<Pair<Integer, Integer>> result = p.showAndWait();
+        if(result.isEmpty()) {
+            return;
+        }
+
+        this.s = new Simulation(result.get().getKey(), result.get().getValue());
 
         this.root = new BorderPane();
 
