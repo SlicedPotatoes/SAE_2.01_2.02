@@ -1,19 +1,25 @@
 package com.batobleu.sae_201_202.model;
 
 import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.exception.invalidMap.*;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.model.tile.TileNotReachable;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class Simulation {
+    private static int[] dx = {0, 1, 0, -1};
+    private static int[] dy = {1, 0, -1, 0};
+
     private int nx, ny;
     private MapTile[][] map;
     private boolean chaseMod;
@@ -112,26 +118,46 @@ public class Simulation {
         return count;
     }
 
-    private int countWithDFSReachableTile(int x, int y, Set<Integer[]> visited) {
-        visited.add(new Integer[]{x, y});
+    private int countWithDFSReachableTile(int x, int y, Set<Pair<Integer, Integer>> visited) {
+        visited.add(Pair.with(x, y));
 
         int count = 1;
-
-        int[] dx = new int[]{0, 1, 0, -1};
-        int[] dy = new int[]{1, 0, -1, 0};
 
         for(int d = 0; d < 4; d++) {
             int _x = x + dx[d], _y = y + dy[d];
 
-            if(visited.contains(new Integer[]{_x, _y})) {
+            if(_x < 0 || _x >= this.nx || _y < 0 || _y >= this.ny || this.map[_y][_x] instanceof TileNotReachable) {
+                continue;
+            }
 
+            if(!visited.contains(Pair.with(_x, _y))) {
+                count += countWithDFSReachableTile(_x, _y, visited);
             }
         }
 
-        return 0;
+        return count;
     }
 
-    public boolean isValidMap() {
-        return true;
+    public void isValidMap() throws InvalidMapException {
+        List<Integer> exitPos = this.findExitMapTile();
+
+        if(exitPos == null) {
+            throw new NoExitException();
+        }
+        if(this.theWolf == null) {
+            throw new NoWolfException();
+        }
+        if(this.theSheep == null) {
+            throw new NoSheepException();
+        }
+
+        int crt = this.countReachableTile();
+        int countWithDFS = this.countWithDFSReachableTile(exitPos.get(0), exitPos.get(1), new HashSet<>());
+
+        System.out.println(crt + " " + countWithDFS);
+
+        if(crt != countWithDFS) {
+            throw new UnconnectedGraphException();
+        }
     }
 }

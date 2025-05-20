@@ -130,7 +130,7 @@ public class MainController extends Application {
                 }
             }
 
-            // On met a jour la map avec le décort correspondant
+            // On met a jour la map avec le décor correspondant
             this.s.getMap()[y][x] = selectedItem;
         }
 

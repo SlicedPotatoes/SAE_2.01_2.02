@@ -1,10 +1,13 @@
 package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.exception.invalidMap.*;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.exception.InvalidPositionException;
+import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -89,10 +92,33 @@ public class EventManager {
     }
 
     // Ajout de l'événement pour le bouton "Valider" sur le menu "Entité"
-    public static void addEventSwitchToSimulation(Button b) {
+    public static void addEventSwitchToSimulation(Button b, Simulation simulation) {
         b.setOnAction((ActionEvent e) -> {
-            PopupTypeSimulation p = new PopupTypeSimulation();
-            p.PopupTypeSimulation();
+            try {
+                simulation.isValidMap();
+                PopupTypeSimulation p = new PopupTypeSimulation();
+                p.PopupTypeSimulation();
+            }
+            catch (NoExitException ex) {
+                new PopupsError("Le labyrinthe doit comporter une sortie");
+                InformationDebug.AddDebug(ex.toString());
+            }
+            catch (NoWolfException ex) {
+                new PopupsError("Un loup doit être présent dans le labyrinthe");
+                InformationDebug.AddDebug(ex.toString());
+            }
+            catch (NoSheepException ex) {
+                new PopupsError("Un mouton doit être présent dans le labyrinthe");
+                InformationDebug.AddDebug(ex.toString());
+            }
+            catch (UnconnectedGraphException ex) {
+                new PopupsError("Toute case doit être accessible depuis n'importe quelle autre");
+                InformationDebug.AddDebug(ex.toString());
+            }
+            catch (InvalidMapException ex) {
+                new PopupsError(ex.toString());
+                InformationDebug.AddDebug(ex.toString());
+            }
         });
     }
 

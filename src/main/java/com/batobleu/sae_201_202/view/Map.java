@@ -3,7 +3,6 @@ package com.batobleu.sae_201_202.view;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;

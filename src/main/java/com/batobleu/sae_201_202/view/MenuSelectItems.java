@@ -39,7 +39,7 @@ public class MenuSelectItems {
     public void switchToMenuDecor() {
         this.changeMenu("Décor", Cactus, Cactus, Poppy, Rock, Herb, Exit);
 
-        this.button1.setText("Reset");
+        this.button1.setText("Réinitialiser");
 
         EventManager.addEventResetButton(this.button1, this.mc, this.currSelected);
         EventManager.addEventSwitchMenuEntity(this.button2, this);
@@ -51,7 +51,7 @@ public class MenuSelectItems {
         this.button1.setText("Retour");
 
         EventManager.addEventSwitchMenuDecor(this.button1, this);
-        EventManager.addEventSwitchToSimulation(this.button2);
+        EventManager.addEventSwitchToSimulation(this.button2, this.mc.getSimulation());
     }
 
     public ObjectProperty<MapTile> currSelectedProperty() {
@@ -72,7 +72,9 @@ public class MenuSelectItems {
         Button b = new Button();
         b.setText(text);
         b.setPrefHeight(30);
-        b.setPrefWidth(130);
+
+        b.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(b, Priority.ALWAYS);
 
         return b;
     }
@@ -107,7 +109,6 @@ public class MenuSelectItems {
             HBox selectContainer = new HBox();
             selectContainer.setSpacing(10);
             selectContainer.setAlignment(Pos.CENTER_LEFT);
-            //selectContainer.setAlignment(Pos.CENTER);
 
             Rectangle imageSelect = new Rectangle(50, 50);
             imageSelect.setStroke(Color.BLACK);
