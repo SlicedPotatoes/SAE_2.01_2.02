@@ -18,8 +18,8 @@ import java.util.HashMap;
 
 import com.batobleu.sae_201_202.view.MenuSelectItems;
 import javafx.application.Platform;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.ImagePattern;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
@@ -62,7 +62,7 @@ class TestUpdateMapAndSimulation {
         simulation = new Simulation(5, 5);
 
         simulationField.set(mc, simulation);
-        rootField.set(mc, new Group());
+        rootField.set(mc, new BorderPane());
 
         map = new Map(mc);
         mapField.set(mc, map);
