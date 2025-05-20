@@ -7,7 +7,7 @@ import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.model.tile.TileNotReachable;
-import org.javatuples.Pair;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -119,7 +119,7 @@ public class Simulation {
     }
 
     private int countWithDFSReachableTile(int x, int y, Set<Pair<Integer, Integer>> visited) {
-        visited.add(Pair.with(x, y));
+        visited.add(new Pair<>(x, y));
 
         int count = 1;
 
@@ -130,7 +130,7 @@ public class Simulation {
                 continue;
             }
 
-            if(!visited.contains(Pair.with(_x, _y))) {
+            if(!visited.contains(new Pair<>(_x, _y))) {
                 count += countWithDFSReachableTile(_x, _y, visited);
             }
         }
