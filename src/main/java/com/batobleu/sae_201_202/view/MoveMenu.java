@@ -1,5 +1,6 @@
 package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.controller.MainController;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -11,7 +12,6 @@ import javafx.scene.text.TextAlignment;
 
 public class MoveMenu {
 
-    Scene scene;
     Group root;
     Group group;
     int numberMoveLeft = 0;
@@ -20,7 +20,8 @@ public class MoveMenu {
 
 
 
-    public MoveMenu() {
+    public MoveMenu(MainController mc) {
+        this.root = mc.getRoot();
         this.group = new Group();
         //Container
         Rectangle rectangle = new Rectangle(50,50,300,600);
@@ -28,7 +29,7 @@ public class MoveMenu {
         rectangle.setStroke(Color.BLACK);
         //Turn display
         Rectangle display = new Rectangle(50+(60*3/2),50+30,120,120);
-        display.setFill(new ImagePattern(new Image("LeftArrow.png")));
+        display.setFill(new ImagePattern(new Image("image/Wolf.png")));
 
         display.setStroke(Color.BLACK);
         Label moveLeft = new Label("Move Left : "+ numberMoveLeft);
@@ -64,8 +65,13 @@ public class MoveMenu {
         group.getChildren().addAll(rectangle, rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom);
     }
 
+
     public void show(){
-        root.getChildren().add(group);
+        this.group.setVisible(true);
+    }
+
+    public void hide(){
+        this.group.setVisible(false);
     }
 
     public void update(){
