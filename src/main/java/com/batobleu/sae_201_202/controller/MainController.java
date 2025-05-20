@@ -40,6 +40,8 @@ public class MainController extends Application {
 
         this.root = new Group();
 
+        InformationDebug informationDebug = new InformationDebug(this);
+
         Scene scene = new Scene(root, 1280, 720);
         stage.setTitle("Hello!");
         stage.setScene(scene);
