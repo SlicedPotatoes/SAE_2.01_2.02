@@ -138,4 +138,11 @@ public class MenuSelectItems {
 
         this.mc.getRoot().getChildren().add(this.group);
     }
+    public void show(){
+        this.group.setVisible(true);
+    }
+
+    public void hide(){
+        this.group.setVisible(false);
+    }
 }
