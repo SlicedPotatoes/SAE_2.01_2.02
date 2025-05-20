@@ -46,6 +46,7 @@ public class PopupTypeSimulation {
         });
 
         auto.setOnAction(e -> {
+            InformationDebug.AddDebug("Attendre la 2.02 pour avoir cette fonctionnalité");
             dialog.close();
         });
 

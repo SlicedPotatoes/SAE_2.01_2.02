@@ -20,11 +20,28 @@ public class MenuBarUp {
         MenuItem m2 = new MenuItem("Importer");
         MenuItem m3 = new MenuItem("Exporter");
 
+        m1.setOnAction(e -> {
+            InformationDebug.AddDebug("Pas encore implémenter ! ");
+        });
+        m2.setOnAction(e -> {
+            InformationDebug.AddDebug("Pas encore implémenter ! ");
+        });
+        m3.setOnAction(e -> {
+            InformationDebug.AddDebug("Pas encore implémenter ! ");
+        });
+
+
+
 
         //à changer avec l'historique des labyrinthes
         Menu m4 = new Menu("Recent");
         MenuItem m5 = new MenuItem("C:\\...\\labyrinthe1.txt");
         m4.getItems().add(m5);
+
+        m5.setOnAction(e -> {
+            InformationDebug.AddDebug("Pas encore implémenter ! ");
+        });
+
 
 
         Fichier.getItems().addAll(m1,m2,m3,m4);
