@@ -26,6 +26,7 @@ public class InformationDebug {
 
         t.setScrollTop(1);
         t.setEditable(false);
+        t.setWrapText(true);
 
         g.getChildren().add(t);
         return t;
