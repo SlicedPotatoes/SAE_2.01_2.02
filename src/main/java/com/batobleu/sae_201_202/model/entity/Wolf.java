@@ -13,12 +13,6 @@ public class Wolf extends Entity {
 
     @Override
     public void move(int dX, int dY) throws IndexOutOfBoundsException, IllegalMoveException {
-        super.move(dX, dY, this.theSimulation.getMap());
-
-        Sheep s = theSimulation.getSheep();
-
-        if(s.getX() == this.x && s.getY() == this.y) {
-            s.eaten();
-        }
+         super.move(dX, dY, this.theSimulation.getMap());
     }
 }

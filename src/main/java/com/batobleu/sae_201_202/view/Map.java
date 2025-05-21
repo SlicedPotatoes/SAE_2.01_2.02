@@ -11,8 +11,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static com.batobleu.sae_201_202.controller.MainController.Sheep;
-import static com.batobleu.sae_201_202.controller.MainController.Wolf;
+import static com.batobleu.sae_201_202.controller.MainController.*;
 import static java.lang.Math.min;
 
 public class Map {
@@ -84,10 +83,10 @@ public class Map {
                 this.images[y][x] = imageV;
 
                 if(wolf != null && wolf.getX() == x && wolf.getY() == y) {
-                    this.updateImage(x, y, Wolf);
+                    this.updateImage(x, y, WOLF);
                 }
                 else if(sheep != null && sheep.getX() == x && sheep.getY() == y) {
-                    this.updateImage(x, y, Sheep);
+                    this.updateImage(x, y, SHEEP);
                 }
                 else {
                     this.updateImage(x, y, this.mc.getSimulation().getMap()[y][x]);

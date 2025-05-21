@@ -103,9 +103,9 @@ class TestUpdateMapAndSimulation {
                 // Si la case n'a pas été spécifiée, on la définit avec la valeur par défaut quand on génère la grille.
                 if (mt == null) {
                     if (x != 0 && x != simulation.getNx() - 1 && y != 0 && y != simulation.getNy() - 1) {
-                        mt = MainController.Herb;
+                        mt = MainController.HERB;
                     } else {
-                        mt = MainController.Rock;
+                        mt = MainController.ROCK;
                     }
                 }
 
@@ -151,194 +151,194 @@ class TestUpdateMapAndSimulation {
 
     @Test
     void test01() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 1, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Wolf);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), null));
     }
 
     @Test
     void test04() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 1, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Sheep);
+        mp.put(Pair.with(1, 1), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, null, new Sheep(1, 1, 2, null)));
     }
 
     @Test
     void test07() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 2, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 2, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Sheep);
-        mp.put(Pair.with(1, 2), MainController.Wolf);
+        mp.put(Pair.with(1, 1), MainController.SHEEP);
+        mp.put(Pair.with(1, 2), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 2, 3, null), new Sheep(1, 1, 2, null)));
     }
 
     @Test
     void test09() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 1, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Wolf);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), null));
     }
 
     @Test
     void test10() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 2, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 2, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 2), MainController.Sheep);
+        mp.put(Pair.with(1, 2), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, null, new Sheep(1, 2, 2, null)));
     }
 
     @Test
     void test12() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 1, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Sheep);
+        mp.put(Pair.with(1, 1), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, null, new Sheep(1, 1, 2, null)));
     }
 
     @Test
     void test13() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF));
 
-        mc.updateMapAndSimulation(1, 2, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 2, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 2), MainController.Wolf);
+        mp.put(Pair.with(1, 2), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 2, 3, null), null));
     }
 
     @Test
     void test14() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 1, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Wolf);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), null));
     }
 
     @Test
     void test16() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF));
 
-        mc.updateMapAndSimulation(1, 2, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 2, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Wolf);
-        mp.put(Pair.with(1, 2), MainController.Sheep);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
+        mp.put(Pair.with(1, 2), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), new Sheep(1, 2, 2, null)));
     }
 
     @Test
     void test17() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 1, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Sheep);
+        mp.put(Pair.with(1, 1), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, null, new Sheep(1, 1, 2, null)));
     }
 
     @Test
     void test19() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf), Triplet.with(1, 2, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF), Triplet.with(1, 2, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 3, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 3, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 2), MainController.Sheep);
-        mp.put(Pair.with(1, 3), MainController.Wolf);
+        mp.put(Pair.with(1, 2), MainController.SHEEP);
+        mp.put(Pair.with(1, 3), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 3, 3, null), new Sheep(1, 2, 2, null)));
     }
 
     @Test
     void test20() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf), Triplet.with(1, 2, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF), Triplet.with(1, 2, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 1, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 2), MainController.Sheep);
-        mp.put(Pair.with(1, 1), MainController.Wolf);
+        mp.put(Pair.with(1, 2), MainController.SHEEP);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), new Sheep(1, 2, 2, null)));
     }
 
     @Test
     void test21() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf), Triplet.with(1, 2, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF), Triplet.with(1, 2, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 2, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 2, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 2), MainController.Wolf);
+        mp.put(Pair.with(1, 2), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 2, 3, null), null));
     }
 
     @Test
     void test22() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf), Triplet.with(1, 2, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF), Triplet.with(1, 2, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 3, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 3, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 3), MainController.Sheep);
-        mp.put(Pair.with(1, 1), MainController.Wolf);
+        mp.put(Pair.with(1, 3), MainController.SHEEP);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), new Sheep(1, 3, 2, null)));
     }
 
     @Test
     void test23() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf), Triplet.with(1, 2, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF), Triplet.with(1, 2, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 1, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Sheep);
+        mp.put(Pair.with(1, 1), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, null, new Sheep(1, 1, 2, null)));
     }
 
     @Test
     void test24() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf), Triplet.with(1, 2, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF), Triplet.with(1, 2, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 2, MainController.Sheep);
+        mc.updateMapAndSimulation(1, 2, MainController.SHEEP);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Wolf);
-        mp.put(Pair.with(1, 2), MainController.Sheep);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
+        mp.put(Pair.with(1, 2), MainController.SHEEP);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), new Sheep(1, 2, 2, null)));
     }
@@ -350,27 +350,27 @@ class TestUpdateMapAndSimulation {
     @Test
     void test25() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 0, MainController.Herb);
+            mc.updateMapAndSimulation(0, 0, MainController.HERB);
         });
     }
 
     @Test
     void test26() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 0, MainController.Cactus);
+            mc.updateMapAndSimulation(0, 0, MainController.CACTUS);
         });
     }
 
     @Test
     void test27() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 0, MainController.Poppy);
+            mc.updateMapAndSimulation(0, 0, MainController.POPPY);
         });
     }
 
     @Test
     void test28() throws InvalidPositionException {
-        mc.updateMapAndSimulation(0, 0, MainController.Rock);
+        mc.updateMapAndSimulation(0, 0, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
@@ -378,44 +378,44 @@ class TestUpdateMapAndSimulation {
     @Test
     void test29() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 0, MainController.Exit);
+            mc.updateMapAndSimulation(0, 0, MainController.EXIT);
         });
     }
 
     @Test
     void test30() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 1, MainController.Herb);
+            mc.updateMapAndSimulation(0, 1, MainController.HERB);
         });
     }
 
     @Test
     void test31() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 1, MainController.Cactus);
+            mc.updateMapAndSimulation(0, 1, MainController.CACTUS);
         });
     }
 
     @Test
     void test32() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 1, MainController.Poppy);
+            mc.updateMapAndSimulation(0, 1, MainController.POPPY);
         });
     }
 
     @Test
     void test33() throws InvalidPositionException {
-        mc.updateMapAndSimulation(0, 1, MainController.Rock);
+        mc.updateMapAndSimulation(0, 1, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
 
     @Test
     void test34() throws InvalidPositionException {
-        mc.updateMapAndSimulation(0, 1, MainController.Exit);
+        mc.updateMapAndSimulation(0, 1, MainController.EXIT);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(0, 1), MainController.Exit);
+        mp.put(Pair.with(0, 1), MainController.EXIT);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
@@ -423,27 +423,27 @@ class TestUpdateMapAndSimulation {
     @Test
     void test35() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 4, MainController.Herb);
+            mc.updateMapAndSimulation(0, 4, MainController.HERB);
         });
     }
 
     @Test
     void test36() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 4, MainController.Cactus);
+            mc.updateMapAndSimulation(0, 4, MainController.CACTUS);
         });
     }
 
     @Test
     void test37() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 4, MainController.Poppy);
+            mc.updateMapAndSimulation(0, 4, MainController.POPPY);
         });
     }
 
     @Test
     void test38() throws InvalidPositionException {
-        mc.updateMapAndSimulation(0, 4, MainController.Rock);
+        mc.updateMapAndSimulation(0, 4, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
@@ -451,81 +451,81 @@ class TestUpdateMapAndSimulation {
     @Test
     void test39() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(0, 4, MainController.Exit);
+            mc.updateMapAndSimulation(0, 4, MainController.EXIT);
         });
     }
 
     @Test
     void test40() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 0, MainController.Herb);
+            mc.updateMapAndSimulation(1, 0, MainController.HERB);
         });
     }
 
     @Test
     void test41() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 0, MainController.Cactus);
+            mc.updateMapAndSimulation(1, 0, MainController.CACTUS);
         });
     }
 
     @Test
     void test42() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 0, MainController.Poppy);
+            mc.updateMapAndSimulation(1, 0, MainController.POPPY);
         });
     }
 
     @Test
     void test43() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 0, MainController.Rock);
+        mc.updateMapAndSimulation(1, 0, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
 
     @Test
     void test44() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 0, MainController.Exit);
+        mc.updateMapAndSimulation(1, 0, MainController.EXIT);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 0), MainController.Exit);
+        mp.put(Pair.with(1, 0), MainController.EXIT);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
 
     @Test
     void test45() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Herb);
+        mc.updateMapAndSimulation(1, 1, MainController.HERB);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
 
     @Test
     void test46() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Cactus);
+        mc.updateMapAndSimulation(1, 1, MainController.CACTUS);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Cactus);
+        mp.put(Pair.with(1, 1), MainController.CACTUS);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
 
     @Test
     void test47() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Poppy);
+        mc.updateMapAndSimulation(1, 1, MainController.POPPY);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Poppy);
+        mp.put(Pair.with(1, 1), MainController.POPPY);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
 
     @Test
     void test48() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Rock);
+        mc.updateMapAndSimulation(1, 1, MainController.ROCK);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Rock);
+        mp.put(Pair.with(1, 1), MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
@@ -533,44 +533,44 @@ class TestUpdateMapAndSimulation {
     @Test
     void test49() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 1, MainController.Exit);
+            mc.updateMapAndSimulation(1, 1, MainController.EXIT);
         });
     }
 
     @Test
     void test50() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 4, MainController.Herb);
+            mc.updateMapAndSimulation(1, 4, MainController.HERB);
         });
     }
 
     @Test
     void test51() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 4, MainController.Cactus);
+            mc.updateMapAndSimulation(1, 4, MainController.CACTUS);
         });
     }
 
     @Test
     void test52() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 4, MainController.Poppy);
+            mc.updateMapAndSimulation(1, 4, MainController.POPPY);
         });
     }
 
     @Test
     void test53() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 4, MainController.Rock);
+        mc.updateMapAndSimulation(1, 4, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
 
     @Test
     void test54() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 4, MainController.Exit);
+        mc.updateMapAndSimulation(1, 4, MainController.EXIT);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 4), MainController.Exit);
+        mp.put(Pair.with(1, 4), MainController.EXIT);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
@@ -578,27 +578,27 @@ class TestUpdateMapAndSimulation {
     @Test
     void test55() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 0, MainController.Herb);
+            mc.updateMapAndSimulation(4, 0, MainController.HERB);
         });
     }
 
     @Test
     void test56() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 0, MainController.Cactus);
+            mc.updateMapAndSimulation(4, 0, MainController.CACTUS);
         });
     }
 
     @Test
     void test57() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 0, MainController.Poppy);
+            mc.updateMapAndSimulation(4, 0, MainController.POPPY);
         });
     }
 
     @Test
     void test58() throws InvalidPositionException {
-        mc.updateMapAndSimulation(4, 0, MainController.Rock);
+        mc.updateMapAndSimulation(4, 0, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
@@ -606,44 +606,44 @@ class TestUpdateMapAndSimulation {
     @Test
     void test59() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 0, MainController.Exit);
+            mc.updateMapAndSimulation(4, 0, MainController.EXIT);
         });
     }
 
     @Test
     void test60() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 1, MainController.Herb);
+            mc.updateMapAndSimulation(4, 1, MainController.HERB);
         });
     }
 
     @Test
     void test61() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 1, MainController.Cactus   );
+            mc.updateMapAndSimulation(4, 1, MainController.CACTUS);
         });
     }
 
     @Test
     void test62() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 1, MainController.Poppy);
+            mc.updateMapAndSimulation(4, 1, MainController.POPPY);
         });
     }
 
     @Test
     void test63() throws InvalidPositionException {
-        mc.updateMapAndSimulation(4, 1, MainController.Rock);
+        mc.updateMapAndSimulation(4, 1, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
 
     @Test
     void test64() throws InvalidPositionException {
-        mc.updateMapAndSimulation(4, 1, MainController.Exit);
+        mc.updateMapAndSimulation(4, 1, MainController.EXIT);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(4, 1), MainController.Exit);
+        mp.put(Pair.with(4, 1), MainController.EXIT);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }
@@ -651,27 +651,27 @@ class TestUpdateMapAndSimulation {
     @Test
     void test65() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 4, MainController.Herb);
+            mc.updateMapAndSimulation(4, 4, MainController.HERB);
         });
     }
 
     @Test
     void test66() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 4, MainController.Cactus);
+            mc.updateMapAndSimulation(4, 4, MainController.CACTUS);
         });
     }
 
     @Test
     void test67() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 4, MainController.Poppy);
+            mc.updateMapAndSimulation(4, 4, MainController.POPPY);
         });
     }
 
     @Test
     void test68() throws InvalidPositionException {
-        mc.updateMapAndSimulation(4, 4, MainController.Rock);
+        mc.updateMapAndSimulation(4, 4, MainController.ROCK);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
@@ -679,7 +679,7 @@ class TestUpdateMapAndSimulation {
     @Test
     void test69() {
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(4, 4, MainController.Exit);
+            mc.updateMapAndSimulation(4, 4, MainController.EXIT);
         });
     }
 
@@ -689,20 +689,20 @@ class TestUpdateMapAndSimulation {
 
     @Test
     void test70() throws InvalidPositionException {
-        mc.updateMapAndSimulation(1, 1, MainController.Wolf);
+        mc.updateMapAndSimulation(1, 1, MainController.WOLF);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(1, 1), MainController.Wolf);
+        mp.put(Pair.with(1, 1), MainController.WOLF);
 
         Assertions.assertTrue(this.checkValid(mp, new Wolf(1, 1, 3, null), null));
     }
 
     @Test
     void test71() {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Rock));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.ROCK));
 
         Assertions.assertThrows(InvalidPositionException.class, () -> {
-            mc.updateMapAndSimulation(1, 1, MainController.Wolf);
+            mc.updateMapAndSimulation(1, 1, MainController.WOLF);
         });
     }
 
@@ -712,18 +712,18 @@ class TestUpdateMapAndSimulation {
 
     @Test
     void test72() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Wolf));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.WOLF));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Herb);
+        mc.updateMapAndSimulation(1, 1, MainController.HERB);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
 
     @Test
     void test73() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.Sheep));
+        this.setupSimulationAndMap(Triplet.with(1, 1, MainController.SHEEP));
 
-        mc.updateMapAndSimulation(1, 1, MainController.Herb);
+        mc.updateMapAndSimulation(1, 1, MainController.HERB);
 
         Assertions.assertTrue(this.checkValid(new HashMap<>(), null, null));
     }
@@ -734,12 +734,12 @@ class TestUpdateMapAndSimulation {
 
     @Test
     void test74() throws InvalidPositionException {
-        this.setupSimulationAndMap(Triplet.with(1, 4, MainController.Exit));
+        this.setupSimulationAndMap(Triplet.with(1, 4, MainController.EXIT));
 
-        mc.updateMapAndSimulation(0, 1, MainController.Exit);
+        mc.updateMapAndSimulation(0, 1, MainController.EXIT);
 
         HashMap<Pair<Integer, Integer>, MapTile> mp = new HashMap<>();
-        mp.put(Pair.with(0, 1), MainController.Exit);
+        mp.put(Pair.with(0, 1), MainController.EXIT);
 
         Assertions.assertTrue(this.checkValid(mp, null, null));
     }

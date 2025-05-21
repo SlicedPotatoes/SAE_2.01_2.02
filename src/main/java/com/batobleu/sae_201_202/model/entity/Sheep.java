@@ -4,18 +4,16 @@ import com.batobleu.sae_201_202.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.TileHerb;
 
+import static com.batobleu.sae_201_202.controller.MainController.EXIT;
+
 public class Sheep extends Entity {
     private Simulation theSimulation;
     private float speedModifier;
-    private boolean isEaten;
-    private boolean isSafe;
 
     public Sheep(int x, int y, int speed, Simulation s) {
         super(x, y, speed);
         this.theSimulation = s;
         this.speedModifier = 1;
-        this.isEaten = false;
-        this.isSafe = false;
     }
 
     @Override
@@ -30,19 +28,13 @@ public class Sheep extends Entity {
     }
 
     public boolean getIsEaten() {
-        return this.isEaten;
+        Wolf w = this.theSimulation.getWolf();
+
+        return w.x == this.x && w.y == this.y;
     }
 
     public boolean getIsSafe() {
-        return this.isSafe;
-    }
-
-    public void eaten() {
-        this.isEaten = true;
-    }
-
-    public void safe() {
-        this.isSafe = true;
+        return this.theSimulation.getMap()[this.y][this.x] == EXIT;
     }
 
     private void eat() {

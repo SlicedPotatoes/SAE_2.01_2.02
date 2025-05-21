@@ -22,15 +22,20 @@ import java.util.List;
 import java.util.Optional;
 
 public class MainController extends Application {
-    public static final MapTile Rock = new TileNotReachable("/Image/Rock.png", "Rocher");
-    public static final MapTile Cactus = new TileHerb("/Image/Cactus.png", "Cactus", 0.5f);
-    public static final MapTile Herb = new TileHerb("/Image/Herb.png", "Herbe", 1f);
-    public static final MapTile Poppy = new TileHerb("/Image/Flower.png", "Marguerite", 2f);
-    public static final MapTile Exit = new TileExit("/Image/Exit.png", "Sortie");
-    public static final MapTile Wolf = new TileEntity("/Image/Wolf.png", "Loup");
-    public static final MapTile Sheep = new TileEntity("/Image/Sheep.png", "Mouton");
+    public static final MapTile ROCK = new TileNotReachable("/Image/Rock.png", "Rocher");
+    public static final MapTile CACTUS = new TileHerb("/Image/Cactus.png", "Cactus", 0.5f);
+    public static final MapTile HERB = new TileHerb("/Image/Herb.png", "Herbe", 1f);
+    public static final MapTile POPPY = new TileHerb("/Image/Flower.png", "Marguerite", 2f);
+    public static final MapTile EXIT = new TileExit("/Image/Exit.png", "Sortie");
+    public static final MapTile WOLF = new TileEntity("/Image/Wolf.png", "Loup");
+    public static final MapTile SHEEP = new TileEntity("/Image/Sheep.png", "Mouton");
+
     public static final HashMap<Character, MapTile> CHARACTER_MAP_TILE_HASH_MAP = new HashMap<>();
     public static final HashMap<MapTile, Character> MAP_TILE_CHARACTER_HASH_MAP = new HashMap<>();
+    public static final HashMap<Character, Pair<Integer, Integer>> CHARACTER_DIRECTION = new HashMap<>();
+
+    public static final int DEFAULT_SPEED_SHEEP = 2;
+    public static final int DEFAULT_SPEED_WOLF = 3;
 
     private Simulation s;
     private MenuSelectItems msi;
@@ -44,21 +49,26 @@ public class MainController extends Application {
     private BorderPane root;
 
     public static void main(String[] args) {
-        CHARACTER_MAP_TILE_HASH_MAP.put('x', Rock);
-        CHARACTER_MAP_TILE_HASH_MAP.put('c', Cactus);
-        CHARACTER_MAP_TILE_HASH_MAP.put('h', Herb);
-        CHARACTER_MAP_TILE_HASH_MAP.put('f', Poppy);
-        CHARACTER_MAP_TILE_HASH_MAP.put('s', Exit);
-        CHARACTER_MAP_TILE_HASH_MAP.put('l', Wolf);
-        CHARACTER_MAP_TILE_HASH_MAP.put('m', Sheep);
+        CHARACTER_MAP_TILE_HASH_MAP.put('x', ROCK);
+        CHARACTER_MAP_TILE_HASH_MAP.put('c', CACTUS);
+        CHARACTER_MAP_TILE_HASH_MAP.put('h', HERB);
+        CHARACTER_MAP_TILE_HASH_MAP.put('f', POPPY);
+        CHARACTER_MAP_TILE_HASH_MAP.put('s', EXIT);
+        CHARACTER_MAP_TILE_HASH_MAP.put('l', WOLF);
+        CHARACTER_MAP_TILE_HASH_MAP.put('m', SHEEP);
 
-        MAP_TILE_CHARACTER_HASH_MAP.put(Rock, 'x');
-        MAP_TILE_CHARACTER_HASH_MAP.put(Cactus, 'c');
-        MAP_TILE_CHARACTER_HASH_MAP.put(Herb, 'h');
-        MAP_TILE_CHARACTER_HASH_MAP.put(Poppy, 'f');
-        MAP_TILE_CHARACTER_HASH_MAP.put(Exit, 's');
-        MAP_TILE_CHARACTER_HASH_MAP.put(Wolf, 'l');
-        MAP_TILE_CHARACTER_HASH_MAP.put(Sheep, 'm');
+        MAP_TILE_CHARACTER_HASH_MAP.put(ROCK, 'x');
+        MAP_TILE_CHARACTER_HASH_MAP.put(CACTUS, 'c');
+        MAP_TILE_CHARACTER_HASH_MAP.put(HERB, 'h');
+        MAP_TILE_CHARACTER_HASH_MAP.put(POPPY, 'f');
+        MAP_TILE_CHARACTER_HASH_MAP.put(EXIT, 's');
+        MAP_TILE_CHARACTER_HASH_MAP.put(WOLF, 'l');
+        MAP_TILE_CHARACTER_HASH_MAP.put(SHEEP, 'm');
+
+        CHARACTER_DIRECTION.put('u', new Pair<>(0, -1));
+        CHARACTER_DIRECTION.put('d', new Pair<>(0, 1));
+        CHARACTER_DIRECTION.put('l', new Pair<>(-1, 0));
+        CHARACTER_DIRECTION.put('r', new Pair<>(1, 0));
 
         launch();
     }
@@ -145,8 +155,8 @@ public class MainController extends Application {
         *  - entity1 sera l'entité, dans la simulation, qui correspond au loup
         *  - entity2 sera le mouton
         */
-        Entity entity1 = selectedItem instanceof TileEntity ? (selectedItem == Wolf ? this.s.getWolf() : this.s.getSheep()) : this.s.getWolf();
-        Entity entity2 = selectedItem instanceof TileEntity ? (selectedItem == Wolf ? this.s.getSheep() : this.s.getWolf()) : this.s.getSheep();
+        Entity entity1 = selectedItem instanceof TileEntity ? (selectedItem == WOLF ? this.s.getWolf() : this.s.getSheep()) : this.s.getWolf();
+        Entity entity2 = selectedItem instanceof TileEntity ? (selectedItem == WOLF ? this.s.getSheep() : this.s.getWolf()) : this.s.getSheep();
 
         // Si on a selectionné une entité
         if(selectedItem instanceof TileEntity) {
@@ -177,8 +187,8 @@ public class MainController extends Application {
                 List<Integer> pos = this.s.findExitMapTile();
 
                 if(pos != null) {
-                    this.s.getMap()[pos.get(1)][pos.get(0)] = Rock;
-                    this.map.updateImage(pos.get(0), pos.get(1), Rock);
+                    this.s.getMap()[pos.get(1)][pos.get(0)] = ROCK;
+                    this.map.updateImage(pos.get(0), pos.get(1), ROCK);
                 }
             }
 

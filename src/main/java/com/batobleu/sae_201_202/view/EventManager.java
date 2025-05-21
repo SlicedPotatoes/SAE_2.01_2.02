@@ -1,9 +1,11 @@
 package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.exception.invalidMap.*;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.view.Popup.PopupEnd;
 import com.batobleu.sae_201_202.view.Popup.PopupTypeSimulation;
 import com.batobleu.sae_201_202.view.Popup.PopupsError;
 import com.batobleu.sae_201_202.view.leftMenu.MenuSelectItems;
@@ -12,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -164,6 +167,26 @@ public class EventManager {
                 case ControlAuto:
                     // TO DO
                     break;
+            }
+        });
+    }
+
+    public static void addEventMove(MainController mc, StackPane sp, char dir) {
+        sp.setOnMouseClicked((MouseEvent e) -> {
+            if(mc.getSimulation().isEnd()) {
+                return;
+            }
+
+            try {
+                mc.getSimulation().move(dir);
+                mc.getMoveMenu().update(dir);
+
+                if(mc.getSimulation().isEnd()) {
+                    new PopupEnd(mc);
+                }
+            }
+            catch (IllegalMoveException | InvalidPositionException ex) {
+                InformationDebug.AddDebug(ex.toString());
             }
         });
     }

@@ -37,7 +37,7 @@ public class MenuSelectItems {
     }
 
     public void switchToMenuDecor() {
-        this.changeMenu("Décor", Cactus, Cactus, Poppy, Rock, Herb, Exit);
+        this.changeMenu("Décor", CACTUS, CACTUS, POPPY, ROCK, HERB, EXIT);
 
         this.button1.setText("Réinitialiser");
 
@@ -46,7 +46,7 @@ public class MenuSelectItems {
     }
 
     public void switchToMenuEntity() {
-        this.changeMenu("Entité", Wolf, Wolf, Sheep);
+        this.changeMenu("Entité", WOLF, WOLF, SHEEP);
 
         this.button1.setText("Retour");
 

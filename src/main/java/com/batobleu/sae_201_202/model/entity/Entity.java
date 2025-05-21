@@ -2,6 +2,7 @@ package com.batobleu.sae_201_202.model.entity;
 
 import com.batobleu.sae_201_202.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.model.tile.TileExit;
 import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 
 public abstract class Entity {
@@ -37,6 +38,10 @@ public abstract class Entity {
 
         if(map[y][x] instanceof TileNotReachable) {
             throw new IllegalMoveException("Deplacement sur un rocher");
+        }
+
+        if(this instanceof Wolf && map[y][x] instanceof TileExit) {
+            throw new IllegalMoveException("Deplacement sur une sortie pour le loup");
         }
 
         this.x = x;
