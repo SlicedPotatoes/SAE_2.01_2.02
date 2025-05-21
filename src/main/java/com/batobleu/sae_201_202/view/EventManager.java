@@ -152,18 +152,18 @@ public class EventManager {
     public static void addEventChangePage(MainController mc) {
         mc.getCurrPage().addListener((observable, oldValue, newValue) -> {
             switch (newValue) {
-                case SetupDecor -> {
+                case SetupDecor:
                     mc.getLmm().showMenuDecor();
-                }
-                case SetupEntity -> {
+                    break;
+                case SetupEntity:
                     mc.getLmm().showMenuEntity();
-                }
-                case ControlManual -> {
+                    break;
+                case ControlManual:
                     mc.getLmm().showMenuMove();
-                }
-                case ControlAuto -> {
+                    break;
+                case ControlAuto:
                     // TO DO
-                }
+                    break;
             }
         });
     }
