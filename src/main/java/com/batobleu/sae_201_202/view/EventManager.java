@@ -3,10 +3,10 @@ package com.batobleu.sae_201_202.view;
 import com.batobleu.sae_201_202.exception.invalidMap.*;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.exception.InvalidPositionException;
-import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.Popup.PopupTypeSimulation;
 import com.batobleu.sae_201_202.view.Popup.PopupsError;
+import com.batobleu.sae_201_202.view.leftMenu.MenuSelectItems;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -42,30 +42,29 @@ public class EventManager {
         });
     }
 
-    // Ajout des événements pour modifier la map et la simuation lors de la configuration de celle ci.
-    // TO DO: En mode "Control Manuel / Automatique", désactiver les événements
+    // Ajout des événements pour modifier la map et la simulation lors de la configuration de celle ci.
+    private static void actionOnClickMap(MainController mc, int x, int y) {
+        if(mc.getCurrPage().get() != CurrPage.SetupDecor && mc.getCurrPage().get() != CurrPage.SetupEntity) {
+            return;
+        }
+
+        MapTile selectedItem = mc.getMsi().currSelectedProperty().get();
+        try {
+            mc.updateMapAndSimulation(x, y, selectedItem);
+        }
+        catch (InvalidPositionException ex) {
+            System.out.println(ex);
+        }
+    }
     public static void addEventOnClickMap(MainController mc) {
         for (int y = 0; y < mc.getSimulation().getNy(); y++) {
             for(int x = 0; x < mc.getSimulation().getNx(); x++) {
                 int _x = x, _y = y;
-
                 mc.getMap().getValidPositionIndicator(x, y).setOnMouseClicked((MouseEvent e) -> {
-                    MapTile selectedItem = mc.getMsi().currSelectedProperty().get();
-                    try {
-                        mc.updateMapAndSimulation(_x, _y, selectedItem);
-                    }
-                    catch (InvalidPositionException ex) {
-                        System.out.println(ex);
-                    }
+                    actionOnClickMap(mc, _x, _y);
                 });
                 mc.getMap().getImages()[y][x].setOnMouseClicked((MouseEvent e) -> {
-                    MapTile selectedItem = mc.getMsi().currSelectedProperty().get();
-                    try {
-                        mc.updateMapAndSimulation(_x, _y, selectedItem);
-                    }
-                    catch (InvalidPositionException ex) {
-                        System.out.println(ex);
-                    }
+                    actionOnClickMap(mc, _x, _y);
                 });
             }
         }
@@ -88,26 +87,25 @@ public class EventManager {
     }
 
     // Ajout de l'événement pour le bouton "Suivant" sur le menu "Décor"
-    public static void addEventSwitchMenuEntity(Button b, MenuSelectItems msi) {
+    public static void addEventSwitchMenuEntity(Button b, MainController mc) {
         b.setOnAction((ActionEvent e) -> {
-            msi.switchToMenuEntity();
+            mc.setCurrPage(CurrPage.SetupEntity);
         });
     }
 
     // Ajout de l'événement pour le bouton "Retour" sur le menu "Entité"
-    public static void addEventSwitchMenuDecor(Button b, MenuSelectItems msi) {
+    public static void addEventSwitchMenuDecor(Button b, MainController mc) {
         b.setOnAction((ActionEvent e) -> {
-            msi.switchToMenuDecor();
+            mc.setCurrPage(CurrPage.SetupDecor);
         });
     }
 
     // Ajout de l'événement pour le bouton "Valider" sur le menu "Entité"
-    public static void addEventSwitchToSimulation(Button b, Simulation simulation) {
+    public static void addEventSwitchToSimulation(Button b, MainController mc) {
         b.setOnAction((ActionEvent e) -> {
             try {
-                simulation.isValidMap();
-                PopupTypeSimulation p = new PopupTypeSimulation();
-                p.PopupTypeSimulation();
+                mc.getSimulation().isValidMap();
+                new PopupTypeSimulation(mc);
             }
             catch (NoExitException ex) {
                 new PopupsError("Le labyrinthe doit comporter une sortie");
@@ -148,6 +146,25 @@ public class EventManager {
     public static void addEventTooltipHide(Rectangle r, Tooltip t) {
         r.setOnMouseExited((MouseEvent e) -> {
             t.hide();
+        });
+    }
+
+    public static void addEventChangePage(MainController mc) {
+        mc.getCurrPage().addListener((observable, oldValue, newValue) -> {
+            switch (newValue) {
+                case SetupDecor -> {
+                    mc.getLmm().showMenuDecor();
+                }
+                case SetupEntity -> {
+                    mc.getLmm().showMenuEntity();
+                }
+                case ControlManual -> {
+                    mc.getLmm().showMenuMove();
+                }
+                case ControlAuto -> {
+                    // TO DO
+                }
+            }
         });
     }
 }

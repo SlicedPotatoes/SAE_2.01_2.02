@@ -6,7 +6,12 @@ import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.*;
 import com.batobleu.sae_201_202.view.Popup.PopupNewLabyrinth;
+import com.batobleu.sae_201_202.view.leftMenu.LeftMenuManager;
+import com.batobleu.sae_201_202.view.leftMenu.MenuSelectItems;
+import com.batobleu.sae_201_202.view.leftMenu.MoveMenu;
 import javafx.application.Application;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -31,7 +36,11 @@ public class MainController extends Application {
     private MenuSelectItems msi;
     private Map map;
     private Stage stage;
+    private MoveMenu moveMenu;
 
+    private LeftMenuManager lmm;
+
+    private ObjectProperty<CurrPage> currPage;
     private BorderPane root;
 
     public static void main(String[] args) {
@@ -76,7 +85,8 @@ public class MainController extends Application {
         Scene scene = new Scene(root, 1280, 720);
         this.stage.setTitle("Mange moi si tu peux !");
         this.stage.setScene(scene);
-        //this.stage.setResizable(false);
+
+        this.lmm = new LeftMenuManager(this);
 
         this.map = new Map(this);
         this.msi = new MenuSelectItems(this);
@@ -85,9 +95,13 @@ public class MainController extends Application {
         t.addMenuBar();
 
         this.map.addMap();
-        this.msi.switchToMenuDecor();
-
         new InformationDebug(this);
+        this.moveMenu = new MoveMenu(this);
+
+        this.currPage = new SimpleObjectProperty<>();
+        EventManager.addEventChangePage(this);
+
+        this.setCurrPage(CurrPage.SetupDecor);
 
         stage.show();
     }
@@ -109,6 +123,14 @@ public class MainController extends Application {
     }
 
     public Stage getStage() { return this.stage; }
+
+    public MoveMenu getMoveMenu() {
+        return this.moveMenu;
+    }
+
+    public LeftMenuManager getLmm() {
+        return this.lmm;
+    }
 
     public void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
         if(!selectedItem.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
@@ -188,5 +210,13 @@ public class MainController extends Application {
         }
 
         _init();
+    }
+
+    public ObjectProperty<CurrPage> getCurrPage() {
+        return this.currPage;
+    }
+
+    public void setCurrPage(CurrPage cp) {
+        this.currPage.set(cp);
     }
 }

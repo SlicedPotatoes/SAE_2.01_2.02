@@ -1,10 +1,10 @@
-package com.batobleu.sae_201_202.view;
+package com.batobleu.sae_201_202.view.leftMenu;
 
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.view.EventManager;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,7 +42,7 @@ public class MenuSelectItems {
         this.button1.setText("Réinitialiser");
 
         EventManager.addEventResetButton(this.button1, this.mc, this.currSelected);
-        EventManager.addEventSwitchMenuEntity(this.button2, this);
+        EventManager.addEventSwitchMenuEntity(this.button2, this.mc);
     }
 
     public void switchToMenuEntity() {
@@ -50,8 +50,8 @@ public class MenuSelectItems {
 
         this.button1.setText("Retour");
 
-        EventManager.addEventSwitchMenuDecor(this.button1, this);
-        EventManager.addEventSwitchToSimulation(this.button2, this.mc.getSimulation());
+        EventManager.addEventSwitchMenuDecor(this.button1, this.mc);
+        EventManager.addEventSwitchToSimulation(this.button2, this.mc);
     }
 
     public ObjectProperty<MapTile> currSelectedProperty() {
@@ -80,13 +80,9 @@ public class MenuSelectItems {
     }
 
     private void changeMenu(String titleString, MapTile defaultSelected, MapTile... mapTiles){
-        this.mc.getRoot().getChildren().remove(this.container);
         this.container = new VBox();
-        this.container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), new BorderWidths(1))));
-        this.container.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-        this.container.setPrefWidth(200);
-        this.container.setPadding(new Insets(15));
         this.container.setSpacing(15);
+        VBox.setVgrow(this.container, Priority.ALWAYS);
 
         BorderPane titleContainer = new BorderPane();
         Label titleLabel = new Label(titleString);
@@ -96,7 +92,7 @@ public class MenuSelectItems {
         help.setMouseTransparent(false);
         help.setFill(new ImagePattern(new Image(getClass().getResource("/Image/Help.png").toExternalForm())));
         // Tooltip
-        Tooltip t = new Tooltip("Selectionner un objet et cliquer sur la grille pour le positionner");
+        Tooltip t = new Tooltip("Sélectionner un objet et cliquer sur la grille pour le positionner");
         Tooltip.install(help, t);
         EventManager.addEventTooltipShow(help, t);
         EventManager.addEventTooltipHide(help, t);
@@ -137,13 +133,9 @@ public class MenuSelectItems {
         VBox.setVgrow(buttonContainer, Priority.ALWAYS);
 
         this.container.getChildren().add(buttonContainer);
-        this.mc.getRoot().setLeft(this.container);
-    }
-    public void show(){
-        this.container.setVisible(true);
     }
 
-    public void hide(){
-        this.container.setVisible(false);
+    public VBox getContainer() {
+        return this.container;
     }
 }

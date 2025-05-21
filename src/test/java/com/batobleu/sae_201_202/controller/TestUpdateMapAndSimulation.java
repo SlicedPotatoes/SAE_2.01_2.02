@@ -16,11 +16,9 @@ import com.batobleu.sae_201_202.view.Map;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import com.batobleu.sae_201_202.view.MenuSelectItems;
+import com.batobleu.sae_201_202.view.leftMenu.MenuSelectItems;
 import javafx.application.Platform;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.ImagePattern;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.junit.jupiter.api.*;
