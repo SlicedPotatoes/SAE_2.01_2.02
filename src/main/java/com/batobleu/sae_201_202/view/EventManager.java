@@ -5,9 +5,10 @@ import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.MapTile;
+import com.batobleu.sae_201_202.view.Popup.PopupTypeSimulation;
+import com.batobleu.sae_201_202.view.Popup.PopupsError;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -48,6 +49,15 @@ public class EventManager {
             for(int x = 0; x < mc.getSimulation().getNx(); x++) {
                 int _x = x, _y = y;
 
+                mc.getMap().getValidPositionIndicator(x, y).setOnMouseClicked((MouseEvent e) -> {
+                    MapTile selectedItem = mc.getMsi().currSelectedProperty().get();
+                    try {
+                        mc.updateMapAndSimulation(_x, _y, selectedItem);
+                    }
+                    catch (InvalidPositionException ex) {
+                        System.out.println(ex);
+                    }
+                });
                 mc.getMap().getImages()[y][x].setOnMouseClicked((MouseEvent e) -> {
                     MapTile selectedItem = mc.getMsi().currSelectedProperty().get();
                     try {

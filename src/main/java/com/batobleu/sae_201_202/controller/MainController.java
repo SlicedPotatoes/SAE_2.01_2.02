@@ -5,24 +5,27 @@ import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.*;
+import com.batobleu.sae_201_202.view.Popup.PopupNewLabyrinth;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class MainController extends Application {
-    public static MapTile Rock = new TileNotReachable("/Image/Rock.png", "Rocher");
-    public static MapTile Cactus = new TileHerb("/Image/Cactus.png", "Cactus", 0.5f);
-    public static MapTile Herb = new TileHerb("/Image/Herb.png", "Herbe", 1f);
-    public static MapTile Poppy = new TileHerb("/Image/Flower.png", "Marguerite", 2f);
-    public static MapTile Exit = new TileExit("/Image/Exit.png", "Sortie");
-    public static MapTile Wolf = new TileEntity("/Image/Wolf.png", "Loup");
-    public static MapTile Sheep = new TileEntity("/Image/Sheep.png", "Mouton");
+    public static final MapTile Rock = new TileNotReachable("/Image/Rock.png", "Rocher");
+    public static final MapTile Cactus = new TileHerb("/Image/Cactus.png", "Cactus", 0.5f);
+    public static final MapTile Herb = new TileHerb("/Image/Herb.png", "Herbe", 1f);
+    public static final MapTile Poppy = new TileHerb("/Image/Flower.png", "Marguerite", 2f);
+    public static final MapTile Exit = new TileExit("/Image/Exit.png", "Sortie");
+    public static final MapTile Wolf = new TileEntity("/Image/Wolf.png", "Loup");
+    public static final MapTile Sheep = new TileEntity("/Image/Sheep.png", "Mouton");
+    public static final HashMap<Character, MapTile> CHARACTER_MAP_TILE_HASH_MAP = new HashMap<>();
+    public static final HashMap<MapTile, Character> MAP_TILE_CHARACTER_HASH_MAP = new HashMap<>();
 
     private Simulation s;
     private MenuSelectItems msi;
@@ -32,6 +35,22 @@ public class MainController extends Application {
     private BorderPane root;
 
     public static void main(String[] args) {
+        CHARACTER_MAP_TILE_HASH_MAP.put('x', Rock);
+        CHARACTER_MAP_TILE_HASH_MAP.put('c', Cactus);
+        CHARACTER_MAP_TILE_HASH_MAP.put('h', Herb);
+        CHARACTER_MAP_TILE_HASH_MAP.put('f', Poppy);
+        CHARACTER_MAP_TILE_HASH_MAP.put('s', Exit);
+        CHARACTER_MAP_TILE_HASH_MAP.put('l', Wolf);
+        CHARACTER_MAP_TILE_HASH_MAP.put('m', Sheep);
+
+        MAP_TILE_CHARACTER_HASH_MAP.put(Rock, 'x');
+        MAP_TILE_CHARACTER_HASH_MAP.put(Cactus, 'c');
+        MAP_TILE_CHARACTER_HASH_MAP.put(Herb, 'h');
+        MAP_TILE_CHARACTER_HASH_MAP.put(Poppy, 'f');
+        MAP_TILE_CHARACTER_HASH_MAP.put(Exit, 's');
+        MAP_TILE_CHARACTER_HASH_MAP.put(Wolf, 'l');
+        MAP_TILE_CHARACTER_HASH_MAP.put(Sheep, 'm');
+
         launch();
     }
 
@@ -48,23 +67,27 @@ public class MainController extends Application {
 
         this.s = new Simulation(result.get().getKey(), result.get().getValue());
 
+        _init();
+    }
+
+    public void _init() {
         this.root = new BorderPane();
 
-        new InformationDebug(this);
-
         Scene scene = new Scene(root, 1280, 720);
-        stage.setTitle("Mange moi si tu peux !");
-        stage.setScene(scene);
-        stage.setResizable(false);
+        this.stage.setTitle("Mange moi si tu peux !");
+        this.stage.setScene(scene);
+        //this.stage.setResizable(false);
 
         this.map = new Map(this);
         this.msi = new MenuSelectItems(this);
 
-        MenuBarUp t = new MenuBarUp(root);
+        MenuBarUp t = new MenuBarUp(this);
         t.addMenuBar();
 
         this.map.addMap();
         this.msi.switchToMenuDecor();
+
+        new InformationDebug(this);
 
         stage.show();
     }
@@ -145,5 +168,25 @@ public class MainController extends Application {
         this.map.updateImage(x, y, selectedItem);
     }
 
+    public void initWithFile(List<String> lineFiles) {
+        int nx = lineFiles.getFirst().length();
+        int ny = lineFiles.size();
 
+        this.s = new Simulation(nx, ny);
+
+        for(int y = 0; y < ny; y++) {
+            for(int x = 0; x < nx; x++) {
+                MapTile mt = CHARACTER_MAP_TILE_HASH_MAP.get(lineFiles.get(y).charAt(x));
+
+                if(mt instanceof TileEntity) {
+                    this.s.setEntity(mt, x, y);
+                }
+                else {
+                    this.s.getMap()[y][x] = mt;
+                }
+            }
+        }
+
+        _init();
+    }
 }

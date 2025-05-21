@@ -84,7 +84,7 @@ public class MenuSelectItems {
         this.container = new VBox();
         this.container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), new BorderWidths(1))));
         this.container.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-        this.container.prefWidthProperty().bind(this.mc.getStage().widthProperty().multiply(0.25));
+        this.container.setPrefWidth(200);
         this.container.setPadding(new Insets(15));
         this.container.setSpacing(15);
 

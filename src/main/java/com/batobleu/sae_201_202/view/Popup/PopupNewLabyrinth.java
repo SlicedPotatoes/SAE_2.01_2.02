@@ -1,4 +1,4 @@
-package com.batobleu.sae_201_202.view;
+package com.batobleu.sae_201_202.view.Popup;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;

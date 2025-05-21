@@ -1,14 +1,23 @@
 package com.batobleu.sae_201_202.view;
 
+import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.view.Popup.PopupFileChooser;
+import com.batobleu.sae_201_202.view.Popup.PopupsError;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class MenuBarUp {
-    private BorderPane root;
+    private MainController mc;
     private MenuBar t;
 
-    public MenuBarUp(BorderPane root) {
-        this.root = root;
+    public MenuBarUp(MainController mc) {
+        this.mc = mc;
         this.t = addMenuBar();
     }
 
@@ -21,10 +30,23 @@ public class MenuBarUp {
         MenuItem m3 = new MenuItem("Exporter");
 
         m1.setOnAction(e -> {
-            InformationDebug.AddDebug("Pas encore implémenter ! ");
+            this.mc.getStage().close();
+            this.mc.start(new Stage());
         });
         m2.setOnAction(e -> {
-            InformationDebug.AddDebug("Pas encore implémenter ! ");
+            String pathString = new PopupFileChooser().getPath("Ouvrir", this.mc.getStage());
+
+            if(pathString != null) {
+                try {
+                    Path path = Paths.get(pathString);
+                    List<String> lines = null;
+                    lines = Files.readAllLines(path);
+                    this.mc.initWithFile(lines);
+                }
+                catch (IOException ex) {
+                    new PopupsError(ex.toString()).show();
+                }
+            }
         });
         m3.setOnAction(e -> {
             InformationDebug.AddDebug("Pas encore implémenter ! ");
@@ -42,7 +64,7 @@ public class MenuBarUp {
         fichier.getItems().addAll(m1,m2,m3,m4);
 
         MenuBar a = new MenuBar(fichier, propos);
-        root.setTop(this.t);
+        this.mc.getRoot().setTop(this.t);
         return a;
     }
 

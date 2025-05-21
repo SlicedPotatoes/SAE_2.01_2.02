@@ -112,9 +112,7 @@ class TestUpdateMapAndSimulation {
                 }
 
                 // Récupération de l'url de l'image qui est affichée sur cette case
-                ImagePattern ip = (ImagePattern)map.getImages()[y][x].getFill();
-                Image i = ip.getImage();
-                String url = i.getUrl();
+                String url = map.getImages()[y][x].getImage().getUrl();
 
                 // Vérifie si l'url correspond à celui de mt.
                 if (!url.equals(this.getClass().getResource(mt.getPathIcon()).toExternalForm())) {

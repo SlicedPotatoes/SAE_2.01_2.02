@@ -14,4 +14,6 @@ module com.batobleu.sae_201_202 {
     opens com.batobleu.sae_201_202.view to javafx.fxml;
     exports com.batobleu.sae_201_202.model;
     opens com.batobleu.sae_201_202.model to javafx.fxml;
+    exports com.batobleu.sae_201_202.view.Popup;
+    opens com.batobleu.sae_201_202.view.Popup to javafx.fxml;
 }

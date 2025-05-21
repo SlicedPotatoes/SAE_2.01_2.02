@@ -13,7 +13,7 @@ public class InformationDebug {
         this.controller = controller;
 
         StackPane container = new StackPane();
-        container.prefWidthProperty().bind(this.controller.getStage().widthProperty().multiply(0.25));
+        container.setPrefWidth(200);
 
         bugs = init(container);
         this.controller.getRoot().setRight(container);
