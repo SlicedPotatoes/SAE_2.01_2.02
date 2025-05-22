@@ -5,6 +5,7 @@ public class TileNotReachable extends MapTile {
         super(pathIcon, label);
     }
 
+    // Un rocher peut être placé partout sur la map
     @Override
     public boolean isValidPosition(int x, int y, int nx, int ny, MapTile mt) {
         return true;

@@ -59,16 +59,42 @@ public class Simulation {
         }
     }
 
+    // Getter
     public MapTile[][] getMap() {
         return this.map;
     }
-
     public Sheep getSheep() {
         return this.theSheep;
     }
-
     public Wolf getWolf() {
         return this.theWolf;
+    }
+    public int getNx() {
+        return this.nx;
+    }
+    public int getNy() {
+        return this.ny;
+    }
+    public int getMoveLeft() {
+        return this.moveLeft;
+    }
+    public int getCurrRound() {
+        return this.currRound;
+    }
+    public MapTile getCurrEntityTurn() {
+        return this.currEntityTurn;
+    }
+    public HashMap<MapTile, Integer> getCounts() {
+        return this.counts;
+    }
+
+    public void setEntity(MapTile entity, int x, int y) {
+        if(entity == MainController.WOLF) {
+            this.theWolf = new Wolf(x, y, DEFAULT_SPEED_WOLF, this);
+        }
+        else {
+            this.theSheep = new Sheep(x, y, DEFAULT_SPEED_SHEEP, this);
+        }
     }
 
     // poor entity 😢
@@ -81,39 +107,7 @@ public class Simulation {
         }
     }
 
-    public void setEntity(MapTile entity, int x, int y) {
-        if(entity == MainController.WOLF) {
-            this.theWolf = new Wolf(x, y, DEFAULT_SPEED_WOLF, this);
-        }
-        else {
-            this.theSheep = new Sheep(x, y, DEFAULT_SPEED_SHEEP, this);
-        }
-    }
-
-    public int getNx() {
-        return this.nx;
-    }
-
-    public int getNy() {
-        return this.ny;
-    }
-
-    public int getMoveLeft() {
-        return this.moveLeft;
-    }
-
-    public int getCurrRound() {
-        return this.currRound;
-    }
-
-    public MapTile getCurrEntityTurn() {
-        return this.currEntityTurn;
-    }
-
-    public HashMap<MapTile, Integer> getCounts() {
-        return this.counts;
-    }
-
+    // Retourne les coordonnées de la sortie
     public List<Integer> findExitMapTile() {
         for(int y = 0; y < this.ny; y++) {
             for(int x = 0; x < this.nx; x++) {
@@ -130,6 +124,7 @@ public class Simulation {
         return null;
     }
 
+    // Compte le nombre de cellules où une entité peut être positionné
     private int countReachableTile() {
         int count = 0;
 
@@ -144,6 +139,7 @@ public class Simulation {
         return count;
     }
 
+    // Compte le nombre de cellules accéssible avec un parcours en profondeur
     private int countWithDFSReachableTile(int x, int y, Set<Pair<Integer, Integer>> visited) {
         visited.add(new Pair<>(x, y));
 
@@ -164,6 +160,7 @@ public class Simulation {
         return count;
     }
 
+    // Vérifie si une map est valide
     public void isValidMap() throws InvalidMapException {
         List<Integer> exitPos = this.findExitMapTile();
 
@@ -185,10 +182,12 @@ public class Simulation {
         }
     }
 
+    // Retourne true si la simulation est fini
     public boolean isEnd() {
         return this.theSheep.getIsEaten() || this.theSheep.getIsSafe();
     }
 
+    // Effectue le déplacement de l'entité a qui c'est le tour
     public void move(char dir) throws IllegalMoveException {
         int dx = CHARACTER_DIRECTION.get(dir).getKey();
         int dy = CHARACTER_DIRECTION.get(dir).getValue();
@@ -203,6 +202,7 @@ public class Simulation {
         this.moveLeft--;
     }
 
+    // Permet de mettre à jour le compteur de tour et l'entité qui va ce déplacer au prochain tour
     public void endTurn() {
         if(this.moveLeft == 0 && !isEnd()) {
             if(this.currEntityTurn == SHEEP) {
@@ -218,6 +218,7 @@ public class Simulation {
         }
     }
 
+    // Incrémente le compteur d'élément mangé par le mouton
     public void incrementCount(MapTile mt) {
         this.counts.put(mt, this.counts.getOrDefault(mt, 0) + 1);
     }

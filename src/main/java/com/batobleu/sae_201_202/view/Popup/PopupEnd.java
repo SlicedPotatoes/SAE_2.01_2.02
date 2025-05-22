@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.Map;
 
+// Popup de fin de partie, affichant le gagnant et les statistiques de la partie
 public class PopupEnd extends Alert {
     public PopupEnd(MainController mc) {
         super(AlertType.INFORMATION);
@@ -17,14 +18,18 @@ public class PopupEnd extends Alert {
 
         DialogPane dp = this.getDialogPane();
 
+        // Container
         VBox container = new VBox();
         container.setSpacing(10);
 
+        // Label pour le gagnant et le nombre de round
         Label winner = new Label("Gagnant: " + (mc.getSimulation().getSheep().getIsSafe() ? "Mouton" : "Loup"));
         Label round = new Label("Nombre de tour: " + mc.getSimulation().getCurrRound());
 
+        // Ajout des labels au container
         container.getChildren().addAll(winner, round);
 
+        // Parcours des différents compteurs et affiche les informations
         for(Map.Entry<MapTile, Integer> entry : mc.getSimulation().getCounts().entrySet()) {
             MapTile mt = entry.getKey();
             int count = entry.getValue();

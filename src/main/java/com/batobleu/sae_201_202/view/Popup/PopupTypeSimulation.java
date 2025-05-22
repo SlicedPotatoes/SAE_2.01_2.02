@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+// Classe affichant un popup laissant le choix à l'utilisateur d'ouvrir la simulation manuel ou automatique
 public class PopupTypeSimulation {
 
     public PopupTypeSimulation(MainController mc){
@@ -21,33 +22,28 @@ public class PopupTypeSimulation {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Choix du type de simulation");
 
-        GridPane grid = new GridPane();
-        grid.setVgap(10);
-        grid.setHgap(10);
-
-        Button manual = new Button("Manuelle");
+        // Button
+        Button manual = new Button("Manuel");
         manual.setPrefWidth(100);
-
         Button auto = new Button("Automatique");
         auto.setPrefWidth(100);
 
-        HBox buttonBox = new HBox(10, manual, auto);
-        buttonBox.setAlignment(Pos.CENTER);
+        // Container
+        HBox container = new HBox(10, manual, auto);
+        container.setAlignment(Pos.CENTER);
+        container.setPadding(new Insets(10));
 
-        VBox layout = new VBox(grid, buttonBox);
-        layout.setPadding(new Insets(10));
-
+        // Event sur les boutons
         manual.setOnAction(e -> {
             mc.setCurrPage(CurrPage.ControlManual);
             dialog.close();
         });
-
         auto.setOnAction(e -> {
             InformationDebug.AddDebug("Attendre la 2.02 pour avoir cette fonctionnalité");
             dialog.close();
         });
 
-        dialog.setScene(new Scene(layout));
+        dialog.setScene(new Scene(container));
         dialog.showAndWait();
     }
 

@@ -12,6 +12,7 @@ public class TileHerb extends MapTile {
         return this.speedModifier;
     }
 
+    // Une herbe peut être placée partout sauf sur les bords
     @Override
     public boolean isValidPosition(int x, int y, int nx, int ny, MapTile mt) {
         return x > 0 && x < nx-1 && y > 0 && y < ny-1;

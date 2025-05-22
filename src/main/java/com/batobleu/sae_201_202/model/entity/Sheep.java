@@ -29,7 +29,6 @@ public class Sheep extends Entity {
 
     public boolean getIsEaten() {
         Wolf w = this.theSimulation.getWolf();
-
         return w.x == this.x && w.y == this.y;
     }
 

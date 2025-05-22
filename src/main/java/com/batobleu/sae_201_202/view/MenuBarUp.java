@@ -38,6 +38,7 @@ public class MenuBarUp {
         this.addMenuBar();
     }
 
+    // Sauvegarder un labyrinthe
     private void export() {
         String pathString = new PopupFileChooser().getPath("Enregistrer", this.mc.getStage(), PopupFileChooser.Type.Export);
 
@@ -77,6 +78,7 @@ public class MenuBarUp {
         }
     }
 
+    // Ajout un élément importé a l'historique
     private void addToHistory(String path) {
         StringBuilder strB = new StringBuilder();
 
@@ -94,15 +96,17 @@ public class MenuBarUp {
 
         byte[] strToBytes = strB.toString().getBytes();
 
+        // Ecrit dans le fichier d'historique pour l'avoir au prochain démarage de l'application
         try {
             Files.write(Paths.get(historyPath), strToBytes);
-            addMenuBar(); // Ajouter un nouveau MenuItem ne fonctionné pas
+            addMenuBar(); // Ajouter un nouveau MenuItem ne fonctionnait pas
         }
         catch (IOException e) {
             new PopupsError(e.toString()).show();
         }
     }
 
+    // Créer le menu
     private void addMenuBar(){
         Menu fichier = new Menu("Fichier");
         Menu propos = new Menu("A Propos");
@@ -134,8 +138,8 @@ public class MenuBarUp {
             export();
         });
 
+        // Historique
         this.historyMenu = new Menu("Recent");
-
         for(String path : history) {
             MenuItem m = new MenuItem(path);
             this.historyMenu.getItems().add(m);
