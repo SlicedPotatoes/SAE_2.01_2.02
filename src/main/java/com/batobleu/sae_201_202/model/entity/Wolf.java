@@ -1,6 +1,6 @@
 package com.batobleu.sae_201_202.model.entity;
 
-import com.batobleu.sae_201_202.exception.IllegalMoveException;
+import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.Simulation;
 
 public class Wolf extends Entity {

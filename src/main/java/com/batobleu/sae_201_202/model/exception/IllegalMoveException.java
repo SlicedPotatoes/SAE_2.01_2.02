@@ -1,4 +1,4 @@
-package com.batobleu.sae_201_202.exception;
+package com.batobleu.sae_201_202.model.exception;
 
 public class IllegalMoveException extends Exception{
     public IllegalMoveException() { super(); }

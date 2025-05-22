@@ -1,6 +1,6 @@
 package com.batobleu.sae_201_202.controller;
 
-import com.batobleu.sae_201_202.exception.InvalidPositionException;
+import com.batobleu.sae_201_202.model.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;

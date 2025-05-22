@@ -1,6 +1,6 @@
 package com.batobleu.sae_201_202.model;
 
-import com.batobleu.sae_201_202.exception.invalidMap.*;
+import com.batobleu.sae_201_202.model.exception.invalidMap.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

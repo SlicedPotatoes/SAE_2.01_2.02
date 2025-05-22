@@ -1,7 +1,7 @@
 package com.batobleu.sae_201_202.view.leftMenu;
 
 import com.batobleu.sae_201_202.controller.MainController;
-import com.batobleu.sae_201_202.exception.InvalidPositionException;
+import com.batobleu.sae_201_202.model.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.EventManager;
@@ -46,10 +46,10 @@ public class MoveMenu {
         //containerArrow.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
 
         //Directional arrow
-        createButtons(1, 0, "/image/LeftArrow.png", containerArrow, 'l');
-        createButtons(1, 2, "/image/RightArrow.png", containerArrow, 'r');
-        createButtons(0, 1, "/image/TopArrow.png", containerArrow, 'u');
-        createButtons(2, 1, "/image/BottomArrow.png", containerArrow, 'd');
+        createButtons(1, 0, "/Image/LeftArrow.png", containerArrow, 'l');
+        createButtons(1, 2, "/Image/RightArrow.png", containerArrow, 'r');
+        createButtons(0, 1, "/Image/TopArrow.png", containerArrow, 'u');
+        createButtons(2, 1, "/Image/BottomArrow.png", containerArrow, 'd');
 
         //add to group
         this.container.getChildren().addAll(display, this.moveLeft, this.round, containerArrow);

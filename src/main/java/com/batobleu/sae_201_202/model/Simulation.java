@@ -1,11 +1,11 @@
 package com.batobleu.sae_201_202.model;
 
 import com.batobleu.sae_201_202.controller.MainController;
-import com.batobleu.sae_201_202.exception.IllegalMoveException;
-import com.batobleu.sae_201_202.exception.invalidMap.*;
+import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
+import com.batobleu.sae_201_202.model.exception.invalidMap.*;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 import javafx.util.Pair;

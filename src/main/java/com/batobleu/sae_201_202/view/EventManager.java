@@ -1,9 +1,9 @@
 package com.batobleu.sae_201_202.view;
 
-import com.batobleu.sae_201_202.exception.IllegalMoveException;
-import com.batobleu.sae_201_202.exception.invalidMap.*;
+import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.controller.MainController;
-import com.batobleu.sae_201_202.exception.InvalidPositionException;
+import com.batobleu.sae_201_202.model.exception.InvalidPositionException;
+import com.batobleu.sae_201_202.model.exception.invalidMap.*;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.Popup.PopupEnd;
 import com.batobleu.sae_201_202.view.Popup.PopupTypeSimulation;
