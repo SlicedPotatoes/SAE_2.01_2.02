@@ -4,9 +4,9 @@ Ce repository contient le code et les documents associés au projet **SAE S2.01*
 
 ## Objectif de la SAE
 
-Le but de ce projet est de développer une application en Java permettant de configurer un labyrinthe et de contrôler des entités dans celui-ci
+Le but de ce projet est de développer une application en Java permettant de configurer un labyrinthe et de controller des entités dans celui-ci
 
-L'interface utilisateur est conçue en JavaFX.
+L'interface utilisateur est concu en JavaFX.
 
 ## Liste des livrables
 
