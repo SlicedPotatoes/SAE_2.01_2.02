@@ -51,10 +51,10 @@ public class MenuBarUp {
 
                     MapTile mt;
 
-                    if(wolf.getX() == x && wolf.getY() == y) {
+                    if(wolf != null && wolf.getX() == x && wolf.getY() == y) {
                         mt = WOLF;
                     }
-                    else if(sheep.getX() == x && sheep.getY() == y) {
+                    else if(sheep != null && sheep.getX() == x && sheep.getY() == y) {
                         mt = SHEEP;
                     }
                     else {
