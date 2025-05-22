@@ -180,8 +180,6 @@ public class Simulation {
         int crt = this.countReachableTile();
         int countWithDFS = this.countWithDFSReachableTile(exitPos.get(0), exitPos.get(1), new HashSet<>());
 
-        System.out.println(crt + " " + countWithDFS);
-
         if(crt != countWithDFS) {
             throw new UnconnectedGraphException();
         }
@@ -206,7 +204,7 @@ public class Simulation {
     }
 
     public void endTurn() {
-        if(this.moveLeft == 0) {
+        if(this.moveLeft == 0 && !isEnd()) {
             if(this.currEntityTurn == SHEEP) {
                 this.incrementCount(this.map[this.theSheep.getY()][this.theSheep.getX()]);
                 this.currEntityTurn = WOLF;
