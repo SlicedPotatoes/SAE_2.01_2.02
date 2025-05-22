@@ -101,8 +101,7 @@ public class MainController extends Application {
         this.map = new Map(this);
         this.msi = new MenuSelectItems(this);
 
-        MenuBarUp t = new MenuBarUp(this);
-        t.addMenuBar();
+        new MenuBarUp(this);
 
         this.map.addMap();
         new InformationDebug(this);

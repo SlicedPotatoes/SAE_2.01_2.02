@@ -12,11 +12,16 @@ import com.batobleu.sae_201_202.view.leftMenu.MenuSelectItems;
 import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class EventManager {
 
@@ -187,6 +192,17 @@ public class EventManager {
             }
             catch (IllegalMoveException | InvalidPositionException ex) {
                 InformationDebug.AddDebug(ex.toString());
+            }
+        });
+    }
+
+    public static void addEventImportHistory(MainController mc, MenuItem m, String path) {
+        m.setOnAction((ActionEvent e) -> {
+            try {
+                mc.initWithFile(Files.readAllLines(Paths.get(path)));
+            }
+            catch (IOException ex) {
+                new PopupsError(ex.toString()).show();
             }
         });
     }

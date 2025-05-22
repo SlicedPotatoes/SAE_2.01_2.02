@@ -1,71 +1,152 @@
 package com.batobleu.sae_201_202.view;
 
 import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.entity.Sheep;
+import com.batobleu.sae_201_202.model.entity.Wolf;
+import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.Popup.PopupFileChooser;
 import com.batobleu.sae_201_202.view.Popup.PopupsError;
+import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.batobleu.sae_201_202.controller.MainController.*;
+
 public class MenuBarUp {
+    private static final String historyPath = "./history.txt";
+
     private MainController mc;
-    private MenuBar t;
+    private List<String> history;
+    private Menu historyMenu;
 
     public MenuBarUp(MainController mc) {
         this.mc = mc;
-        this.t = addMenuBar();
+
+        try {
+            this.history = Files.readAllLines(Paths.get(historyPath));
+        }
+        catch (IOException e) {
+            this.history = new ArrayList<>();
+        }
+
+        this.addMenuBar();
     }
 
-    public MenuBar addMenuBar(){
+    private void export() {
+        String pathString = new PopupFileChooser().getPath("Enregistrer", this.mc.getStage(), PopupFileChooser.Type.Export);
+
+        if(pathString != null) {
+            StringBuilder strB = new StringBuilder();
+
+            for(int y = 0; y < this.mc.getSimulation().getNy(); y++) {
+                for(int x = 0; x < this.mc.getSimulation().getNx(); x++) {
+                    Wolf wolf = this.mc.getSimulation().getWolf();
+                    Sheep sheep = this.mc.getSimulation().getSheep();
+
+                    MapTile mt;
+
+                    if(wolf.getX() == x && wolf.getY() == y) {
+                        mt = WOLF;
+                    }
+                    else if(sheep.getX() == x && sheep.getY() == y) {
+                        mt = SHEEP;
+                    }
+                    else {
+                        mt = this.mc.getSimulation().getMap()[y][x];
+                    }
+
+                    strB.append(MAP_TILE_CHARACTER_HASH_MAP.get(mt));
+                }
+                strB.append('\n');
+            }
+
+            byte[] strToBytes = strB.toString().getBytes();
+
+            try {
+                Files.write(Paths.get(pathString), strToBytes);
+            }
+            catch (IOException ex) {
+                new PopupsError(ex.toString()).show();
+            }
+        }
+    }
+
+    private void addToHistory(String path) {
+        StringBuilder strB = new StringBuilder();
+
+        for(String s : history) {
+            if(s.equals(path)) {
+                return;
+            }
+
+            strB.append(s);
+            strB.append('\n');
+        }
+
+        this.history.add(path);
+        strB.append(path);
+
+        byte[] strToBytes = strB.toString().getBytes();
+
+        try {
+            Files.write(Paths.get(historyPath), strToBytes);
+            addMenuBar(); // Ajouter un nouveau MenuItem ne fonctionné pas
+        }
+        catch (IOException e) {
+            new PopupsError(e.toString()).show();
+        }
+    }
+
+    private void addMenuBar(){
         Menu fichier = new Menu("Fichier");
         Menu propos = new Menu("A Propos");
 
-        MenuItem m1 = new MenuItem("Nouveau");
-        MenuItem m2 = new MenuItem("Importer");
-        MenuItem m3 = new MenuItem("Exporter");
+        MenuItem newButton = new MenuItem("Nouveau");
+        MenuItem importButton = new MenuItem("Importer");
+        MenuItem exportButton = new MenuItem("Exporter");
 
-        m1.setOnAction(e -> {
+        newButton.setOnAction(e -> {
             this.mc.getStage().close();
             this.mc.start(new Stage());
         });
-        m2.setOnAction(e -> {
-            String pathString = new PopupFileChooser().getPath("Ouvrir", this.mc.getStage());
+
+        importButton.setOnAction(e -> {
+            String pathString = new PopupFileChooser().getPath("Ouvrir", this.mc.getStage(), PopupFileChooser.Type.Import);
 
             if(pathString != null) {
                 try {
-                    Path path = Paths.get(pathString);
-                    List<String> lines = null;
-                    lines = Files.readAllLines(path);
-                    this.mc.initWithFile(lines);
+                    this.mc.initWithFile(Files.readAllLines(Paths.get(pathString)));
+                    this.addToHistory(pathString);
                 }
                 catch (IOException ex) {
                     new PopupsError(ex.toString()).show();
                 }
             }
         });
-        m3.setOnAction(e -> {
-            InformationDebug.AddDebug("Pas encore implémenter ! ");
+
+        exportButton.setOnAction(e -> {
+            export();
         });
 
-        //à changer avec l'historique des labyrinthes
-        Menu m4 = new Menu("Recent");
-        MenuItem m5 = new MenuItem("C:\\...\\labyrinthe1.txt");
-        m4.getItems().add(m5);
+        this.historyMenu = new Menu("Recent");
 
-        m5.setOnAction(e -> {
-            InformationDebug.AddDebug("Pas encore implémenter ! ");
-        });
+        for(String path : history) {
+            MenuItem m = new MenuItem(path);
+            this.historyMenu.getItems().add(m);
 
-        fichier.getItems().addAll(m1,m2,m3,m4);
+            EventManager.addEventImportHistory(this.mc, m, path);
+        }
 
-        MenuBar a = new MenuBar(fichier, propos);
-        this.mc.getRoot().setTop(this.t);
-        return a;
+        fichier.getItems().addAll(newButton, importButton, exportButton, this.historyMenu);
+
+        MenuBar mb = new MenuBar(fichier, propos);
+        this.mc.getRoot().setTop(mb);
     }
 
 }

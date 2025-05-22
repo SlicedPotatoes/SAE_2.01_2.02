@@ -6,9 +6,14 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class PopupFileChooser {
+    public enum Type {
+        Import,
+        Export
+    }
+
     public PopupFileChooser() { }
 
-    public String getPath(String title, Stage s) {
+    public String getPath(String title, Stage s, Type t) {
         FileChooser fileChooser = new FileChooser();
 
         fileChooser.setTitle(title);
@@ -17,7 +22,7 @@ public class PopupFileChooser {
             new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
-        File selectedFile = fileChooser.showOpenDialog(s);
+        File selectedFile = t == Type.Import ? fileChooser.showOpenDialog(s) : fileChooser.showSaveDialog(s);
 
         if(selectedFile != null) {
             return selectedFile.getPath();
