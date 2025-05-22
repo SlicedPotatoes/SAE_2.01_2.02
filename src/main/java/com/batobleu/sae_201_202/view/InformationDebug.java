@@ -7,17 +7,15 @@ import javafx.scene.layout.StackPane;
 // Composant affichant des informations
 public class InformationDebug {
 
-    private MainController controller;
     private static TextArea bugs;
 
     public InformationDebug(MainController controller) {
-        this.controller = controller;
 
         StackPane container = new StackPane();
         container.setPrefWidth(200);
 
         bugs = init(container);
-        this.controller.getRoot().setRight(container);
+        controller.getRoot().setRight(container);
     }
 
     public TextArea init(StackPane g){

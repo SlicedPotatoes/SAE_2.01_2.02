@@ -7,7 +7,7 @@ import com.batobleu.sae_201_202.model.tile.TileHerb;
 import static com.batobleu.sae_201_202.controller.MainController.EXIT;
 
 public class Sheep extends Entity {
-    private Simulation theSimulation;
+    private final Simulation theSimulation;
     private float speedModifier;
 
     public Sheep(int x, int y, int speed, Simulation s) {

@@ -6,7 +6,6 @@ import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.Popup.PopupFileChooser;
 import com.batobleu.sae_201_202.view.Popup.PopupsError;
-import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -21,9 +20,8 @@ import static com.batobleu.sae_201_202.controller.MainController.*;
 public class MenuBarUp {
     private static final String historyPath = "./history.txt";
 
-    private MainController mc;
+    private final MainController mc;
     private List<String> history;
-    private Menu historyMenu;
 
     public MenuBarUp(MainController mc) {
         this.mc = mc;
@@ -139,15 +137,15 @@ public class MenuBarUp {
         });
 
         // Historique
-        this.historyMenu = new Menu("Recent");
+        Menu historyMenu = new Menu("Recent");
         for(String path : history) {
             MenuItem m = new MenuItem(path);
-            this.historyMenu.getItems().add(m);
+            historyMenu.getItems().add(m);
 
             EventManager.addEventImportHistory(this.mc, m, path);
         }
 
-        fichier.getItems().addAll(newButton, importButton, exportButton, this.historyMenu);
+        fichier.getItems().addAll(newButton, importButton, exportButton, historyMenu);
 
         MenuBar mb = new MenuBar(fichier, propos);
         this.mc.getRoot().setTop(mb);

@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 
 // Classe permettant la gestion de l'affichage des menus sur la gauche
 public class LeftMenuManager {
-    private MainController mc;
-    private VBox container;
+    private final MainController mc;
+    private final VBox container;
 
     public LeftMenuManager(MainController mc) {
         this.mc = mc;

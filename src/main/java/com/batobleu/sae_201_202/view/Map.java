@@ -16,10 +16,10 @@ import static java.lang.Math.min;
 
 // Composant pour afficher une map
 public class Map {
-    private MainController mc;
+    private final MainController mc;
 
-    private Rectangle[][] validPositionIndicators;  // Liste des indicateurs de position valides pour l'élément sélectionné
-    private ImageView[][] images;                   // Liste des images
+    private final Rectangle[][] validPositionIndicators;  // Liste des indicateurs de position valides pour l'élément sélectionné
+    private final ImageView[][] images;                   // Liste des images
 
     private VBox container;
 
@@ -119,7 +119,7 @@ public class Map {
         return this.images;
     }
 
-    // Permet de mettre à jour l'icone affiché dans une cellule
+    // Permet de mettre à jour l'icône affiché dans une cellule
     public void updateImage(int x, int y, MapTile mt) {
         Image image = new Image(getClass().getResource(mt.getPathIcon()).toExternalForm());
         this.images[y][x].setImage(image);

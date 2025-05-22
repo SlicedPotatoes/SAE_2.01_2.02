@@ -1,8 +1,8 @@
 package com.batobleu.sae_201_202.model.tile;
 
 public abstract class MapTile {
-    private String pathIcon;
-    private String label;
+    private final String pathIcon;
+    private final String label;
 
     public MapTile(String pathIcon, String label) {
         this.pathIcon = pathIcon;

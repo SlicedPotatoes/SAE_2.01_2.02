@@ -1,7 +1,7 @@
 package com.batobleu.sae_201_202.model.tile;
 
 public class TileHerb extends MapTile {
-    private float speedModifier;
+    private final float speedModifier;
 
     public TileHerb(String pathIcon, String label, float speedModifier) {
         super(pathIcon, label);

@@ -15,10 +15,10 @@ import java.util.*;
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class Simulation {
-    private static int[] dx = {0, 1, 0, -1};
-    private static int[] dy = {1, 0, -1, 0};
+    private static final int[] dx = {0, 1, 0, -1};
+    private static final int[] dy = {1, 0, -1, 0};
 
-    private int nx, ny;
+    private final int nx, ny;
     private MapTile[][] map;
     private boolean chaseMod;
     private Wolf theWolf;

@@ -18,13 +18,13 @@ import javafx.scene.shape.Rectangle;
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class MenuSelectItems {
-    private MainController mc;
+    private final MainController mc;
     private VBox container;
 
-    private Button button1;
-    private Button button2;
+    private final Button button1;
+    private final Button button2;
 
-    private ObjectProperty<MapTile> currSelected;
+    private final ObjectProperty<MapTile> currSelected;
     private Rectangle currSelectedRectangle;
 
     public MenuSelectItems(MainController mc) {
