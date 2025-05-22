@@ -48,16 +48,7 @@ class TestIsValidMap {
     }
 
     @Test
-    void test04() throws InvalidMapException {
-        this.s.getMap()[1][0] = EXIT;
-        this.s.setEntity(WOLF, 1, 1);
-        this.s.setEntity(SHEEP, 1, 2);
-
-        this.s.isValidMap();
-    }
-
-    @Test
-    void test05() {
+    void test04() {
         this.s.getMap()[1][0] = EXIT;
         this.s.setEntity(WOLF, 1, 1);
         this.s.setEntity(SHEEP, 1, 2);
@@ -67,5 +58,14 @@ class TestIsValidMap {
         assertThrows(UnconnectedGraphException.class, () -> {
            this.s.isValidMap();
         });
+    }
+
+    @Test
+    void test05() throws InvalidMapException {
+        this.s.getMap()[1][0] = EXIT;
+        this.s.setEntity(WOLF, 1, 1);
+        this.s.setEntity(SHEEP, 1, 2);
+
+        this.s.isValidMap();
     }
 }
