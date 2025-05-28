@@ -4,7 +4,7 @@ import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.Simulation;
 
 public class Wolf extends Entity {
-    private Simulation theSimulation;
+    private final Simulation theSimulation;
 
     public Wolf(int _x, int _y, int _speed, Simulation s) {
         super(_x, _y, _speed);

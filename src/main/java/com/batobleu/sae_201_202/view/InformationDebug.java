@@ -4,19 +4,18 @@ import com.batobleu.sae_201_202.controller.MainController;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 
+// Composant affichant des informations
 public class InformationDebug {
 
-    private MainController controller;
     private static TextArea bugs;
 
     public InformationDebug(MainController controller) {
-        this.controller = controller;
 
         StackPane container = new StackPane();
         container.setPrefWidth(200);
 
         bugs = init(container);
-        this.controller.getRoot().setRight(container);
+        controller.getRoot().setRight(container);
     }
 
     public TextArea init(StackPane g){
@@ -26,7 +25,7 @@ public class InformationDebug {
 
         t.setScrollTop(1);
         t.setEditable(false);
-        t.setWrapText(true);
+        t.setWrapText(true); // retour à la ligne pour éviter une scrollbar horizontal
 
         g.getChildren().add(t);
         return t;

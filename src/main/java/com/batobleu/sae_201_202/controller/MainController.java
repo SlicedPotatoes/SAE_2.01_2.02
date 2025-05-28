@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class MainController extends Application {
+    // Constante permettant de représenter un élément de la simulation, utilisée pour faire des comparaisons,
+    // contient les informations nécessaires à l'affichage
     public static final MapTile ROCK = new TileNotReachable("/Image/Rock.png", "Rocher");
     public static final MapTile CACTUS = new TileHerb("/Image/Cactus.png", "Cactus", 0.5f);
     public static final MapTile HERB = new TileHerb("/Image/Herb.png", "Herbe", 1f);
@@ -30,8 +32,11 @@ public class MainController extends Application {
     public static final MapTile WOLF = new TileEntity("/Image/Wolf.png", "Loup");
     public static final MapTile SHEEP = new TileEntity("/Image/Sheep.png", "Mouton");
 
+    // Dictionnaire pour convertir un caractère vers son équivalent MapTile
     public static final HashMap<Character, MapTile> CHARACTER_MAP_TILE_HASH_MAP = new HashMap<>();
+    // Dictionnaire pour convertir un MapTile vers son équivalent caractère
     public static final HashMap<MapTile, Character> MAP_TILE_CHARACTER_HASH_MAP = new HashMap<>();
+    // Dictionnaire pour convertir un caractère en déplacement (dx, dy)
     public static final HashMap<Character, Pair<Integer, Integer>> CHARACTER_DIRECTION = new HashMap<>();
 
     public static final int DEFAULT_SPEED_SHEEP = 2;
@@ -45,10 +50,13 @@ public class MainController extends Application {
 
     private LeftMenuManager lmm;
 
+    // Le type ObjectProperty permet de rendre une variable "observable",
+    // on peut y mettre des événements ou faire de l'affichage dynamique
     private ObjectProperty<CurrPage> currPage;
     private BorderPane root;
 
     public static void main(String[] args) {
+        // Remplissage des dictionnaires
         CHARACTER_MAP_TILE_HASH_MAP.put('x', ROCK);
         CHARACTER_MAP_TILE_HASH_MAP.put('c', CACTUS);
         CHARACTER_MAP_TILE_HASH_MAP.put('h', HERB);
@@ -77,18 +85,21 @@ public class MainController extends Application {
     public void start(Stage stage) {
         this.stage = stage;
 
-        PopupNewLabyrinth p = new PopupNewLabyrinth();
-
+        PopupNewLabyrinth p = new PopupNewLabyrinth(); // Popup demandant la taille du labyrinthe
         Optional<Pair<Integer, Integer>> result = p.showAndWait();
+
+        // Si le résultat est nul, on arrête le programme
         if(result.isEmpty()) {
             return;
         }
 
+        // On initialise la simulation avec les dimensions récupérées du popup.
         this.s = new Simulation(result.get().getKey(), result.get().getValue());
 
         _init();
     }
 
+    // Initialisation des éléments de l'UI
     public void _init() {
         this.root = new BorderPane();
 
@@ -115,40 +126,44 @@ public class MainController extends Application {
         stage.show();
     }
 
+    // Getter
     public Simulation getSimulation() {
         return this.s;
     }
-
     public BorderPane getRoot() {
         return this.root;
     }
-
     public Map getMap() {
         return this.map;
     }
-
     public MenuSelectItems getMsi() {
         return this.msi;
     }
-
     public Stage getStage() { return this.stage; }
-
     public MoveMenu getMoveMenu() {
         return this.moveMenu;
     }
-
     public LeftMenuManager getLmm() {
         return this.lmm;
     }
+    public ObjectProperty<CurrPage> getCurrPage() {
+        return this.currPage;
+    }
 
+    public void setCurrPage(CurrPage cp) {
+        this.currPage.set(cp);
+    }
+
+    // Méthode permettant de mettre à jour la simulation est l'affichage, pendant la configuration du labyrinthe.
     public void updateMapAndSimulation(int x, int y, MapTile selectedItem) throws InvalidPositionException {
+        // Si on tente de placer un élément à une position incorrecte (par exemple une sortie au milieu du terrain).
         if(!selectedItem.isValidPosition(x, y, this.s.getNx(), this.s.getNy(), this.s.getMap()[y][x])) {
             throw new InvalidPositionException();
         }
 
         /*
-        * Dans le cas ou selectedItem représente une entité:
-        *  - entity1 sera l'entité, dans simulation, qui correspond a l'entité dans selectedItem
+        * Dans le cas où selectedItem représente une entité :
+        *  - entity1 sera l'entité, dans simulation, qui correspond à l'entité dans selectedItem
         *  - entity2 sera l'autre
         * Sinon:
         *  - entity1 sera l'entité, dans la simulation, qui correspond au loup
@@ -157,23 +172,23 @@ public class MainController extends Application {
         Entity entity1 = selectedItem instanceof TileEntity ? (selectedItem == WOLF ? this.s.getWolf() : this.s.getSheep()) : this.s.getWolf();
         Entity entity2 = selectedItem instanceof TileEntity ? (selectedItem == WOLF ? this.s.getSheep() : this.s.getWolf()) : this.s.getSheep();
 
-        // Si on a selectionné une entité
+        // Si on a sélectionné une entité
         if(selectedItem instanceof TileEntity) {
             // Si on positionne une entité sur une autre, on supprime la seconde entité
             if(entity2 != null && x == entity2.getX() && y == entity2.getY()) {
                 this.s.killEntity(entity2);
             }
-            // Si on déplace une entité, on fait apparaitre l'image du décort correspondant
+            // Si on déplace une entité, on fait apparaître l'image du décor correspondant
             if(entity1 != null) {
                 int _x = entity1.getX(), _y = entity1.getY();
                 this.map.updateImage(_x, _y, this.s.getMap()[_y][_x]);
             }
 
-            // On met a jour l'entité dans la simulation
+            // On met à jour l'entité dans la simulation
             this.s.setEntity(selectedItem, x, y);
         }
         else {
-            // Si le décort ce trouve sur une entité, on supprime l'entité correspondant
+            // Si le décor se trouve sur une entité, on supprime l'entité correspondante dans la simulation
             if(entity1 != null && x == entity1.getX() && y == entity1.getY()){
                 this.s.killEntity(entity1);
             }
@@ -191,14 +206,15 @@ public class MainController extends Application {
                 }
             }
 
-            // On met a jour la map avec le décor correspondant
+            // On met à jour la map avec le décor correspondant
             this.s.getMap()[y][x] = selectedItem;
         }
 
-        // On met a jour l'affichage
+        // On met à jour l'affichage
         this.map.updateImage(x, y, selectedItem);
     }
 
+    // Méthode permettant d'initialiser l'affichage et les données à partir d'un fichier.
     public void initWithFile(List<String> lineFiles) {
         int nx = lineFiles.getFirst().length();
         int ny = lineFiles.size();
@@ -221,11 +237,5 @@ public class MainController extends Application {
         _init();
     }
 
-    public ObjectProperty<CurrPage> getCurrPage() {
-        return this.currPage;
-    }
 
-    public void setCurrPage(CurrPage cp) {
-        this.currPage.set(cp);
-    }
 }

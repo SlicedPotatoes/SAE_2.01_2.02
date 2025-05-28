@@ -5,6 +5,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+// Classe permettant d'ouvrir une fenêtre contextuelle pour choisir un fichier
+// On peut facilement récupérer le chemin de ce fichier.
 public class PopupFileChooser {
     public enum Type {
         Import,
@@ -16,14 +18,17 @@ public class PopupFileChooser {
     public String getPath(String title, Stage s, Type t) {
         FileChooser fileChooser = new FileChooser();
 
+        // Configuration de la fenêtre contextuelle
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("Text Files", "*.txt"),
             new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
+        // Choix du type (Ouverture de fichier ou sauvegarde)
         File selectedFile = t == Type.Import ? fileChooser.showOpenDialog(s) : fileChooser.showSaveDialog(s);
 
+        // Vérifie si la fenêtre n'a pas été fermée
         if(selectedFile != null) {
             return selectedFile.getPath();
         }

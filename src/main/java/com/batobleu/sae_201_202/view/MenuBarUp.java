@@ -6,7 +6,6 @@ import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.Popup.PopupFileChooser;
 import com.batobleu.sae_201_202.view.Popup.PopupsError;
-import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -21,9 +20,8 @@ import static com.batobleu.sae_201_202.controller.MainController.*;
 public class MenuBarUp {
     private static final String historyPath = "./history.txt";
 
-    private MainController mc;
+    private final MainController mc;
     private List<String> history;
-    private Menu historyMenu;
 
     public MenuBarUp(MainController mc) {
         this.mc = mc;
@@ -38,6 +36,7 @@ public class MenuBarUp {
         this.addMenuBar();
     }
 
+    // Sauvegarder un labyrinthe
     private void export() {
         String pathString = new PopupFileChooser().getPath("Enregistrer", this.mc.getStage(), PopupFileChooser.Type.Export);
 
@@ -77,6 +76,7 @@ public class MenuBarUp {
         }
     }
 
+    // Ajout un élément importé a l'historique
     private void addToHistory(String path) {
         StringBuilder strB = new StringBuilder();
 
@@ -94,15 +94,17 @@ public class MenuBarUp {
 
         byte[] strToBytes = strB.toString().getBytes();
 
+        // Ecrit dans le fichier d'historique pour l'avoir au prochain démarage de l'application
         try {
             Files.write(Paths.get(historyPath), strToBytes);
-            addMenuBar(); // Ajouter un nouveau MenuItem ne fonctionné pas
+            addMenuBar(); // Ajouter un nouveau MenuItem ne fonctionnait pas
         }
         catch (IOException e) {
             new PopupsError(e.toString()).show();
         }
     }
 
+    // Créer le menu
     private void addMenuBar(){
         Menu fichier = new Menu("Fichier");
         Menu propos = new Menu("A Propos");
@@ -134,16 +136,16 @@ public class MenuBarUp {
             export();
         });
 
-        this.historyMenu = new Menu("Recent");
-
+        // Historique
+        Menu historyMenu = new Menu("Recent");
         for(String path : history) {
             MenuItem m = new MenuItem(path);
-            this.historyMenu.getItems().add(m);
+            historyMenu.getItems().add(m);
 
             EventManager.addEventImportHistory(this.mc, m, path);
         }
 
-        fichier.getItems().addAll(newButton, importButton, exportButton, this.historyMenu);
+        fichier.getItems().addAll(newButton, importButton, exportButton, historyMenu);
 
         MenuBar mb = new MenuBar(fichier, propos);
         this.mc.getRoot().setTop(mb);

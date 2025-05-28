@@ -32,11 +32,12 @@ public class EventManager {
     // Ajout des événements pour détecter un changement d'éléments sélectionnés
     public static void addValidPositionEventOnMap(MainController mc) {
         mc.getMsi().currSelectedProperty().addListener((observable, oldValue, newValue) -> {
-            // Permet de ne pas faire d'Exception, quand on force le trigger "manuellement" avec apres un appuis sur le bouton reset
+            // Permet de ne pas faire d'Exception, quand on force le trigger "manuellement" avec après un appui sur le bouton reset
             if(newValue == null) {
                 return;
             }
 
+            // Met a jour les indicateurs de position valide
             for(int y = 0; y < mc.getSimulation().getNy(); y++) {
                 for(int x = 0; x < mc.getSimulation().getNx(); x++) {
                     if(newValue.isValidPosition(x, y, mc.getSimulation().getNx(), mc.getSimulation().getNy(), mc.getSimulation().getMap()[y][x])) {
@@ -50,8 +51,9 @@ public class EventManager {
         });
     }
 
-    // Ajout des événements pour modifier la map et la simulation lors de la configuration de celle ci.
+    // Ajout des événements pour modifier la map avec et la simulation avec l'élément sélectionné.
     private static void actionOnClickMap(MainController mc, int x, int y) {
+        // Mettre à jour la map, au click seulement dans le cas de la configuration du labyrinthe
         if(mc.getCurrPage().get() != CurrPage.SetupDecor && mc.getCurrPage().get() != CurrPage.SetupEntity) {
             return;
         }
@@ -68,6 +70,8 @@ public class EventManager {
         for (int y = 0; y < mc.getSimulation().getNy(); y++) {
             for(int x = 0; x < mc.getSimulation().getNx(); x++) {
                 int _x = x, _y = y;
+                // La hitbox de l'image est plus petite que la hitbox réel.
+                // On ajoute l'événement a l'image et a l'indicateur de position valide
                 mc.getMap().getValidPositionIndicator(x, y).setOnMouseClicked((MouseEvent e) -> {
                     actionOnClickMap(mc, _x, _y);
                 });
@@ -109,6 +113,7 @@ public class EventManager {
     }
 
     // Ajout de l'événement pour le bouton "Valider" sur le menu "Entité"
+    // Vérifie si le labyrinthe est valide, affiche un message dans le cas ou il ne l'est pas.
     public static void addEventSwitchToSimulation(Button b, MainController mc) {
         b.setOnAction((ActionEvent e) -> {
             try {
@@ -145,18 +150,21 @@ public class EventManager {
         });
     }
 
+    // Event pour afficher un tooltip sur un rectangle
     public static void addEventTooltipShow(Rectangle r, Tooltip t) {
         r.setOnMouseEntered((MouseEvent e) -> {
             t.show(r, e.getScreenX(), e.getScreenY() - 50);
         });
     }
 
+    // Event pour cacher un tooltip
     public static void addEventTooltipHide(Rectangle r, Tooltip t) {
         r.setOnMouseExited((MouseEvent e) -> {
             t.hide();
         });
     }
 
+    // Gestion des pages à afficher
     public static void addEventChangePage(MainController mc) {
         mc.getCurrPage().addListener((observable, oldValue, newValue) -> {
             switch (newValue) {
@@ -176,6 +184,7 @@ public class EventManager {
         });
     }
 
+    // Event gestion mouvement dans simulation manuelle
     public static void addEventMove(MainController mc, StackPane sp, char dir) {
         sp.setOnMouseClicked((MouseEvent e) -> {
             if(mc.getSimulation().isEnd()) {
@@ -196,6 +205,7 @@ public class EventManager {
         });
     }
 
+    // Click sur un bouton de l'historique, permet charger la configuration
     public static void addEventImportHistory(MainController mc, MenuItem m, String path) {
         m.setOnAction((ActionEvent e) -> {
             try {
