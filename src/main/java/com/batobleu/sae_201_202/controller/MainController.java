@@ -6,6 +6,7 @@ import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
 import com.batobleu.sae_201_202.view.*;
 import com.batobleu.sae_201_202.view.Popup.PopupNewLabyrinth;
+import com.batobleu.sae_201_202.view.leftMenu.AutoMenu;
 import com.batobleu.sae_201_202.view.leftMenu.LeftMenuManager;
 import com.batobleu.sae_201_202.view.leftMenu.MenuSelectItems;
 import com.batobleu.sae_201_202.view.leftMenu.MoveMenu;
@@ -47,6 +48,7 @@ public class MainController extends Application {
     private Map map;
     private Stage stage;
     private MoveMenu moveMenu;
+    private AutoMenu autoMenu;
 
     private LeftMenuManager lmm;
 
@@ -117,6 +119,7 @@ public class MainController extends Application {
         this.map.addMap();
         new InformationDebug(this);
         this.moveMenu = new MoveMenu(this);
+        this.autoMenu = new AutoMenu(this);
 
         this.currPage = new SimpleObjectProperty<>();
         EventManager.addEventChangePage(this);
@@ -149,6 +152,7 @@ public class MainController extends Application {
     public ObjectProperty<CurrPage> getCurrPage() {
         return this.currPage;
     }
+    public AutoMenu getAutoMenu() { return this.autoMenu; }
 
     public void setCurrPage(CurrPage cp) {
         this.currPage.set(cp);

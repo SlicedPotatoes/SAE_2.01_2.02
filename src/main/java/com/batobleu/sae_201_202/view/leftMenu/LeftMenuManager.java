@@ -22,29 +22,37 @@ public class LeftMenuManager {
         this.mc.getRoot().setLeft(this.container);
     }
 
+    private void removeAll() {
+        this.container.getChildren().remove(this.mc.getMsi().getContainer());
+        this.container.getChildren().remove(this.mc.getMoveMenu().getContainer());
+        this.container.getChildren().remove(this.mc.getAutoMenu().getContainer());
+    }
+
     // Affiche le menu de sélection de décor
     public void showMenuDecor() {
-        this.container.getChildren().remove(this.mc.getMoveMenu().getContainer());
-        this.container.getChildren().remove(this.mc.getMsi().getContainer());
+        this.removeAll();
 
         this.mc.getMsi().switchToMenuDecor();
-
         this.container.getChildren().add(this.mc.getMsi().getContainer());
     }
 
     // Affiche le menu de sélection d'entité
     public void showMenuEntity() {
-        this.container.getChildren().remove(this.mc.getMoveMenu().getContainer());
-        this.container.getChildren().remove(this.mc.getMsi().getContainer());
+        this.removeAll();
 
         this.mc.getMsi().switchToMenuEntity();
-
         this.container.getChildren().add(this.mc.getMsi().getContainer());
     }
 
     // Affiche le menu des contrôles manuels
     public void showMenuMove() {
-        this.container.getChildren().remove(this.mc.getMsi().getContainer());
+        this.removeAll();
         this.container.getChildren().add(this.mc.getMoveMenu().getContainer());
+    }
+
+    // Affiche le menu des contrôles automatique
+    public void showMenuAuto() {
+        this.removeAll();
+        this.container.getChildren().add(this.mc.getAutoMenu().getContainer());
     }
 }

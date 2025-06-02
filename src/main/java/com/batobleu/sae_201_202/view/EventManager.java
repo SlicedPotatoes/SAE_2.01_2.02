@@ -178,7 +178,7 @@ public class EventManager {
                     mc.getLmm().showMenuMove();
                     break;
                 case ControlAuto:
-                    // TO DO
+                    mc.getLmm().showMenuAuto();
                     break;
             }
         });
