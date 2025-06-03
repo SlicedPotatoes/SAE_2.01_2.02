@@ -1,6 +1,6 @@
 package com.batobleu.sae_201_202.model;
 
-import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.entity.Sheep;
@@ -20,7 +20,6 @@ public class Simulation {
 
     private final int nx, ny;
     private MapTile[][] map;
-    private boolean chaseMod;
     private Wolf theWolf;
     private Sheep theSheep;
 
@@ -29,6 +28,9 @@ public class Simulation {
     private MapTile currEntityTurn;
 
     private HashMap<MapTile, Integer> counts;
+
+    private List<HistorySimulation> history;
+    private int indexAutoMoves;
 
     public Simulation(int nx, int ny) {
         this.nx = nx;
@@ -89,7 +91,7 @@ public class Simulation {
     }
 
     public void setEntity(MapTile entity, int x, int y) {
-        if(entity == MainController.WOLF) {
+        if(entity == WOLF) {
             this.theWolf = new Wolf(x, y, DEFAULT_SPEED_WOLF, this);
         }
         else {
@@ -221,5 +223,73 @@ public class Simulation {
     // Incrémente le compteur d'élément mangé par le mouton
     public void incrementCount(MapTile mt) {
         this.counts.put(mt, this.counts.getOrDefault(mt, 0) + 1);
+    }
+
+    private int manhattanDistance(int x1, int y1, int x2, int y2) {
+        return Math.abs(x2 - x1) + Math.abs(y2 - y1);
+    }
+
+    public int getIndexAutoMoves() {
+        return this.indexAutoMoves;
+    }
+
+    public void autoSimulation(PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
+        this.history = new ArrayList<>();
+        this.indexAutoMoves = 0;
+
+        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn));
+
+        while(!this.isEnd()) {
+            Pair<Integer, Integer> move = null;
+
+            Entity e = this.currEntityTurn == SHEEP ? this.theSheep : this.theWolf;
+            Entity other = this.currEntityTurn == SHEEP ? this.theWolf : this.theSheep;
+
+            if(this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) < 999) {
+                List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
+
+                for (int d = 0; d < 4; d++) {
+                    int x = e.getX() + dx[d];
+                    int y = e.getY() + dy[d];
+
+                    if(x < 0 || x >= nx || y < 0 || y >= ny || this.map[y][x] instanceof TileNotReachable) {
+                        continue;
+                    }
+
+                    possibleMoves.add(new Pair<>(dx[d], dy[d]));
+                }
+
+                move = possibleMoves.get(new Random().nextInt(possibleMoves.size()));
+            }
+            else {
+                move = this.currEntityTurn == SHEEP ? algoSheep.nextMove(this.map, e, other) : algoWolf.nextMove(this.map, e, other);
+            }
+
+            e.move(move.getKey(), move.getValue());
+
+            this.moveLeft--;
+            if(this.moveLeft == 0) {
+                this.endTurn();
+            }
+
+            this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn));
+        }
+
+        this.setupState(this.history.getFirst());
+    }
+
+    private void setupState(HistorySimulation h) {
+        this.theWolf = h.getWolf();
+        this.theSheep = h.getSheep();
+        this.moveLeft = h.getMoveLeft();
+        this.currEntityTurn = h.getCurrEntityTurn();
+    }
+
+    public void getNext() {
+        this.setupState(this.history.get(++this.indexAutoMoves));
+    }
+
+    public void getPrev() {
+        this.setupState(this.history.get(--this.indexAutoMoves));
     }
 }

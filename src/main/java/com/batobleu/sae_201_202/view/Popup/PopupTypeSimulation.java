@@ -1,6 +1,7 @@
 package com.batobleu.sae_201_202.view.Popup;
 
 import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.view.CurrPage;
 import com.batobleu.sae_201_202.view.InformationDebug;
 import javafx.geometry.Insets;
@@ -38,6 +39,11 @@ public class PopupTypeSimulation {
         });
         auto.setOnAction(e -> {
             mc.setCurrPage(CurrPage.ControlAuto);
+            try {
+                mc.getSimulation().autoSimulation(null, null);
+            } catch (IllegalMoveException ex) {
+                InformationDebug.AddDebug(ex.toString());
+            }
             dialog.close();
         });
 

@@ -11,6 +11,11 @@ public class Wolf extends Entity {
         this.theSimulation = s;
     }
 
+    public Wolf(Wolf w) {
+        super(w.x, w.y, w.speed);
+        this.theSimulation = w.theSimulation;
+    }
+
     @Override
     public void move(int dX, int dY) throws IndexOutOfBoundsException, IllegalMoveException {
          super.move(dX, dY, this.theSimulation.getMap());

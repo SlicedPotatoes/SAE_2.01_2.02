@@ -1,6 +1,8 @@
 package com.batobleu.sae_201_202.view.leftMenu;
 
 import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.entity.Sheep;
+import com.batobleu.sae_201_202.model.entity.Wolf;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,7 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-import static com.batobleu.sae_201_202.controller.MainController.SHEEP;
+import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class AutoMenu {
     private final MainController mc;
@@ -81,6 +83,39 @@ public class AutoMenu {
         sliderSpeed.setBlockIncrement(10);
 
         this.container.getChildren().addAll(title, infoContainer, arrowContainer, cbAuto, sliderSpeed);
+
+        leftButton.setOnAction(e -> {
+            this.update(true);
+        });
+        rightButton.setOnAction(e -> {
+            this.update(false);
+        });
+    }
+
+    private void update(boolean prev) {
+        Wolf w = this.mc.getSimulation().getWolf();
+        Sheep s = this.mc.getSimulation().getSheep();
+
+        this.mc.getMap().updateImage(w.getX(), w.getY(), this.mc.getSimulation().getMap()[w.getY()][w.getX()]);
+        this.mc.getMap().updateImage(s.getX(), s.getY(), this.mc.getSimulation().getMap()[s.getY()][s.getX()]);
+
+        if(prev) {
+            this.mc.getSimulation().getPrev();
+        }
+        else {
+            this.mc.getSimulation().getNext();
+        }
+
+        w = this.mc.getSimulation().getWolf();
+        s = this.mc.getSimulation().getSheep();
+
+        this.mc.getMap().updateImage(s.getX(), s.getY(), SHEEP);
+        this.mc.getMap().updateImage(w.getX(), w.getY(), WOLF);
+
+        // Mets à jour les différents labels, et l'icône de l'entité à qui c'est le tour.
+        this.moveLeft.setText("Mouvement restant : " + this.mc.getSimulation().getMoveLeft());
+        this.round.setText("Tour n° " + this.mc.getSimulation().getIndexAutoMoves());
+        this.display.setFill(new ImagePattern(new Image(getClass().getResource(this.mc.getSimulation().getCurrEntityTurn().getPathIcon()).toExternalForm())));
     }
 
     public VBox getContainer() {

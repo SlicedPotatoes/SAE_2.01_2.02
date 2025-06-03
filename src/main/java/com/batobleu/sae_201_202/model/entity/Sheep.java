@@ -16,6 +16,12 @@ public class Sheep extends Entity {
         this.speedModifier = 1;
     }
 
+    public Sheep(Sheep s) {
+        super(s.x, s.y, s.speed);
+        this.theSimulation = s.theSimulation;
+        this.speedModifier = s.speedModifier;
+    }
+
     @Override
     public int getSpeed() {
         return (int) (super.getSpeed() * speedModifier);
