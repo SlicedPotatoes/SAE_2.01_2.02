@@ -75,8 +75,11 @@ public class BfsMatthis {
         ArrayList<Pair<Integer, Integer>> chemin = new ArrayList<>();
         Pair<Integer, Integer> courant = exit;
         while (courant != null) {
-            chemin.add(courant);
+            Pair<Integer, Integer> a = courant;
             courant = precedent.get(courant);
+            if (courant != null) {
+                chemin.add(new Pair<>(a.getValue0() - courant.getValue0(), a.getValue1() - courant.getValue1()));
+            }
         }
 
         return chemin;
