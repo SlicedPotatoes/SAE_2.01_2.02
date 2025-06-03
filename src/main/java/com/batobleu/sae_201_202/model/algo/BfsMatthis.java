@@ -3,18 +3,18 @@ package com.batobleu.sae_201_202.model.algo;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.tile.*;
 import org.javatuples.Pair;
-import org.javatuples.Tuple;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
-public class DijkstraMatthis {
+public class BfsMatthis {
     private Simulation sim;
     private MapTile[][] map;
 
-    public DijkstraMatthis(Simulation sim) {
+    public BfsMatthis(Simulation sim) {
         this.sim = sim;
         this.map = sim.getMap();
         long start = System.nanoTime();
@@ -49,8 +49,8 @@ public class DijkstraMatthis {
         Pair<Integer, Integer> start = new Pair<>(this.sim.getSheep().getY(), this.sim.getSheep().getX());
         ArrayList<Pair<Integer, Integer>> visited = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> queue = new ArrayList<>();
-        ArrayList<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> precedent = new ArrayList<>();
-        precedent.add(new Pair<>(start, null));
+        HashMap<Pair<Integer, Integer>,Pair<Integer, Integer>> precedent = new HashMap<>();
+        precedent.put(start, null);
 
         queue.add(start);
         visited.add(start);
@@ -66,7 +66,7 @@ public class DijkstraMatthis {
                 if (!visited.contains(p1)) {
                     visited.add(p1);
                     queue.add(p1);
-                    precedent.add(new Pair<>(p1, curr));
+                    precedent.put(p1, curr);
                 }
             }
             queue.remove(curr);
@@ -76,18 +76,9 @@ public class DijkstraMatthis {
         Pair<Integer, Integer> courant = exit;
         while (courant != null) {
             chemin.add(courant);
-            courant = retrouverParent(precedent, courant);
+            courant = precedent.get(courant);
         }
 
         return chemin;
-    }
-
-    public Pair<Integer, Integer> retrouverParent(ArrayList<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> precedent, Pair<Integer, Integer> enfant) {
-        for (Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> p : precedent) {
-            if (p.getValue0().equals(enfant)) {
-                return p.getValue1();
-            }
-        }
-        return null;
     }
 }
