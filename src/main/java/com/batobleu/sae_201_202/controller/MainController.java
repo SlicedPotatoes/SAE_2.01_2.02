@@ -50,7 +50,7 @@ public class MainController extends Application {
     public static final List<String> WOLF_ALGORITHM = new ArrayList<>();
 
     // Dictionnaire pour récupérer un algorithme à partir de son nom
-    public static final HashMap<String, PathFinding> NOM_ALGORITHME_HASHMAP = new HashMap<>();
+    public static final HashMap<String, PathFinding> STRING_ALGORITHM_HASHMAP = new HashMap<>();
 
     public static final int DEFAULT_SPEED_SHEEP = 2;
     public static final int DEFAULT_SPEED_WOLF = 3;
@@ -97,8 +97,8 @@ public class MainController extends Application {
 
         WOLF_ALGORITHM.add("Random");
 
-        NOM_ALGORITHME_HASHMAP.put("Random", new Random());
-        NOM_ALGORITHME_HASHMAP.put("BFSMatthis", new BfsMatthis());
+        STRING_ALGORITHM_HASHMAP.put("Random", new Random());
+        STRING_ALGORITHM_HASHMAP.put("BFSMatthis", new BfsMatthis());
 
         launch();
     }

@@ -247,7 +247,7 @@ public class Simulation {
             PathFinding algo = this.currEntityTurn == SHEEP ? algoSheep : algoWolf;
 
             if(algo == null || this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) < dManhattan) {
-                move = NOM_ALGORITHME_HASHMAP.get("Random").nextMove(this);
+                move = STRING_ALGORITHM_HASHMAP.get("Random").nextMove(this);
             }
             else {
                 move = algo.nextMove(this);
