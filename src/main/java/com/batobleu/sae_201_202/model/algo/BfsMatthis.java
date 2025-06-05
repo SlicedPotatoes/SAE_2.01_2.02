@@ -1,8 +1,9 @@
 package com.batobleu.sae_201_202.model.algo;
 
 import com.batobleu.sae_201_202.model.Simulation;
+import com.batobleu.sae_201_202.model.entity.Entity;
 import com.batobleu.sae_201_202.model.tile.*;
-import org.javatuples.Pair;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,18 +11,13 @@ import java.util.List;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
-public class BfsMatthis {
-    private Simulation sim;
+public class BfsMatthis extends PathFinding{
     private MapTile[][] map;
+    private ArrayList<Pair<Integer,Integer>> chemin;
+    private Simulation sim;
 
-    public BfsMatthis(Simulation sim) {
-        this.sim = sim;
-        this.map = sim.getMap();
-        long start = System.nanoTime();
-        System.out.println(getChemin());
-        long end = System.nanoTime();
-        System.out.println("Temp : " + (end - start) / 1e9);
-
+    public BfsMatthis() {
+        this.chemin = getChemin();
     }
 
     public ArrayList<Pair<Integer, Integer>> voisins(int x, int y) {
@@ -41,10 +37,6 @@ public class BfsMatthis {
         return v;
     }
 
-    public int manhattan(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
-        return Math.abs(a.getValue0() - b.getValue0()) + Math.abs(a.getValue1() - b.getValue1());
-    }
-
     public ArrayList<Pair<Integer, Integer>> getChemin() {
         Pair<Integer, Integer> start = new Pair<>(this.sim.getSheep().getY(), this.sim.getSheep().getX());
         ArrayList<Pair<Integer, Integer>> visited = new ArrayList<>();
@@ -61,7 +53,7 @@ public class BfsMatthis {
             if (curr == exit) {
                 break;
             }
-            ArrayList<Pair<Integer, Integer>> v = voisins(curr.getValue1(), curr.getValue0());
+            ArrayList<Pair<Integer, Integer>> v = voisins(curr.getValue(), curr.getKey());
             for (Pair<Integer, Integer> p1 : v) {
                 if (!visited.contains(p1)) {
                     visited.add(p1);
@@ -78,10 +70,21 @@ public class BfsMatthis {
             Pair<Integer, Integer> a = courant;
             courant = precedent.get(courant);
             if (courant != null) {
-                chemin.add(new Pair<>(a.getValue0() - courant.getValue0(), a.getValue1() - courant.getValue1()));
+                chemin.add(new Pair<>(a.getValue() - courant.getValue(), a.getKey() - courant.getKey()));
             }
         }
 
         return chemin;
+    }
+
+    @Override
+    public Pair<Integer, Integer> nextMove(Simulation sim) {
+        this.sim = sim;
+        this.map = sim.getMap();
+        Pair<Integer, Integer> a = this.chemin.getFirst();
+        this.chemin.remove(a);
+        System.out.println(this.chemin);
+        System.out.println(a);
+        return a;
     }
 }
