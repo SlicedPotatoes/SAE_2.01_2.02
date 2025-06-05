@@ -17,7 +17,6 @@ public class BfsMatthis extends PathFinding{
     private Simulation sim;
 
     public BfsMatthis() {
-        this.chemin = getChemin();
     }
 
     public ArrayList<Pair<Integer, Integer>> voisins(int x, int y) {
@@ -81,10 +80,9 @@ public class BfsMatthis extends PathFinding{
     public Pair<Integer, Integer> nextMove(Simulation sim) {
         this.sim = sim;
         this.map = sim.getMap();
+        this.chemin = getChemin();
         Pair<Integer, Integer> a = this.chemin.getFirst();
         this.chemin.remove(a);
-        System.out.println(this.chemin);
-        System.out.println(a);
         return a;
     }
 }
