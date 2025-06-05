@@ -85,9 +85,7 @@ public class BfsMatthis extends PathFinding{
         this.sim = sim;
         this.map = sim.getMap();
 
-        if (this.chemin == null || this.chemin.isEmpty()) {
-            this.chemin = getChemin();
-        }
+        this.chemin = getChemin();
 
         Pair<Integer, Integer> a = this.chemin.getFirst();
         this.chemin.remove(a);

@@ -3,6 +3,7 @@ package com.batobleu.sae_201_202.view.leftMenu;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
+import com.batobleu.sae_201_202.view.EventManager;
 import com.batobleu.sae_201_202.view.Popup.PopupEnd;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,6 +11,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,6 +21,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
+import static javafx.scene.input.MouseEvent.*;
 
 public class AutoMenu {
     private final MainController mc;
@@ -85,12 +89,33 @@ public class AutoMenu {
 
         this.container.getChildren().addAll(title, infoContainer, arrowContainer, cbAuto, sliderSpeed);
 
+        rightButton.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.E)){
+                this.update(false);
+            }
+            if (e.getCode().equals(KeyCode.A)){
+                this.update(true);
+            }
+        });
+
+        leftButton.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.A)){
+                this.update(true);
+            }
+            if (e.getCode().equals(KeyCode.E)){
+                this.update(false);
+            }
+        });
+
         leftButton.setOnAction(e -> {
             this.update(true);
         });
+
         rightButton.setOnAction(e -> {
             this.update(false);
         });
+
+
     }
 
     private void update(boolean prev) {
