@@ -81,14 +81,15 @@ public class BfsMatthis extends PathFinding{
     }
 
     @Override
-    public Pair<Integer, Integer> nextMove(Simulation sim) {
+    public List<Pair<Integer, Integer>> nextMove(Simulation sim) {
         this.sim = sim;
         this.map = sim.getMap();
 
         this.chemin = getChemin();
 
-        Pair<Integer, Integer> a = this.chemin.getFirst();
-        this.chemin.remove(a);
+        List<Pair<Integer, Integer>> a = new ArrayList<>();
+        a.add(this.chemin.getFirst());
+
         return a;
     }
 }

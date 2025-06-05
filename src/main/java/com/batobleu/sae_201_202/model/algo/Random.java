@@ -6,6 +6,7 @@ import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 import javafx.util.Pair;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import static com.batobleu.sae_201_202.model.Simulation.*;
 public class Random extends PathFinding {
 
     @Override
-    public Pair<Integer, Integer> nextMove(Simulation s) {
+    public List<Pair<Integer, Integer>> nextMove(Simulation s) {
         List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
 
         Entity e = s.getCurrEntityTurn() == SHEEP ? s.getSheep() : s.getWolf();
@@ -35,6 +36,9 @@ public class Random extends PathFinding {
             possibleMoves.add(new Pair<>(dx[d], dy[d]));
         }
 
-        return possibleMoves.get(new java.util.Random().nextInt(possibleMoves.size()));
+        List<Pair<Integer, Integer>> result = new ArrayList<>();
+        result.add(possibleMoves.get(new java.util.Random().nextInt(possibleMoves.size())));
+
+        return result;
     }
 }

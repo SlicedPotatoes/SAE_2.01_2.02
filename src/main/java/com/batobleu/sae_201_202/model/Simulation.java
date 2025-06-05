@@ -89,9 +89,6 @@ public class Simulation {
     public HashMap<MapTile, Integer> getCounts() {
         return this.counts;
     }
-    public int getIndexAutoMoves() {
-        return this.indexAutoMoves;
-    }
 
     public void setEntity(MapTile entity, int x, int y) {
         if(entity == WOLF) {
@@ -239,28 +236,33 @@ public class Simulation {
         this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
 
         while(!this.isEnd()) {
-            Pair<Integer, Integer> move = null;
+            List<Pair<Integer, Integer>> moves = null;
 
             Entity e = this.currEntityTurn == SHEEP ? this.theSheep : this.theWolf;
             Entity other = this.currEntityTurn == SHEEP ? this.theWolf : this.theSheep;
 
             PathFinding algo = this.currEntityTurn == SHEEP ? algoSheep : algoWolf;
 
-            if(algo == null || this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) < dManhattan) {
-                move = STRING_ALGORITHM_HASHMAP.get("Random").nextMove(this);
+            if(algo == null || this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) > dManhattan) {
+                moves = STRING_ALGORITHM_HASHMAP.get("Random").nextMove(this);
             }
             else {
-                move = algo.nextMove(this);
+                moves = algo.nextMove(this);
             }
 
-            e.move(move.getKey(), move.getValue());
+            for (Pair<Integer, Integer> move : moves) {
+                System.out.println(e.getClass() + " Mouvement: " + move);
+                e.move(move.getKey(), move.getValue());
 
-            this.moveLeft--;
-            if(this.moveLeft == 0) {
-                this.endTurn();
+                this.moveLeft--;
+                if(this.moveLeft == 0) {
+                    this.endTurn();
+                    this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
+                    break;
+                }
+
+                this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
             }
-
-            this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
         }
 
         this.setupState(this.history.getFirst());
