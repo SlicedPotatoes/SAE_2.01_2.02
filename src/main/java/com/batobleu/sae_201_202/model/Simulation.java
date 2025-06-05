@@ -15,8 +15,8 @@ import java.util.*;
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class Simulation {
-    private static final int[] dx = {0, 1, 0, -1};
-    private static final int[] dy = {1, 0, -1, 0};
+    public static final int[] dx = {0, 1, 0, -1};
+    public static final int[] dy = {1, 0, -1, 0};
 
     private final int nx, ny;
     private MapTile[][] map;
@@ -233,7 +233,7 @@ public class Simulation {
         return this.indexAutoMoves;
     }
 
-    public void autoSimulation(PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
+    public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
         this.history = new ArrayList<>();
         this.indexAutoMoves = 0;
 
@@ -245,24 +245,13 @@ public class Simulation {
             Entity e = this.currEntityTurn == SHEEP ? this.theSheep : this.theWolf;
             Entity other = this.currEntityTurn == SHEEP ? this.theWolf : this.theSheep;
 
-            if(this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) < 999) {
-                List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
+            PathFinding algo = this.currEntityTurn == SHEEP ? algoSheep : algoWolf;
 
-                for (int d = 0; d < 4; d++) {
-                    int x = e.getX() + dx[d];
-                    int y = e.getY() + dy[d];
-
-                    if(x < 0 || x >= nx || y < 0 || y >= ny || this.map[y][x] instanceof TileNotReachable) {
-                        continue;
-                    }
-
-                    possibleMoves.add(new Pair<>(dx[d], dy[d]));
-                }
-
-                move = possibleMoves.get(new Random().nextInt(possibleMoves.size()));
+            if(algo == null || this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) < dManhattan) {
+                move = NOM_ALGORITHME_HASHMAP.get("Random").nextMove(this);
             }
             else {
-                move = this.currEntityTurn == SHEEP ? algoSheep.nextMove(this.map, e, other) : algoWolf.nextMove(this.map, e, other);
+                move = algo.nextMove(this);
             }
 
             e.move(move.getKey(), move.getValue());

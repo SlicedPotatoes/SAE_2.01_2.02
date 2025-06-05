@@ -1,5 +1,8 @@
 package com.batobleu.sae_201_202.controller;
 
+import com.batobleu.sae_201_202.model.algo.BfsMatthis;
+import com.batobleu.sae_201_202.model.algo.PathFinding;
+import com.batobleu.sae_201_202.model.algo.Random;
 import com.batobleu.sae_201_202.model.exception.InvalidPositionException;
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.entity.Entity;
@@ -18,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +43,14 @@ public class MainController extends Application {
     public static final HashMap<MapTile, Character> MAP_TILE_CHARACTER_HASH_MAP = new HashMap<>();
     // Dictionnaire pour convertir un caractère en déplacement (dx, dy)
     public static final HashMap<Character, Pair<Integer, Integer>> CHARACTER_DIRECTION = new HashMap<>();
+
+    // Liste d'algorithme disponible pour le mouton
+    public static final List<String> SHEEP_ALGORITHM = new ArrayList<>();
+    // Liste d'algorithme disponible pour le loup
+    public static final List<String> WOLF_ALGORITHM = new ArrayList<>();
+
+    // Dictionnaire pour récupérer un algorithme à partir de son nom
+    public static final HashMap<String, PathFinding> NOM_ALGORITHME_HASHMAP = new HashMap<>();
 
     public static final int DEFAULT_SPEED_SHEEP = 2;
     public static final int DEFAULT_SPEED_WOLF = 3;
@@ -79,6 +91,14 @@ public class MainController extends Application {
         CHARACTER_DIRECTION.put('d', new Pair<>(0, 1));
         CHARACTER_DIRECTION.put('l', new Pair<>(-1, 0));
         CHARACTER_DIRECTION.put('r', new Pair<>(1, 0));
+
+        SHEEP_ALGORITHM.add("Random");
+        SHEEP_ALGORITHM.add("BFSMatthis");
+
+        WOLF_ALGORITHM.add("Random");
+
+        NOM_ALGORITHME_HASHMAP.put("Random", new Random());
+        NOM_ALGORITHME_HASHMAP.put("BFSMatthis", new BfsMatthis());
 
         launch();
     }

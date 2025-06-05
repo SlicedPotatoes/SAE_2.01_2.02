@@ -1,6 +1,7 @@
 package com.batobleu.sae_201_202.view.Popup;
 
 import com.batobleu.sae_201_202.controller.MainController;
+import com.batobleu.sae_201_202.model.SettingsAutoSimulation;
 import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.view.CurrPage;
 import com.batobleu.sae_201_202.view.InformationDebug;
@@ -11,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 // Classe affichant un popup laissant le choix à l'utilisateur d'ouvrir la simulation manuel ou automatique
 public class PopupTypeSimulation {
@@ -38,9 +41,16 @@ public class PopupTypeSimulation {
             dialog.close();
         });
         auto.setOnAction(e -> {
+            PopupSettingAutoSimulation p = new PopupSettingAutoSimulation();
+            Optional<SettingsAutoSimulation> result = p.showAndWait();
+
+            if(result.isEmpty()) {
+                return;
+            }
+
             mc.setCurrPage(CurrPage.ControlAuto);
             try {
-                mc.getSimulation().autoSimulation(null, null);
+                mc.getSimulation().autoSimulation(result.get().getDManhattan(), result.get().getAlgoSheep(), result.get().getAlgoWolf());
             } catch (IllegalMoveException ex) {
                 InformationDebug.AddDebug(ex.toString());
             }
