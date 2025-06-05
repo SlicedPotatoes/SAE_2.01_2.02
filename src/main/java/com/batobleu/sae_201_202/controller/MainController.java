@@ -1,5 +1,6 @@
 package com.batobleu.sae_201_202.controller;
 
+import com.batobleu.sae_201_202.model.algo.BFSKevin.BFSKevin;
 import com.batobleu.sae_201_202.model.algo.BfsMatthis;
 import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.algo.Random;
@@ -94,11 +95,14 @@ public class MainController extends Application {
 
         SHEEP_ALGORITHM.add("Random");
         SHEEP_ALGORITHM.add("BFSMatthis");
+        SHEEP_ALGORITHM.add("BFSKevin");
 
         WOLF_ALGORITHM.add("Random");
+        WOLF_ALGORITHM.add("BFSKevin");
 
         STRING_ALGORITHM_HASHMAP.put("Random", new Random());
         STRING_ALGORITHM_HASHMAP.put("BFSMatthis", new BfsMatthis());
+        STRING_ALGORITHM_HASHMAP.put("BFSKevin", new BFSKevin());
 
         launch();
     }
@@ -139,7 +143,7 @@ public class MainController extends Application {
         this.map.addMap();
         new InformationDebug(this);
         this.moveMenu = new MoveMenu(this);
-        this.autoMenu = new AutoMenu(this);
+        this.autoMenu = new AutoMenu(this, scene);
 
         this.currPage = new SimpleObjectProperty<>();
         EventManager.addEventChangePage(this);

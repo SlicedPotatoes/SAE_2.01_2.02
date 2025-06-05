@@ -6,6 +6,7 @@ import com.batobleu.sae_201_202.model.entity.Wolf;
 import com.batobleu.sae_201_202.view.EventManager;
 import com.batobleu.sae_201_202.view.Popup.PopupEnd;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -25,14 +26,17 @@ import static javafx.scene.input.MouseEvent.*;
 
 public class AutoMenu {
     private final MainController mc;
+    private final Scene scene;
     private final VBox container;
+
 
     private final Label moveLeft;
     private final Label round;
     private final Rectangle display;
 
-    public AutoMenu(MainController mc){
+    public AutoMenu(MainController mc, Scene scene){
         this.mc = mc;
+        this.scene = scene;
         this.container = new VBox();
         this.container.setSpacing(15);
 
@@ -89,21 +93,12 @@ public class AutoMenu {
 
         this.container.getChildren().addAll(title, infoContainer, arrowContainer, cbAuto, sliderSpeed);
 
-        rightButton.setOnKeyPressed(e -> {
+        this.scene.setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.E)){
                 this.update(false);
             }
             if (e.getCode().equals(KeyCode.A)){
                 this.update(true);
-            }
-        });
-
-        leftButton.setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.A)){
-                this.update(true);
-            }
-            if (e.getCode().equals(KeyCode.E)){
-                this.update(false);
             }
         });
 
