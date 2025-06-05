@@ -3,6 +3,7 @@ package com.batobleu.sae_201_202.view.leftMenu;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
+import com.batobleu.sae_201_202.view.Popup.PopupEnd;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -104,6 +105,9 @@ public class AutoMenu {
         }
         else {
             this.mc.getSimulation().getNext();
+            if(this.mc.getSimulation().isEnd()) {
+                new PopupEnd(this.mc);
+            }
         }
 
         w = this.mc.getSimulation().getWolf();
@@ -114,7 +118,7 @@ public class AutoMenu {
 
         // Mets à jour les différents labels, et l'icône de l'entité à qui c'est le tour.
         this.moveLeft.setText("Mouvement restant : " + this.mc.getSimulation().getMoveLeft());
-        this.round.setText("Tour n° " + this.mc.getSimulation().getIndexAutoMoves());
+        this.round.setText("Tour n° " + this.mc.getSimulation().getCurrRound());
         this.display.setFill(new ImagePattern(new Image(getClass().getResource(this.mc.getSimulation().getCurrEntityTurn().getPathIcon()).toExternalForm())));
     }
 

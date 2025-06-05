@@ -49,8 +49,8 @@ public class PopupSettingAutoSimulation extends Dialog<SettingsAutoSimulation> {
         // Retourne le résultat si l'utilisateur a validé la saisie, sinon null
         super.setResultConverter(dialogButton -> {
             if(dialogButton == okButtonType) {
-                PathFinding sheepAlgo = NOM_ALGORITHME_HASHMAP.getOrDefault(algoSheep.getValue(), NOM_ALGORITHME_HASHMAP.get("Random"));
-                PathFinding wolfAlgo = NOM_ALGORITHME_HASHMAP.getOrDefault(algoWolf.getValue(), NOM_ALGORITHME_HASHMAP.get("Random"));
+                PathFinding sheepAlgo = STRING_ALGORITHM_HASHMAP.getOrDefault(algoSheep.getValue(), STRING_ALGORITHM_HASHMAP.get("Random"));
+                PathFinding wolfAlgo = STRING_ALGORITHM_HASHMAP.getOrDefault(algoWolf.getValue(), STRING_ALGORITHM_HASHMAP.get("Random"));
                 return new SettingsAutoSimulation(dManhattan.getValue(), sheepAlgo, wolfAlgo);
             }
             return null;
