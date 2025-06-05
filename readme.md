@@ -19,7 +19,7 @@ L'interface utilisateur est concu en JavaFX.
 
 ## Contributeur
 - Kevin MASMEJEAN
-- Matthis LUSTREMENT
+- Matthis LUSTREMANT
 - Isaac GODISIABOIS
 
 
