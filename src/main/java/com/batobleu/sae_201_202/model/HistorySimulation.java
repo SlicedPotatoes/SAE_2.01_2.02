@@ -8,13 +8,15 @@ public class HistorySimulation {
     private final Wolf w;
     private final Sheep s;
     private final int ml;
+    private final int cr;
     private final MapTile mt;
 
-    public HistorySimulation(Wolf w, Sheep s, int ml, MapTile mt){
+    public HistorySimulation(Wolf w, Sheep s, int ml, MapTile mt, int cr){
         this.w = new Wolf(w);
         this.s = new Sheep(s);
         this.ml = ml;
         this.mt = mt;
+        this.cr = cr;
     }
 
     public Wolf getWolf() {
@@ -31,5 +33,9 @@ public class HistorySimulation {
 
     public MapTile getCurrEntityTurn() {
         return this.mt;
+    }
+
+    public int getCr() {
+        return this.cr;
     }
 }

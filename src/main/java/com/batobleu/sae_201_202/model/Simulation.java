@@ -89,6 +89,9 @@ public class Simulation {
     public HashMap<MapTile, Integer> getCounts() {
         return this.counts;
     }
+    public int getIndexAutoMoves() {
+        return this.indexAutoMoves;
+    }
 
     public void setEntity(MapTile entity, int x, int y) {
         if(entity == WOLF) {
@@ -229,15 +232,11 @@ public class Simulation {
         return Math.abs(x2 - x1) + Math.abs(y2 - y1);
     }
 
-    public int getIndexAutoMoves() {
-        return this.indexAutoMoves;
-    }
-
     public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
         this.history = new ArrayList<>();
         this.indexAutoMoves = 0;
 
-        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn));
+        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
 
         while(!this.isEnd()) {
             Pair<Integer, Integer> move = null;
@@ -261,7 +260,7 @@ public class Simulation {
                 this.endTurn();
             }
 
-            this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn));
+            this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
         }
 
         this.setupState(this.history.getFirst());
@@ -272,13 +271,18 @@ public class Simulation {
         this.theSheep = h.getSheep();
         this.moveLeft = h.getMoveLeft();
         this.currEntityTurn = h.getCurrEntityTurn();
+        this.currRound = h.getCr();
     }
 
     public void getNext() {
-        this.setupState(this.history.get(++this.indexAutoMoves));
+        if(this.indexAutoMoves < this.history.size() - 1) {
+            this.setupState(this.history.get(++this.indexAutoMoves));
+        }
     }
 
     public void getPrev() {
-        this.setupState(this.history.get(--this.indexAutoMoves));
+        if(this.indexAutoMoves > 0) {
+            this.setupState(this.history.get(--this.indexAutoMoves));
+        }
     }
 }
