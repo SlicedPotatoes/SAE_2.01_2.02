@@ -13,6 +13,7 @@ public class BfsMatthis extends PathFinding{
     private MapTile[][] map;
     private ArrayList<Pair<Integer,Integer>> chemin;
     private Simulation sim;
+    private Boolean isSheep;
 
     public BfsMatthis() {
     }
@@ -36,15 +37,23 @@ public class BfsMatthis extends PathFinding{
 
     public ArrayList<Pair<Integer, Integer>> getChemin() {
         //initialisation
-        Pair<Integer, Integer> start = new Pair<>(this.sim.getSheep().getY(), this.sim.getSheep().getX());
+        Pair<Integer, Integer> start;
+        Pair<Integer, Integer> exit;
+        if (isSheep){
+            List<Integer> temp = this.sim.findExitMapTile();
+            exit = new Pair<>(temp.get(1), temp.get(0));
+            start = new Pair<>(this.sim.getSheep().getY(), this.sim.getSheep().getX());
+        } else{
+            exit = new Pair<>(this.sim.getSheep().getX(), this.sim.getSheep().getY());
+            start = new Pair<>(this.sim.getWolf().getY(), this.sim.getWolf().getX());
+        }
         ArrayList<Pair<Integer, Integer>> visited = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> queue = new ArrayList<>();
         HashMap<Pair<Integer, Integer>,Pair<Integer, Integer>> precedent = new HashMap<>();
         precedent.put(start, null);
         queue.add(start);
         visited.add(start);
-        List<Integer> temp = this.sim.findExitMapTile();
-        Pair<Integer, Integer> exit = new Pair<>(temp.get(1), temp.get(0));
+
 
         //Parcours
         while (!queue.isEmpty()) {
@@ -84,6 +93,7 @@ public class BfsMatthis extends PathFinding{
     public List<Pair<Integer, Integer>> nextMove(Simulation sim) {
         this.sim = sim;
         this.map = sim.getMap();
+        this.isSheep = sim.getCurrEntityTurn() == SHEEP;
 
         this.chemin = getChemin();
 

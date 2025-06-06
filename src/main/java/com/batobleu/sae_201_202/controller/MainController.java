@@ -99,6 +99,7 @@ public class MainController extends Application {
 
         WOLF_ALGORITHM.add("Random");
         WOLF_ALGORITHM.add("BFSKevin");
+        WOLF_ALGORITHM.add("BFSMatthis");
 
         STRING_ALGORITHM_HASHMAP.put("Random", new Random());
         STRING_ALGORITHM_HASHMAP.put("BFSMatthis", new BfsMatthis());
