@@ -1,29 +1,25 @@
-package com.batobleu.sae_201_202.model.algo.BFSKevin;
+package com.batobleu.sae_201_202.model.algo.AlgoKevin;
 
 import com.batobleu.sae_201_202.model.Simulation;
 import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.entity.Entity;
-import com.batobleu.sae_201_202.model.tile.TileExit;
 import com.batobleu.sae_201_202.model.tile.TileHerb;
-import com.batobleu.sae_201_202.model.tile.TileNotReachable;
 import javafx.util.Pair;
 
 import java.util.*;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
-import static com.batobleu.sae_201_202.model.Simulation.*;
 
 public class BFSKevin extends PathFinding {
-    private Simulation s;
     // Matrice des coûts pour arriver à une case X, Y depuis le départ
-    private int[][] mapCost;
+    protected int[][] mapCost;
     // Matrice des prédécesseurs pour arriver à une case X, Y avec le coût le plus faible
-    private int[][][] mapPrev;
+    protected int[][][] mapPrev;
+
+    protected Pair<Integer, Integer> target;
 
     private boolean isSheep;
-    private Pair<Integer, Integer> target;
     private HashMap<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>, List<Pair<Integer, Integer>>> intermediateMovement;
-
 
     public BFSKevin() {}
 
@@ -43,19 +39,19 @@ public class BFSKevin extends PathFinding {
     }
 
     // Récupère le nombre de déplacements dans le tour actuel
-    public int getSpeed(int x, int y) {
-        if (! (this.s.getMap()[y][x] instanceof TileHerb)) {
+    protected int getSpeed(int x, int y) {
+        if (! (super.s.getMap()[y][x] instanceof TileHerb)) {
             return 0;
         }
-        return this.isSheep ? (int) (DEFAULT_SPEED_SHEEP * ((TileHerb) this.s.getMap()[y][x]).getSpeedModifier()) : DEFAULT_SPEED_WOLF;
+        return this.isSheep ? (int) (DEFAULT_SPEED_SHEEP * ((TileHerb) super.s.getMap()[y][x]).getSpeedModifier()) : DEFAULT_SPEED_WOLF;
     }
 
     // Récupère les voisins, pour prendre en compte les plantes, on part du principe qu'une
     // case est adjacente si elle est atteignable à la fin de tous les déplacements d'un tour.
     // Cette méthode construit également le chemin intermédiaire pour atteindre les cases entre les tours
-    // (Chemin pour aller de position_depart_tourX jusqu'à position_depart_tourX+1)
-    public void neighbor(int x, int y, Set<Pair<Integer, Integer>> result, int nbDep, Pair<Integer, Integer> start, List<Pair<Integer, Integer>> path) {
-        // Condition d'arrêt, quand c'est une case de fin de tour (nbDep <= 0) ou que la cible est atteinte.
+    // (Chemin pour aller de position_depart_tourX jusqu'à position_depart_tourX+1).
+    protected void neighbor(int x, int y, Set<Pair<Integer, Integer>> result, int nbDep, Pair<Integer, Integer> start, List<Pair<Integer, Integer>> path) {
+        // Condition d'arrêt, quand c'est une case de fin de tour (nbDep ≤ 0) ou que la cible est atteinte.
         if (nbDep <= 0 || (x == this.target.getKey() && y == this.target.getValue())) {
             Pair<Integer, Integer> end = new Pair<>(x, y);
 
@@ -67,42 +63,39 @@ public class BFSKevin extends PathFinding {
         }
 
         // Parcours des déplacements possibles
-        for(int d = 0; d < 4; d++) {
-            int _x = x + dx[d];
-            int _y = y + dy[d];
+        List<Pair<Integer, Integer>> neighbors = super.getNeighbors(x, y, false);
+        for (Pair<Integer, Integer> neighbor : neighbors) {
+            int _x = neighbor.getKey();
+            int _y = neighbor.getValue();
 
-            // Le déplacement fait sortir l'entité de la grille
-            if(_x < 0 || _x >= this.s.getNx() || _y < 0 || _y >= this.s.getNy()) {
-                continue;
-            }
-            // Le déplacement mène sur une case inaccessible
-            if (this.s.getMap()[_y][_x] instanceof TileNotReachable) {
-                continue;
-            }
-            // Cas du loup qui ne peut pas aller sur la case de sortie
-            if (!this.isSheep && this.s.getMap()[_y][_x] instanceof TileExit) {
-                continue;
-            }
-
-            path.add(new Pair<>(dx[d], dy[d]));
-            this.neighbor(_x, _y, result, nbDep - 1, start, path);
+            path.add(new Pair<>(_x, _y));
+            this.neighbor(x + _x, y + _y, result, nbDep - 1, start, path);
             path.removeLast();
         }
     }
 
+    protected Queue<BFSKevinQueueData> getQueue() {
+        return new LinkedList<>();
+    }
+
+    protected void addElementToQueue(Queue<BFSKevinQueueData> q, BFSKevinQueueData element) {
+        q.add(element);
+    }
+
     // Parcours en largeur
-    public void compute(Pair<Integer, Integer> start) {
+    protected void compute(Pair<Integer, Integer> start) {
         // Initialisation
-        Queue<BFSKevinQueueData> q = new LinkedList<>();
-        q.add(new BFSKevinQueueData(start, 0, this.getSpeed(start.getKey(), start.getValue())));
+        Queue<BFSKevinQueueData> q = this.getQueue();
+        q.add(new BFSKevinQueueData(start, super.s.getMoveLeft()));
         this.mapCost[start.getValue()][start.getKey()] = 0;
 
         while (!q.isEmpty()) {
             BFSKevinQueueData curr = q.poll();
-            Pair<Integer, Integer> pos = curr.getPos();
+            int x = curr.getPos().getKey(), y = curr.getPos().getValue();
+            int currTurn = this.mapCost[y][x] + 1;
 
-            // Si la case actuelle est la cible, on arrête d'itérer car c'est le chemin le plus court.
-            if(pos.getKey().equals(this.target.getKey()) && pos.getValue().equals(this.target.getValue())) {
+            // Si la case actuelle est la cible, on arrête d'itérer, car c'est le chemin le plus court.
+            if(x == this.target.getKey() && y == this.target.getValue()) {
                 break;
             }
 
@@ -110,7 +103,7 @@ public class BFSKevin extends PathFinding {
             Set<Pair<Integer, Integer>> moves = new HashSet<>();
             // Stocke le chemin intermédiaire
             List<Pair<Integer, Integer>> path = new ArrayList<>();
-            this.neighbor(pos.getKey(), pos.getValue(), moves, curr.getNbDep(), pos, path);
+            this.neighbor(x, y, moves, curr.getNbDep(), curr.getPos(), path);
 
             // Parcours des voisins
             for (Pair<Integer, Integer> move : moves) {
@@ -118,24 +111,23 @@ public class BFSKevin extends PathFinding {
                 int _y = move.getValue();
 
                 // Si la case est atteignable plus rapidement, on l'ignore
-                if(this.mapCost[_y][_x] <= curr.getCurrTurn() ){
+                if(this.mapCost[_y][_x] <= currTurn){
                     continue;
                 }
 
                 // On met à jour la map des prédécesseurs et des coûts
-                this.mapCost[_y][_x] = curr.getCurrTurn() + 1;
-                this.mapPrev[_y][_x][0] = pos.getKey();
-                this.mapPrev[_y][_x][1] = pos.getValue();
+                this.mapCost[_y][_x] = currTurn;
+                this.mapPrev[_y][_x] = new int[]{x, y};
 
                 // On ajoute le voisin à la file
-                q.add(new BFSKevinQueueData(new Pair<>(_x, _y), curr.getCurrTurn()+1, this.getSpeed(_x, _y)));
+                this.addElementToQueue(q, new BFSKevinQueueData(new Pair<>(_x, _y), this.getSpeed(_x, _y)));
             }
         }
     }
 
     @Override
     public List<Pair<Integer, Integer>> nextMove(Simulation s) {
-        this.s = s;
+        super.s = s;
         this.init(s.getNx(), s.getNy());
         this.isSheep = s.getCurrEntityTurn() == SHEEP;
 
@@ -154,8 +146,8 @@ public class BFSKevin extends PathFinding {
         this.compute(new Pair<>(e.getX(), e.getY()));
 
         // Debug
-        for(int y = 0; y < this.s.getNy(); y++) {
-            for(int x = 0; x < this.s.getNx(); x++) {
+        for(int y = 0; y < super.s.getNy(); y++) {
+            for(int x = 0; x < super.s.getNx(); x++) {
                 System.out.print((this.mapCost[y][x] == s.getNx()+s.getNy()+1 ? "#" : this.mapCost[y][x]) + "\t");
             }
             System.out.println();

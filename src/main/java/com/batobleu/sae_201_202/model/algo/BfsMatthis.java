@@ -1,8 +1,6 @@
 package com.batobleu.sae_201_202.model.algo;
 
 import com.batobleu.sae_201_202.model.Simulation;
-import com.batobleu.sae_201_202.model.entity.Entity;
-import com.batobleu.sae_201_202.model.tile.*;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -10,29 +8,10 @@ import java.util.*;
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class BfsMatthis extends PathFinding{
-    private MapTile[][] map;
     private ArrayList<Pair<Integer,Integer>> chemin;
-    private Simulation sim;
     private Boolean isSheep;
 
     public BfsMatthis() {
-    }
-
-    public ArrayList<Pair<Integer, Integer>> voisins(int y, int x) {
-        ArrayList<Pair<Integer, Integer>> v = new ArrayList<>();
-        if (y > 0 && map[y - 1][x] != ROCK) {
-            v.add(new Pair<>(y - 1, x));
-        }
-        if (x > 0 && map[y][x - 1] != ROCK) {
-            v.add(new Pair<>(y, x - 1));
-        }
-        if (y < map.length - 1 && map[y + 1][x] != ROCK) {
-            v.add(new Pair<>(y + 1, x));
-        }
-        if (x < map[0].length - 1 && map[y][x + 1] != ROCK) {
-            v.add(new Pair<>(y, x + 1));
-        }
-        return v;
     }
 
     public ArrayList<Pair<Integer, Integer>> getChemin() {
@@ -40,12 +19,12 @@ public class BfsMatthis extends PathFinding{
         Pair<Integer, Integer> start;
         Pair<Integer, Integer> exit;
         if (isSheep){
-            List<Integer> temp = this.sim.findExitMapTile();
-            exit = new Pair<>(temp.get(1), temp.get(0));
-            start = new Pair<>(this.sim.getSheep().getY(), this.sim.getSheep().getX());
+            List<Integer> temp = super.s.findExitMapTile();
+            exit = new Pair<>(temp.get(0), temp.get(1));
+            start = new Pair<>(super.s.getSheep().getX(), super.s.getSheep().getY());
         } else{
-            exit = new Pair<>(this.sim.getSheep().getX(), this.sim.getSheep().getY());
-            start = new Pair<>(this.sim.getWolf().getY(), this.sim.getWolf().getX());
+            exit = new Pair<>(super.s.getSheep().getX(), super.s.getSheep().getY());
+            start = new Pair<>(super.s.getWolf().getX(), super.s.getWolf().getY());
         }
         ArrayList<Pair<Integer, Integer>> visited = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> queue = new ArrayList<>();
@@ -61,7 +40,7 @@ public class BfsMatthis extends PathFinding{
             if (curr == exit) {
                 break;
             }
-            ArrayList<Pair<Integer, Integer>> v = voisins(curr.getKey(), curr.getValue());
+            List<Pair<Integer, Integer>> v = super.getNeighbors(curr.getKey(), curr.getValue(), true);
             for (Pair<Integer, Integer> p1 : v) {
                 if (!visited.contains(p1)) {
                     visited.add(p1);
@@ -80,7 +59,7 @@ public class BfsMatthis extends PathFinding{
             Pair<Integer, Integer> ancien = courant;
             courant = precedent.get(courant);
             if (courant != null) {
-                chemin.add(new Pair<>(ancien.getValue() - courant.getValue(), ancien.getKey() - courant.getKey()));
+                chemin.add(new Pair<>(ancien.getKey() - courant.getKey(), ancien.getValue() - courant.getValue()));
             }
         }
 
@@ -91,8 +70,7 @@ public class BfsMatthis extends PathFinding{
 
     @Override
     public List<Pair<Integer, Integer>> nextMove(Simulation sim) {
-        this.sim = sim;
-        this.map = sim.getMap();
+        super.s = sim;
         this.isSheep = sim.getCurrEntityTurn() == SHEEP;
 
         this.chemin = getChemin();

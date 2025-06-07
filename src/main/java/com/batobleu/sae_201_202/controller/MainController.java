@@ -1,6 +1,9 @@
 package com.batobleu.sae_201_202.controller;
 
-import com.batobleu.sae_201_202.model.algo.BFSKevin.BFSKevin;
+import com.batobleu.sae_201_202.model.algo.AlgoKevin.AStarKevin1;
+import com.batobleu.sae_201_202.model.algo.AlgoKevin.AStarKevin2;
+import com.batobleu.sae_201_202.model.algo.AlgoKevin.BFSKevin;
+import com.batobleu.sae_201_202.model.algo.AlgoKevin.DijkstraKevin;
 import com.batobleu.sae_201_202.model.algo.BfsMatthis;
 import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.algo.Random;
@@ -96,14 +99,23 @@ public class MainController extends Application {
         SHEEP_ALGORITHM.add("Random");
         SHEEP_ALGORITHM.add("BFSMatthis");
         SHEEP_ALGORITHM.add("BFSKevin");
+        SHEEP_ALGORITHM.add("DijkstraKevin");
+        SHEEP_ALGORITHM.add("AStarKevin1");
+        SHEEP_ALGORITHM.add("AStarKevin2");
 
         WOLF_ALGORITHM.add("Random");
-        WOLF_ALGORITHM.add("BFSKevin");
         WOLF_ALGORITHM.add("BFSMatthis");
+        WOLF_ALGORITHM.add("BFSKevin");
+        WOLF_ALGORITHM.add("DijkstraKevin");
+        WOLF_ALGORITHM.add("AStarKevin1");
+        WOLF_ALGORITHM.add("AStarKevin2");
 
         STRING_ALGORITHM_HASHMAP.put("Random", new Random());
         STRING_ALGORITHM_HASHMAP.put("BFSMatthis", new BfsMatthis());
         STRING_ALGORITHM_HASHMAP.put("BFSKevin", new BFSKevin());
+        STRING_ALGORITHM_HASHMAP.put("DijkstraKevin", new DijkstraKevin());
+        STRING_ALGORITHM_HASHMAP.put("AStarKevin1", new AStarKevin1());
+        STRING_ALGORITHM_HASHMAP.put("AStarKevin2", new AStarKevin2());
 
         launch();
     }

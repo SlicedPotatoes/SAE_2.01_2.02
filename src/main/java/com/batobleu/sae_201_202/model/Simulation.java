@@ -225,25 +225,28 @@ public class Simulation {
         this.counts.put(mt, this.counts.getOrDefault(mt, 0) + 1);
     }
 
-    private int manhattanDistance(int x1, int y1, int x2, int y2) {
-        return Math.abs(x2 - x1) + Math.abs(y2 - y1);
+    private boolean isChaseMod(int limit) {
+        int diffX = this.theSheep.getX() - this.theWolf.getX();
+        int diffY = this.theSheep.getY() - this.theWolf.getY();
+        return Math.abs(diffX) + Math.abs(diffY) <= limit;
     }
 
     public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
         this.history = new ArrayList<>();
         this.indexAutoMoves = 0;
 
-        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
+        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
 
         while(!this.isEnd()) {
             List<Pair<Integer, Integer>> moves = null;
 
             Entity e = this.currEntityTurn == SHEEP ? this.theSheep : this.theWolf;
-            Entity other = this.currEntityTurn == SHEEP ? this.theWolf : this.theSheep;
 
             PathFinding algo = this.currEntityTurn == SHEEP ? algoSheep : algoWolf;
 
-            if(algo == null || this.manhattanDistance(e.getX(), e.getY(), other.getX(), other.getX()) > dManhattan) {
+            boolean chaseMod = this.isChaseMod(dManhattan);
+
+            if(algo == null || !chaseMod) {
                 moves = STRING_ALGORITHM_HASHMAP.get("Random").nextMove(this);
             }
             else {
@@ -257,11 +260,15 @@ public class Simulation {
                 this.moveLeft--;
                 if(this.moveLeft == 0) {
                     this.endTurn();
-                    this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
+                    this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
                     break;
                 }
 
-                this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound));
+                this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
+
+                if(this.isChaseMod(dManhattan) != chaseMod) {
+                    break;
+                }
             }
         }
 
@@ -279,12 +286,14 @@ public class Simulation {
     public void getNext() {
         if(this.indexAutoMoves < this.history.size() - 1) {
             this.setupState(this.history.get(++this.indexAutoMoves));
+            System.out.println("ChaseMod: " + this.history.get(this.indexAutoMoves - 1).getInChaseMode());
         }
     }
 
     public void getPrev() {
         if(this.indexAutoMoves > 0) {
             this.setupState(this.history.get(--this.indexAutoMoves));
+            System.out.println("ChaseMod: " + this.history.get(this.indexAutoMoves + 1).getInChaseMode());
         }
     }
 }

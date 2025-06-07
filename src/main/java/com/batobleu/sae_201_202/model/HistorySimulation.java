@@ -10,13 +10,15 @@ public class HistorySimulation {
     private final int ml;
     private final int cr;
     private final MapTile mt;
+    private final boolean inChaseMode;
 
-    public HistorySimulation(Wolf w, Sheep s, int ml, MapTile mt, int cr){
+    public HistorySimulation(Wolf w, Sheep s, int ml, MapTile mt, int cr, boolean b){
         this.w = new Wolf(w);
         this.s = new Sheep(s);
         this.ml = ml;
         this.mt = mt;
         this.cr = cr;
+        this.inChaseMode = b;
     }
 
     public Wolf getWolf() {
@@ -37,5 +39,9 @@ public class HistorySimulation {
 
     public int getCr() {
         return this.cr;
+    }
+
+    public boolean getInChaseMode() {
+        return this.inChaseMode;
     }
 }
