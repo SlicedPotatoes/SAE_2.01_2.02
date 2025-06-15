@@ -3,7 +3,6 @@ package com.batobleu.sae_201_202.view.leftMenu;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.entity.Sheep;
 import com.batobleu.sae_201_202.model.entity.Wolf;
-import com.batobleu.sae_201_202.view.EventManager;
 import com.batobleu.sae_201_202.view.Popup.PopupEnd;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,7 +20,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import static com.batobleu.sae_201_202.controller.MainController.*;
-import static javafx.scene.input.MouseEvent.*;
 
 public class AutoMenu {
     private final MainController mc;
@@ -32,6 +29,7 @@ public class AutoMenu {
 
     private final Label moveLeft;
     private final Label round;
+    private final Label valueChaseMode;
     private final Rectangle display;
 
     public AutoMenu(MainController mc, Scene scene){
@@ -63,6 +61,12 @@ public class AutoMenu {
 
         infoContainer.getChildren().addAll(this.display, labelContainer);
 
+        // Indicateur mode chasse / fuite
+        HBox chaseModeContainer = new HBox();
+        Label labelChaseMode = new Label("Mode chasse / fuite: ");
+        this.valueChaseMode = new Label();
+        chaseModeContainer.getChildren().addAll(labelChaseMode, valueChaseMode);
+
         // Controle de la simulation
         BorderPane arrowContainer = new BorderPane();
 
@@ -91,7 +95,7 @@ public class AutoMenu {
         sliderSpeed.setMajorTickUnit(50);
         sliderSpeed.setBlockIncrement(10);
 
-        this.container.getChildren().addAll(title, infoContainer, arrowContainer, cbAuto, sliderSpeed);
+        this.container.getChildren().addAll(title, infoContainer, chaseModeContainer, arrowContainer, cbAuto, sliderSpeed);
 
         this.scene.setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.E)){
@@ -121,10 +125,10 @@ public class AutoMenu {
         this.mc.getMap().updateImage(s.getX(), s.getY(), this.mc.getSimulation().getMap()[s.getY()][s.getX()]);
 
         if(prev) {
-            this.mc.getSimulation().getPrev();
+            this.mc.getSimulation().setPrev();
         }
         else {
-            this.mc.getSimulation().getNext();
+            this.mc.getSimulation().setNext();
             if(this.mc.getSimulation().isEnd()) {
                 new PopupEnd(this.mc);
             }
@@ -139,6 +143,7 @@ public class AutoMenu {
         // Mets à jour les différents labels, et l'icône de l'entité à qui c'est le tour.
         this.moveLeft.setText("Mouvement restant : " + this.mc.getSimulation().getMoveLeft());
         this.round.setText("Tour n° " + this.mc.getSimulation().getCurrRound());
+        this.valueChaseMode.setText(this.mc.getSimulation().isChaseMod() ? "Oui" : "Non");
         this.display.setFill(new ImagePattern(new Image(getClass().getResource(this.mc.getSimulation().getCurrEntityTurn().getPathIcon()).toExternalForm())));
     }
 

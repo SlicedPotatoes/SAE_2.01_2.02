@@ -38,4 +38,9 @@ public class BFSKevinQueueData implements Comparable<BFSKevinQueueData> {
     public int compareTo(BFSKevinQueueData o) {
         return Double.compare(this.currCost, o.currCost);
     }
+
+    @Override
+    public String toString() {
+        return "Pos: " + this.pos + " nbDep: " + this.nbDep + " currCost: " + this.currCost;
+    }
 }

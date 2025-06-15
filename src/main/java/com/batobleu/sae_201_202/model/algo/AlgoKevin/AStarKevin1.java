@@ -10,7 +10,7 @@ import java.util.Queue;
 import static com.batobleu.sae_201_202.controller.MainController.*;
 
 public class AStarKevin1 extends DijkstraKevin {
-    private double weight;
+    protected double weight;
 
     public AStarKevin1() {}
 

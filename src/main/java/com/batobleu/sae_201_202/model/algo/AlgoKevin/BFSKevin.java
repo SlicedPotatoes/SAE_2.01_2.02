@@ -82,6 +82,10 @@ public class BFSKevin extends PathFinding {
         q.add(element);
     }
 
+    protected boolean needToBeAddedToQueue(int x, int y) {
+        return true;
+    }
+
     // Parcours en largeur
     protected void compute(Pair<Integer, Integer> start) {
         // Initialisation
@@ -116,11 +120,13 @@ public class BFSKevin extends PathFinding {
                 }
 
                 // On met à jour la map des prédécesseurs et des coûts
-                this.mapCost[_y][_x] = currTurn;
                 this.mapPrev[_y][_x] = new int[]{x, y};
+                this.mapCost[_y][_x] = currTurn;
 
                 // On ajoute le voisin à la file
-                this.addElementToQueue(q, new BFSKevinQueueData(new Pair<>(_x, _y), this.getSpeed(_x, _y)));
+                if (this.needToBeAddedToQueue(_x, _y)) {
+                    this.addElementToQueue(q, new BFSKevinQueueData(new Pair<>(_x, _y), this.getSpeed(_x, _y)));
+                }
             }
         }
     }

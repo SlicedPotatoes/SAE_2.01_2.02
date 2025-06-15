@@ -32,6 +32,8 @@ public class Simulation {
     private List<HistorySimulation> history;
     private int indexAutoMoves;
 
+    private int dLimit;
+
     public Simulation(int nx, int ny) {
         this.nx = nx;
         this.ny = ny;
@@ -225,6 +227,9 @@ public class Simulation {
         this.counts.put(mt, this.counts.getOrDefault(mt, 0) + 1);
     }
 
+    public boolean isChaseMod() {
+        return this.isChaseMod(this.dLimit);
+    }
     private boolean isChaseMod(int limit) {
         int diffX = this.theSheep.getX() - this.theWolf.getX();
         int diffY = this.theSheep.getY() - this.theWolf.getY();
@@ -232,6 +237,8 @@ public class Simulation {
     }
 
     public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
+        this.dLimit = dManhattan;
+
         this.history = new ArrayList<>();
         this.indexAutoMoves = 0;
 
@@ -283,17 +290,15 @@ public class Simulation {
         this.currRound = h.getCr();
     }
 
-    public void getNext() {
+    public void setNext() {
         if(this.indexAutoMoves < this.history.size() - 1) {
             this.setupState(this.history.get(++this.indexAutoMoves));
-            System.out.println("ChaseMod: " + this.history.get(this.indexAutoMoves - 1).getInChaseMode());
         }
     }
 
-    public void getPrev() {
+    public void setPrev() {
         if(this.indexAutoMoves > 0) {
             this.setupState(this.history.get(--this.indexAutoMoves));
-            System.out.println("ChaseMod: " + this.history.get(this.indexAutoMoves + 1).getInChaseMode());
         }
     }
 }

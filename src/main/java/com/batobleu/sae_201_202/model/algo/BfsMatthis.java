@@ -33,7 +33,6 @@ public class BfsMatthis extends PathFinding{
         queue.add(start);
         visited.add(start);
 
-
         //Parcours
         while (!queue.isEmpty()) {
             Pair<Integer, Integer> curr = queue.getFirst();

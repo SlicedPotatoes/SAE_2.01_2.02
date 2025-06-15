@@ -1,10 +1,8 @@
 package com.batobleu.sae_201_202.controller;
 
-import com.batobleu.sae_201_202.model.algo.AlgoKevin.AStarKevin1;
-import com.batobleu.sae_201_202.model.algo.AlgoKevin.AStarKevin2;
-import com.batobleu.sae_201_202.model.algo.AlgoKevin.BFSKevin;
-import com.batobleu.sae_201_202.model.algo.AlgoKevin.DijkstraKevin;
+import com.batobleu.sae_201_202.model.algo.AlgoKevin.*;
 import com.batobleu.sae_201_202.model.algo.BfsMatthis;
+import com.batobleu.sae_201_202.model.algo.NoMove;
 import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.algo.Random;
 import com.batobleu.sae_201_202.model.exception.InvalidPositionException;
@@ -97,13 +95,17 @@ public class MainController extends Application {
         CHARACTER_DIRECTION.put('r', new Pair<>(1, 0));
 
         SHEEP_ALGORITHM.add("Random");
+        SHEEP_ALGORITHM.add("NoMove");
         SHEEP_ALGORITHM.add("BFSMatthis");
         SHEEP_ALGORITHM.add("BFSKevin");
         SHEEP_ALGORITHM.add("DijkstraKevin");
         SHEEP_ALGORITHM.add("AStarKevin1");
         SHEEP_ALGORITHM.add("AStarKevin2");
+        SHEEP_ALGORITHM.add("SafeDijkstra1");
+        SHEEP_ALGORITHM.add("SafeDijkstra2");
 
         WOLF_ALGORITHM.add("Random");
+        WOLF_ALGORITHM.add("NoMove");
         WOLF_ALGORITHM.add("BFSMatthis");
         WOLF_ALGORITHM.add("BFSKevin");
         WOLF_ALGORITHM.add("DijkstraKevin");
@@ -111,11 +113,14 @@ public class MainController extends Application {
         WOLF_ALGORITHM.add("AStarKevin2");
 
         STRING_ALGORITHM_HASHMAP.put("Random", new Random());
+        STRING_ALGORITHM_HASHMAP.put("NoMove", new NoMove());
         STRING_ALGORITHM_HASHMAP.put("BFSMatthis", new BfsMatthis());
         STRING_ALGORITHM_HASHMAP.put("BFSKevin", new BFSKevin());
         STRING_ALGORITHM_HASHMAP.put("DijkstraKevin", new DijkstraKevin());
         STRING_ALGORITHM_HASHMAP.put("AStarKevin1", new AStarKevin1());
         STRING_ALGORITHM_HASHMAP.put("AStarKevin2", new AStarKevin2());
+        STRING_ALGORITHM_HASHMAP.put("SafeDijkstra1", new SafeDijkstra1());
+        STRING_ALGORITHM_HASHMAP.put("SafeDijkstra2", new SafeDijkstra2());
 
         launch();
     }
