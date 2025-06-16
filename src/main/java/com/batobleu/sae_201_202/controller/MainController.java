@@ -138,7 +138,7 @@ public class MainController extends Application {
         }
 
         // On initialise la simulation avec les dimensions récupérées du popup.
-        this.s = new Simulation(result.get().getKey(), result.get().getValue());
+        this.s = new Simulation(result.get().getKey(), result.get().getValue(), this);
 
         _init();
     }
@@ -265,7 +265,7 @@ public class MainController extends Application {
         int nx = lineFiles.getFirst().length();
         int ny = lineFiles.size();
 
-        this.s = new Simulation(nx, ny);
+        this.s = new Simulation(nx, ny, this);
 
         for(int y = 0; y < ny; y++) {
             for(int x = 0; x < nx; x++) {

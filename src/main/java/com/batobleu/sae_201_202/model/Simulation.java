@@ -1,5 +1,6 @@
 package com.batobleu.sae_201_202.model;
 
+import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
 import com.batobleu.sae_201_202.model.entity.Entity;
@@ -33,10 +34,13 @@ public class Simulation {
     private int indexAutoMoves;
 
     private int dLimit;
+    private MainController mc;
 
-    public Simulation(int nx, int ny) {
+
+    public Simulation(int nx, int ny, MainController mc) {
         this.nx = nx;
         this.ny = ny;
+        this.mc = mc;
 
         init();
     }
@@ -230,12 +234,113 @@ public class Simulation {
     public boolean isChaseMod() {
         return this.isChaseMod(this.dLimit);
     }
+
+    // Permet de récupérer les 4 segments d'une case
+    private List<Pair<Pair<Double, Double>, Pair<Double, Double>>> getSegments(int x, int y) {
+        List<Pair<Pair<Double, Double>, Pair<Double, Double>>> result = new ArrayList<>();
+
+        double size = this.mc.getMap().getSizeSquare();
+
+        // Coin haut gauche → coin bas gauche
+        result.add(new Pair<>(new Pair<>(x*size, y*size), new Pair<>(x*size, y*size+size)));
+        // Coin bas gauche → coin bas droit
+        result.add(new Pair<>(new Pair<>(x*size, y*size+size), new Pair<>(x*size+size, y*size+size)));
+        // Coin bas droit → coin haut droit
+        result.add(new Pair<>(new Pair<>(x*size+size, y*size+size), new Pair<>(x*size+size, y*size)));
+        // Coin haut droit → coin haut gauche
+        result.add(new Pair<>(new Pair<>(x*size+size, y*size), new Pair<>(x*size, y*size)));
+
+        return result;
+    }
+
+    // Calcul de l'orientation en effectuant un produit vectoriel
+    private double orientation(Pair<Double, Double> p, Pair<Double, Double> q, Pair<Double, Double> r) {
+        double p0 = p.getKey();
+        double p1 = p.getValue();
+        double q0 = q.getKey();
+        double q1 = q.getValue();
+        double r0 = r.getKey();
+        double r1 = r.getValue();
+
+        return (q0 - p0) * (r1 - p1) - (q1 - p1) * (r0 - p0);
+    }
+
+    // Vérifie si le point r est sur le segment [p, q]
+    private boolean onSegment(Pair<Double, Double> p, Pair<Double, Double> q, Pair<Double, Double> r) {
+        double p0 = p.getKey();
+        double p1 = p.getValue();
+        double q0 = q.getKey();
+        double q1 = q.getValue();
+        double r0 = r.getKey();
+        double r1 = r.getValue();
+
+        return Math.min(p0, q0) <= r0 && r0 <= Math.max(p0, q0) && Math.min(p1, q1) <= r1 && r1 <= Math.max(p1, q1);
+    }
+
+    // Vérifie si les segments [A, B] et [C, D] sont sécants
+    private boolean isSegmentsCut(Pair<Double, Double> A, Pair<Double, Double> B) {
+        double size = this.mc.getMap().getSizeSquare();
+
+        Pair<Double, Double> C = new Pair<>(this.theSheep.getX()*size+(size / 2), this.theSheep.getY()*size+(size / 2));
+        Pair<Double, Double> D = new Pair<>(this.theWolf.getX()*size+(size / 2), this.theWolf.getY()*size+(size / 2));
+
+        double o1 = orientation(A, B, C);
+        double o2 = orientation(A, B, D);
+        double o3 = orientation(C, D, A);
+        double o4 = orientation(C, D, B);
+
+        // Cas général
+        if(o1 * o2 < 0 && o3 * o4 < 0) {
+            return true;
+        }
+
+        // Cas particuliers (colinéaire ou extrémités touchantes)
+        if(o1 == 0 && this.onSegment(A, B, C)) { return true; }
+        if(o2 == 0 && this.onSegment(A, B, D)) { return true; }
+        if(o3 == 0 && this.onSegment(C, D, A)) { return true; }
+        if(o4 == 0 && this.onSegment(C, D, B)) { return true; }
+
+        return false;
+    }
+
     private boolean isChaseMod(int limit) {
         int diffX = this.theSheep.getX() - this.theWolf.getX();
         int diffY = this.theSheep.getY() - this.theWolf.getY();
-        return Math.abs(diffX) + Math.abs(diffY) <= limit;
+
+        // Si la distance de Manhattan est supérieure au seuil, alors on n'est pas en chasemod
+        if (Math.abs(diffX) + Math.abs(diffY) > limit) {
+            return false;
+        }
+
+        // Définie le périmètre de recherche des rochers
+        int startX = Math.min(this.theSheep.getX(), this.theWolf.getX());
+        int endX = Math.max(this.theSheep.getX(), this.theWolf.getX());
+        int startY = Math.min(this.theSheep.getY(), this.theWolf.getY());
+        int endY = Math.max(this.theSheep.getY(), this.theWolf.getY());
+
+        // Itère dans la zone définie
+        for(int y = startY; y <= endY; y++) {
+            for(int x = startX; x <= endX; x++) {
+                // Si l'élément est un rocher
+                if(this.map[y][x] instanceof TileNotReachable) {
+                    // On récupère les segments associés à la case.
+                    List<Pair<Pair<Double, Double>, Pair<Double, Double>>> segments = this.getSegments(x, y);
+
+                    // Pour chaque segment
+                    for(int i = 0; i < segments.size(); i++) {
+                        // On vérifie s'il est coupé par le segment [LOUP, MOUTON].
+                        if(this.isSegmentsCut(segments.get(i).getKey(), segments.get(i).getValue())) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
+    // Calcule tous les mouvements de la simulation
     public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
         this.dLimit = dManhattan;
 
@@ -244,15 +349,15 @@ public class Simulation {
 
         this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
 
+        // Tant que la simulation n'est pas terminée
         while(!this.isEnd()) {
             List<Pair<Integer, Integer>> moves = null;
 
             Entity e = this.currEntityTurn == SHEEP ? this.theSheep : this.theWolf;
-
             PathFinding algo = this.currEntityTurn == SHEEP ? algoSheep : algoWolf;
-
             boolean chaseMod = this.isChaseMod(dManhattan);
 
+            // On récupère les mouvements à effectuer en fonction de la situation (Mouvement en chaseMod ou mouvement aléatoire)
             if(algo == null || !chaseMod) {
                 moves = STRING_ALGORITHM_HASHMAP.get("Random").nextMove(this);
             }
@@ -260,19 +365,25 @@ public class Simulation {
                 moves = algo.nextMove(this);
             }
 
+            // Pour chaque mouvement
             for (Pair<Integer, Integer> move : moves) {
                 System.out.println(e.getClass() + " Mouvement: " + move);
-                e.move(move.getKey(), move.getValue());
+                e.move(move.getKey(), move.getValue()); // On effectue le mouvement
 
+                // On décrémente le compteur de mouvement restant pour cette entité
                 this.moveLeft--;
+                // Si c'est la fin du tour, on quitte la boucle
                 if(this.moveLeft == 0) {
                     this.endTurn();
                     this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
                     break;
                 }
 
+                // On ajoute l'état actuel à l'historique
                 this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
 
+                // Si l'on n'est plus dans le même mode qu'avant le mouvement
+                // On quitte la boucle pour permettre de choisir l'algorithme approprié.
                 if(this.isChaseMod(dManhattan) != chaseMod) {
                     break;
                 }

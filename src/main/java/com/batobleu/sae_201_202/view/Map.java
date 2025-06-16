@@ -21,6 +21,8 @@ public class Map {
     private final Rectangle[][] validPositionIndicators;  // Liste des indicateurs de position valides pour l'élément sélectionné
     private final ImageView[][] images;                   // Liste des images
 
+    private DoubleBinding sizeSquare;
+
     private VBox container;
 
     public Map(MainController mc) {
@@ -40,7 +42,7 @@ public class Map {
         // Responsive des cellules de la map en fonction de la taille disponible
         DoubleBinding width = this.container.widthProperty().multiply(0.9).divide((double)this.mc.getSimulation().getNx());
         DoubleBinding height = this.container.heightProperty().multiply(0.9).divide((double)this.mc.getSimulation().getNy());
-        DoubleBinding sizeSquare = new DoubleBinding() {
+        this.sizeSquare = new DoubleBinding() {
             {
                 super.bind(width, height);
             }
@@ -65,21 +67,21 @@ public class Map {
 
                 // Rectangle de l'indicateur de position valide
                 Rectangle validPossitionRectangle = new Rectangle();
-                validPossitionRectangle.widthProperty().bind(sizeSquare);
-                validPossitionRectangle.heightProperty().bind(sizeSquare);
+                validPossitionRectangle.widthProperty().bind(this.sizeSquare);
+                validPossitionRectangle.heightProperty().bind(this.sizeSquare);
 
                 // Rectangle de la bordure
                 Rectangle borderRectangle = new Rectangle();
-                borderRectangle.widthProperty().bind(sizeSquare);
-                borderRectangle.heightProperty().bind(sizeSquare);
+                borderRectangle.widthProperty().bind(this.sizeSquare);
+                borderRectangle.heightProperty().bind(this.sizeSquare);
                 borderRectangle.setStroke(Color.BLACK);
                 borderRectangle.setStrokeWidth(1);
                 borderRectangle.setFill(Color.WHITE);
 
                 // Icone
                 ImageView imageV = new ImageView();
-                imageV.fitHeightProperty().bind(sizeSquare);
-                imageV.fitWidthProperty().bind(sizeSquare);
+                imageV.fitHeightProperty().bind(this.sizeSquare);
+                imageV.fitWidthProperty().bind(this.sizeSquare);
 
                 // ajout des éléments dans le container de la cellule
                 tile.getChildren().addAll(borderRectangle, validPossitionRectangle, imageV);
@@ -123,5 +125,9 @@ public class Map {
     public void updateImage(int x, int y, MapTile mt) {
         Image image = new Image(getClass().getResource(mt.getPathIcon()).toExternalForm());
         this.images[y][x].setImage(image);
+    }
+
+    public double getSizeSquare() {
+        return this.sizeSquare.get();
     }
 }

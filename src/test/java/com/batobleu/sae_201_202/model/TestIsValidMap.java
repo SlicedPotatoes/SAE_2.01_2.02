@@ -13,7 +13,7 @@ class TestIsValidMap {
 
     @BeforeEach
     public void beforeEach() {
-        this.s = new Simulation(5, 5);
+        this.s = new Simulation(5, 5, null);
     }
 
     @AfterEach

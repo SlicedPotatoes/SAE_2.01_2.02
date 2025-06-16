@@ -57,7 +57,7 @@ class TestUpdateMapAndSimulation {
     public void beforeEach() throws IllegalAccessException {
         // Reproduire le comportement de la methode start
         mc = new MainController();
-        simulation = new Simulation(5, 5);
+        simulation = new Simulation(5, 5, mc);
 
         simulationField.set(mc, simulation);
         rootField.set(mc, new BorderPane());
