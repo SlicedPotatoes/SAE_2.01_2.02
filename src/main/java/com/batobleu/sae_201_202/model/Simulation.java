@@ -1,5 +1,6 @@
 package com.batobleu.sae_201_202.model;
 
+import com.batobleu.sae_201_202.CycleData;
 import com.batobleu.sae_201_202.controller.MainController;
 import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.exception.IllegalMoveException;
@@ -39,6 +40,7 @@ public class Simulation {
     private long sumTimes;
     private MainController mc;
 
+    private CycleDetector cd;
 
     public Simulation(int nx, int ny, MainController mc) {
         this.nx = nx;
@@ -201,7 +203,7 @@ public class Simulation {
 
     // Retourne true si la simulation est fini
     public boolean isEnd() {
-        return this.theSheep.getIsEaten() || this.theSheep.getIsSafe();
+        return this.theSheep.getIsEaten() || this.theSheep.getIsSafe() || this.cd.getHaveDetectCycle(this.indexAutoMoves);
     }
 
     // Effectue le déplacement de l'entité a qui c'est le tour
@@ -367,6 +369,8 @@ public class Simulation {
 
         this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan, vision)));
 
+        this.cd = new CycleDetector();
+
         // Permet d'éviter une boucle infinie si l'algorithme "NoMove" est choisi pour le loup et le mouton
         if(algoSheep == algoWolf && algoSheep == STRING_ALGORITHM_HASHMAP.get("NoMove")) {
             return;
@@ -395,29 +399,42 @@ public class Simulation {
 
             // Pour chaque mouvement
             for (Pair<Integer, Integer> move : moves) {
+                System.out.println("Wolf: x:" + theWolf.getX() + " y:" + theWolf.getY());
+                System.out.println("Sheep: x:" + theSheep.getX() + " y:" + theSheep.getY());
+                System.out.println(currRound + " " + moveLeft);
+                System.out.println("----------------------");
+
                 e.move(move.getKey(), move.getValue()); // On effectue le mouvement
+
+                if(this.isChaseMod(dLimit, vision) && this.cd.isCycle(new CycleData(theWolf, theSheep, moveLeft, currEntityTurn), this.indexAutoMoves)) {
+                    System.out.println("Cycle");
+                    System.out.println(this.history.size());
+                    break;
+                }
 
                 // On décrémente le compteur de mouvement restant pour cette entité
                 this.moveLeft--;
                 // Si c'est la fin du tour, on quitte la boucle
                 if(this.moveLeft == 0) {
                     this.endTurn();
+                    this.indexAutoMoves++;
                     this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan, vision)));
                     break;
                 }
 
                 // On ajoute l'état actuel à l'historique
                 this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan, vision)));
-
-                // Si l'on n'est plus dans le même mode qu'avant le mouvement
+                this.indexAutoMoves++;
+                // Si l'on n'est plus dans le même mode qu'avant le mouvement ou
+                // Que la simulation est fini
                 // On quitte la boucle pour permettre de choisir l'algorithme approprié.
-                if(this.isChaseMod(dManhattan, vision) != chaseMod) {
+                if(this.isChaseMod(dManhattan, vision) != chaseMod || this.isEnd()) {
                     break;
                 }
             }
         }
 
-        this.setupState(this.history.getFirst());
+        this.setFirst();
     }
 
     private void setupState(HistorySimulation h) {
@@ -438,6 +455,11 @@ public class Simulation {
         if(this.indexAutoMoves > 0) {
             this.setupState(this.history.get(--this.indexAutoMoves));
         }
+    }
+
+    public void setFirst() {
+        this.indexAutoMoves = 0;
+        this.setupState(this.history.getFirst());
     }
 
     public void setLast() {

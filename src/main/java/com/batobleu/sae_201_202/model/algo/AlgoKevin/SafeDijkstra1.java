@@ -24,11 +24,22 @@ public class SafeDijkstra1 extends DijkstraKevin {
                 //this.dangersValues[y][x] = -d;
                 //this.dangersValues[y][x] = ((double) (s.getNx() + s.getNy()) / (1 + d));
                 this.dangersValues[y][x] = 100 * Math.pow(Math.E, -d);
-
                 this.visited[y][x] = false;
             }
         }
-        return super.nextMove(s);
+
+        this.visited[s.getSheep().getY()][s.getSheep().getX()] = true;
+
+        List<Pair<Integer, Integer>> a = super.nextMove(s);
+
+        for(int y = 0; y < s.getNy(); y++) {
+            for(int x = 0; x < s.getNx(); x++) {
+                System.out.print(Math.round((this.mapCost[y][x] + this.dangersValues[y][x]) * 100) / 100 + "\t");
+            }
+            System.out.println();
+        }
+
+        return a;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.batobleu.sae_201_202.model.algo.PathFinding;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.view.Popup.PopupFileChooser;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -33,6 +34,8 @@ public class StatisticsController extends Application {
     private Spinner<Integer> nbIteration;
     private CheckBox cb;
     private Spinner<Integer> distanceManhattan;
+
+    private ProgressBar progressCompute;
 
     private List<Statistics> statistics;
 
@@ -118,6 +121,8 @@ public class StatisticsController extends Application {
             this.startSimulation();
         });
 
+        this.progressCompute = new ProgressBar(0);
+
         containerConfig.add(titleConfiguration, 0, 0);
         containerConfig.add(new Label("Nombre d'itération par tuple\n(AlgoL, AlgoM, Scenario)"), 0, 1);
         containerConfig.add(this.nbIteration, 1, 1);
@@ -126,7 +131,11 @@ public class StatisticsController extends Application {
         containerConfig.add(this.distanceManhattan, 1, 3);
         containerConfig.add(buttonConfirm, 0, 4);
 
-        this.root.getChildren().addAll(containerAlgoWolf, containerAlgoSheep, containerScenario, containerConfig);
+        VBox containerProgress = new VBox();
+        containerProgress.setSpacing(5);
+        containerProgress.getChildren().addAll(this.progressCompute);
+
+        this.root.getChildren().addAll(containerAlgoWolf, containerAlgoSheep, containerScenario, containerConfig, containerProgress);
 
         stage.show();
     }
@@ -168,33 +177,53 @@ public class StatisticsController extends Application {
             }
         }
 
-        for(String algoWolf : algosWolf) {
-            PathFinding aw = STRING_ALGORITHM_HASHMAP.get(algoWolf);
-            for(String algoSheep : algosSheep) {
-                PathFinding as = STRING_ALGORITHM_HASHMAP.get(algoSheep);
-                for(String scenario : fileListView.getItems()) {
-                    SettingsAutoSimulation settings = new SettingsAutoSimulation(distanceManhattan.getValue(), as, aw, cb.isSelected());
-                    Statistics s = new Statistics(scenario, nbIteration.getValue(), settings);
-                    s.simulate();
+        Task<Void> task = new Task<>() {
 
-                    System.out.println(algoSheep);
-                    System.out.println(scenario);
-                    System.out.println("AvgNbTurn: " + s.getAvgNbTurn());
-                    System.out.println("Winrate: " + s.getWinRate() + "%");
-                    System.out.println("AvgNbExpByGame: " + s.getAvgExplorationByGame());
-                    System.out.println("AvgTimeByGame: " + s.getAvgTimeByGame() + "ns");
+            @Override
+            protected Void call() throws Exception {
+                int totalTask = algosWolf.size() * algosSheep.size() * fileListView.getItems().size() * nbIteration.getValue();
 
-                    HashMap<MapTile, Double> avgHerbEat = s.getAvgHerbEat();
+                updateProgress(0, totalTask);
+                for(int i = 0; i < algosWolf.size(); i++) {
+                    PathFinding aw = STRING_ALGORITHM_HASHMAP.get(algosWolf.get(i));
+                    for(int j = 0; j < algosSheep.size(); j++) {
+                        PathFinding as = STRING_ALGORITHM_HASHMAP.get(algosSheep.get(j));
+                        for(int k = 0; k < fileListView.getItems().size(); k++) {
+                            try {
+                                SettingsAutoSimulation settings = new SettingsAutoSimulation(distanceManhattan.getValue(), as, aw, cb.isSelected());
+                                Statistics s = new Statistics(fileListView.getItems().get(k), nbIteration.getValue(), settings);
 
-                    for(MapTile mt : avgHerbEat.keySet()) {
-                        System.out.println(mt.getLabel() + ": " + avgHerbEat.get(mt));
+                                for(int l = 0; l < nbIteration.getValue(); l++) {
+                                    s.simulate();
+                                    updateProgress((long) i *j*k*l+1, totalTask);
+                                }
+
+                                System.out.println(algosSheep.get(j));
+                                System.out.println(fileListView.getItems());
+                                System.out.println("AvgNbTurn: " + s.getAvgNbTurn());
+                                System.out.println("Winrate: " + s.getWinRate() + "%");
+                                System.out.println("AvgNbExpByGame: " + s.getAvgExplorationByGame());
+                                System.out.println("AvgTimeByGame: " + s.getAvgTimeByGame() + "ns");
+                                HashMap<MapTile, Double> avgHerbEat = s.getAvgHerbEat();
+                                for(MapTile mt : avgHerbEat.keySet()) {
+                                    System.out.println(mt.getLabel() + ": " + avgHerbEat.get(mt));
+                                }
+                                System.out.println("-----------------");
+
+                                statistics.add(s);
+                            }
+                            catch (Exception e) {
+                                System.out.println("Erreur lors de la simulation : " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
                     }
-
-                    System.out.println("-----------------");
-
-                    statistics.add(s);
                 }
+                return null;
             }
-        }
+        };
+
+        this.progressCompute.progressProperty().bind(task.progressProperty());
+        new Thread(task).start();
     }
 }
