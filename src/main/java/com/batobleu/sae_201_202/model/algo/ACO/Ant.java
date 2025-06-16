@@ -33,7 +33,7 @@ public class Ant {
     }
 
     public void setRecherche(String recherche) {
-        Recherche = recherche;
+        this.Recherche = recherche;
     }
 }
 
