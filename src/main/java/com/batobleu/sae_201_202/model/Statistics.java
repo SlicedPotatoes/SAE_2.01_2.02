@@ -3,6 +3,7 @@ package com.batobleu.sae_201_202.model;
 import com.batobleu.sae_201_202.model.tile.MapTile;
 import com.batobleu.sae_201_202.model.tile.TileEntity;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 import static com.batobleu.sae_201_202.controller.MainController.CHARACTER_MAP_TILE_HASH_MAP;
 
 public class Statistics {
-    private final String scenario;
+    private final List<String> lineFiles;
     private final int nbIteration;
     private final SettingsAutoSimulation settings;
 
@@ -22,15 +23,15 @@ public class Statistics {
     private List<HashMap<MapTile, Integer>> listHerbsEat;
     private int nbTurn;
 
-    public Statistics(String scenario, int nbIteration, SettingsAutoSimulation settings) {
-        this.scenario = scenario;
+    public Statistics(String scenario, int nbIteration, SettingsAutoSimulation settings) throws IOException {
+        this.lineFiles = Files.readAllLines(Path.of(scenario));
         this.nbIteration = nbIteration;
         this.settings = settings;
     }
 
-    private Simulation setupSimulation(List<String> lineFiles) {
-        int nx = lineFiles.getFirst().length();
-        int ny = lineFiles.size();
+    private Simulation setupSimulation() {
+        int nx = this.lineFiles.getFirst().length();
+        int ny = this.lineFiles.size();
 
         Simulation s = new Simulation(nx, ny, null);
 
@@ -52,31 +53,28 @@ public class Statistics {
 
     public void simulate() {
         try {
-            List<String> lineFiles = Files.readAllLines(Path.of(this.scenario));
             this.listExplorations = new ArrayList<>();
             this.listTimes = new ArrayList<>();
             this.listHerbsEat = new ArrayList<>();
             this.win = 0;
             this.nbTurn = 0;
 
-            for(int i = 0; i < this.nbIteration; i++) {
-                Simulation s = setupSimulation(lineFiles);
-                s.autoSimulation(
-                        this.settings.getDManhattan(),
-                        this.settings.getAlgoSheep(),
-                        this.settings.getAlgoWolf(),
-                        this.settings.getVision()
-                );
-                s.setLast();
+            Simulation s = setupSimulation();
+            s.autoSimulation(
+                    this.settings.getDManhattan(),
+                    this.settings.getAlgoSheep(),
+                    this.settings.getAlgoWolf(),
+                    this.settings.getVision()
+            );
+            s.setLast();
 
-                this.listExplorations.add(s.getSumExplorations());
-                this.listTimes.add(s.getSumTimes());
-                this.listHerbsEat.add(s.getCounts());
-                this.nbTurn += s.getCurrRound();
+            this.listExplorations.add(s.getSumExplorations());
+            this.listTimes.add(s.getSumTimes());
+            this.listHerbsEat.add(s.getCounts());
+            this.nbTurn += s.getCurrRound();
 
-                if(s.getSheep().getIsSafe()) {
-                    this.win++;
-                }
+            if(s.getSheep().getIsSafe()) {
+                this.win++;
             }
         }
         catch (Exception e) {
@@ -86,7 +84,7 @@ public class Statistics {
     }
 
     public double getWinRate() {
-        return this.win / (double)this.nbIteration;
+        return this.win / (double)this.nbIteration * 100;
     }
 
     public HashMap<MapTile, Double> getAvgHerbEat() {

@@ -23,7 +23,7 @@ public class PopupEnd extends Alert {
         container.setSpacing(10);
 
         // Label pour le gagnant et le nombre de round
-        Label winner = new Label("Gagnant: " + (mc.getSimulation().getSheep().getIsSafe() ? "Mouton" : "Loup"));
+        Label winner = new Label("Gagnant: " + (mc.getSimulation().getSheep().getIsSafe() ? "Mouton" : (mc.getSimulation().getSheep().getIsEaten() ? "Loup" : "Match nul")));
         Label round = new Label("Nombre de tour: " + mc.getSimulation().getCurrRound());
 
         // Ajout des labels au container
