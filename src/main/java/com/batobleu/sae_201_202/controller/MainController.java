@@ -1,5 +1,6 @@
 package com.batobleu.sae_201_202.controller;
 
+import com.batobleu.sae_201_202.model.algo.ACO.FOURMIEIsaac;
 import com.batobleu.sae_201_202.model.algo.AlgoKevin.*;
 import com.batobleu.sae_201_202.model.algo.BfsMatthis;
 import com.batobleu.sae_201_202.model.algo.NoMove;
@@ -103,6 +104,7 @@ public class MainController extends Application {
         SHEEP_ALGORITHM.add("AStarKevin2");
         SHEEP_ALGORITHM.add("SafeDijkstra1");
         SHEEP_ALGORITHM.add("SafeDijkstra2");
+        SHEEP_ALGORITHM.add("ACO");
 
         WOLF_ALGORITHM.add("Random");
         WOLF_ALGORITHM.add("NoMove");
@@ -111,6 +113,7 @@ public class MainController extends Application {
         WOLF_ALGORITHM.add("DijkstraKevin");
         WOLF_ALGORITHM.add("AStarKevin1");
         WOLF_ALGORITHM.add("AStarKevin2");
+        WOLF_ALGORITHM.add("ACO");
 
         STRING_ALGORITHM_HASHMAP.put("Random", new Random());
         STRING_ALGORITHM_HASHMAP.put("NoMove", new NoMove());
@@ -121,6 +124,7 @@ public class MainController extends Application {
         STRING_ALGORITHM_HASHMAP.put("AStarKevin2", new AStarKevin2());
         STRING_ALGORITHM_HASHMAP.put("SafeDijkstra1", new SafeDijkstra1());
         STRING_ALGORITHM_HASHMAP.put("SafeDijkstra2", new SafeDijkstra2());
+        STRING_ALGORITHM_HASHMAP.put("ACO", new FOURMIEIsaac());
     }
 
     public static void main(String[] args) {
