@@ -343,11 +343,15 @@ public class Simulation {
     // Calcule tous les mouvements de la simulation
     public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
         this.dLimit = dManhattan;
-
         this.history = new ArrayList<>();
         this.indexAutoMoves = 0;
 
         this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
+
+        // Permet d'éviter une boucle infinie si l'algorithme "NoMove" est choisi pour le loup et le mouton
+        if(algoSheep == algoWolf && algoSheep == STRING_ALGORITHM_HASHMAP.get("NoMove")) {
+            return;
+        }
 
         // Tant que la simulation n'est pas terminée
         while(!this.isEnd()) {
