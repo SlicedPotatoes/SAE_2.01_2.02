@@ -71,7 +71,7 @@ public class MainController extends Application {
     private ObjectProperty<CurrPage> currPage;
     private BorderPane root;
 
-    public static void main(String[] args) {
+    public static void setupConstant() {
         // Remplissage des dictionnaires
         CHARACTER_MAP_TILE_HASH_MAP.put('x', ROCK);
         CHARACTER_MAP_TILE_HASH_MAP.put('c', CACTUS);
@@ -121,6 +121,10 @@ public class MainController extends Application {
         STRING_ALGORITHM_HASHMAP.put("AStarKevin2", new AStarKevin2());
         STRING_ALGORITHM_HASHMAP.put("SafeDijkstra1", new SafeDijkstra1());
         STRING_ALGORITHM_HASHMAP.put("SafeDijkstra2", new SafeDijkstra2());
+    }
+
+    public static void main(String[] args) {
+        setupConstant();
 
         launch();
     }

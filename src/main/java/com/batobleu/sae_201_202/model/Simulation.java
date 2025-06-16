@@ -34,6 +34,9 @@ public class Simulation {
     private int indexAutoMoves;
 
     private int dLimit;
+    private boolean vision;
+    private int sumExplorations;
+    private long sumTimes;
     private MainController mc;
 
 
@@ -94,6 +97,12 @@ public class Simulation {
     }
     public HashMap<MapTile, Integer> getCounts() {
         return this.counts;
+    }
+    public int getSumExplorations() {
+        return this.sumExplorations;
+    }
+    public long getSumTimes() {
+        return this.sumTimes;
     }
 
     public void setEntity(MapTile entity, int x, int y) {
@@ -232,14 +241,14 @@ public class Simulation {
     }
 
     public boolean isChaseMod() {
-        return this.isChaseMod(this.dLimit);
+        return this.isChaseMod(this.dLimit, this.vision);
     }
 
     // Permet de récupérer les 4 segments d'une case
     private List<Pair<Pair<Double, Double>, Pair<Double, Double>>> getSegments(int x, int y) {
         List<Pair<Pair<Double, Double>, Pair<Double, Double>>> result = new ArrayList<>();
 
-        double size = this.mc.getMap().getSizeSquare();
+        double size = this.mc == null ? 40 : this.mc.getMap().getSizeSquare();
 
         // Coin haut gauche → coin bas gauche
         result.add(new Pair<>(new Pair<>(x*size, y*size), new Pair<>(x*size, y*size+size)));
@@ -279,7 +288,7 @@ public class Simulation {
 
     // Vérifie si les segments [A, B] et [C, D] sont sécants
     private boolean isSegmentsCut(Pair<Double, Double> A, Pair<Double, Double> B) {
-        double size = this.mc.getMap().getSizeSquare();
+        double size = this.mc == null ? 40 : this.mc.getMap().getSizeSquare();
 
         Pair<Double, Double> C = new Pair<>(this.theSheep.getX()*size+(size / 2), this.theSheep.getY()*size+(size / 2));
         Pair<Double, Double> D = new Pair<>(this.theWolf.getX()*size+(size / 2), this.theWolf.getY()*size+(size / 2));
@@ -303,12 +312,18 @@ public class Simulation {
         return false;
     }
 
-    private boolean isChaseMod(int limit) {
+    private boolean isChaseMod(int limit, boolean vision) {
         int diffX = this.theSheep.getX() - this.theWolf.getX();
         int diffY = this.theSheep.getY() - this.theWolf.getY();
+        int dManhattan = Math.abs(diffX) + Math.abs(diffY);
+
+        // Si la vision à travers les rochers est activée
+        if (vision) {
+            return dManhattan <= limit;
+        }
 
         // Si la distance de Manhattan est supérieure au seuil, alors on n'est pas en chasemod
-        if (Math.abs(diffX) + Math.abs(diffY) > limit) {
+        if (dManhattan > limit) {
             return false;
         }
 
@@ -341,12 +356,16 @@ public class Simulation {
     }
 
     // Calcule tous les mouvements de la simulation
-    public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf) throws IllegalMoveException {
+    public void autoSimulation(int dManhattan, PathFinding algoSheep, PathFinding algoWolf, boolean vision) throws IllegalMoveException {
         this.dLimit = dManhattan;
+        this.vision = vision;
         this.history = new ArrayList<>();
         this.indexAutoMoves = 0;
 
-        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
+        this.sumExplorations = 0;
+        this.sumTimes = 0;
+
+        this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan, vision)));
 
         // Permet d'éviter une boucle infinie si l'algorithme "NoMove" est choisi pour le loup et le mouton
         if(algoSheep == algoWolf && algoSheep == STRING_ALGORITHM_HASHMAP.get("NoMove")) {
@@ -359,7 +378,7 @@ public class Simulation {
 
             Entity e = this.currEntityTurn == SHEEP ? this.theSheep : this.theWolf;
             PathFinding algo = this.currEntityTurn == SHEEP ? algoSheep : algoWolf;
-            boolean chaseMod = this.isChaseMod(dManhattan);
+            boolean chaseMod = this.isChaseMod(dManhattan, vision);
 
             // On récupère les mouvements à effectuer en fonction de la situation (Mouvement en chaseMod ou mouvement aléatoire)
             if(algo == null || !chaseMod) {
@@ -369,9 +388,13 @@ public class Simulation {
                 moves = algo.nextMove(this);
             }
 
+            if(algo != null && this.currEntityTurn == SHEEP && chaseMod) {
+                this.sumExplorations += algo.getCountExploredTiles();
+                this.sumTimes += algo.getTimes();
+            }
+
             // Pour chaque mouvement
             for (Pair<Integer, Integer> move : moves) {
-                System.out.println(e.getClass() + " Mouvement: " + move);
                 e.move(move.getKey(), move.getValue()); // On effectue le mouvement
 
                 // On décrémente le compteur de mouvement restant pour cette entité
@@ -379,16 +402,16 @@ public class Simulation {
                 // Si c'est la fin du tour, on quitte la boucle
                 if(this.moveLeft == 0) {
                     this.endTurn();
-                    this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
+                    this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan, vision)));
                     break;
                 }
 
                 // On ajoute l'état actuel à l'historique
-                this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan)));
+                this.history.add(new HistorySimulation(this.theWolf, this.theSheep, this.moveLeft, this.currEntityTurn, this.currRound, this.isChaseMod(dManhattan, vision)));
 
                 // Si l'on n'est plus dans le même mode qu'avant le mouvement
                 // On quitte la boucle pour permettre de choisir l'algorithme approprié.
-                if(this.isChaseMod(dManhattan) != chaseMod) {
+                if(this.isChaseMod(dManhattan, vision) != chaseMod) {
                     break;
                 }
             }
@@ -415,5 +438,10 @@ public class Simulation {
         if(this.indexAutoMoves > 0) {
             this.setupState(this.history.get(--this.indexAutoMoves));
         }
+    }
+
+    public void setLast() {
+        this.setupState(this.history.getLast());
+        this.indexAutoMoves = this.history.size() - 1;
     }
 }

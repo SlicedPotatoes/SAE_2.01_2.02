@@ -11,6 +11,8 @@ import static com.batobleu.sae_201_202.model.Simulation.*;
 
 public abstract class PathFinding {
     protected Simulation s;
+    protected int countTileExplored;
+    protected long times;
 
     public abstract List<Pair<Integer, Integer>> nextMove(Simulation s);
 
@@ -34,5 +36,12 @@ public abstract class PathFinding {
         }
 
         return result;
+    }
+
+    public int getCountExploredTiles(){
+        return this.countTileExplored;
+    }
+    public long getTimes() {
+        return this.times;
     }
 }

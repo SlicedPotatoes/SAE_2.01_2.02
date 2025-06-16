@@ -56,7 +56,7 @@ public class SafeDijkstra2 extends DijkstraKevin {
             }
         }
 
-        System.out.println("Cost: ");
+        /*System.out.println("Cost: ");
         for(y = 0; y < s.getNy(); y++) {
             for(x = 0; x < s.getNx(); x++) {
                 System.out.print(cost[y][x] + "\t");
@@ -69,7 +69,7 @@ public class SafeDijkstra2 extends DijkstraKevin {
                 System.out.print(Math.round(dangersValues[y][x] * 100) / (double)100 + "\t");
             }
             System.out.println();
-        }
+        }*/
 
         return super.nextMove(s);
     }

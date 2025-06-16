@@ -50,7 +50,7 @@ public class PopupTypeSimulation {
 
             mc.setCurrPage(CurrPage.ControlAuto);
             try {
-                mc.getSimulation().autoSimulation(result.get().getDManhattan(), result.get().getAlgoSheep(), result.get().getAlgoWolf());
+                mc.getSimulation().autoSimulation(result.get().getDManhattan(), result.get().getAlgoSheep(), result.get().getAlgoWolf(), result.get().getVision());
             } catch (IllegalMoveException ex) {
                 InformationDebug.AddDebug(ex.toString());
             }

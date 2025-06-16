@@ -45,10 +45,11 @@ public class BfsMatthis extends PathFinding{
                     visited.add(p1);
                     queue.add(p1);
                     precedent.put(p1, curr);
+
+                    super.countTileExplored++;
                 }
             }
             queue.remove(curr);
-
         }
 
         //Recherche du chemin
@@ -69,14 +70,15 @@ public class BfsMatthis extends PathFinding{
 
     @Override
     public List<Pair<Integer, Integer>> nextMove(Simulation sim) {
+        super.countTileExplored = 0;
         super.s = sim;
         this.isSheep = sim.getCurrEntityTurn() == SHEEP;
 
+        long startTimes = System.nanoTime();
         this.chemin = getChemin();
+        long endTimes = System.nanoTime();
+        super.times = endTimes - startTimes;
 
-        List<Pair<Integer, Integer>> a = new ArrayList<>();
-        a.add(this.chemin.getFirst());
-
-        return a;
+        return this.chemin;
     }
 }

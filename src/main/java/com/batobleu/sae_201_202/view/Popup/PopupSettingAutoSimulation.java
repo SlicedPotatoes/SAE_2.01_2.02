@@ -37,12 +37,16 @@ public class PopupSettingAutoSimulation extends Dialog<SettingsAutoSimulation> {
         algoWolf.getItems().addAll(WOLF_ALGORITHM);
         algoWolf.setValue("Random");
 
+        CheckBox cb = new CheckBox("Vision à travers les rochers");
+        cb.setIndeterminate(false);
+
         container.add(new Label("Distance de Manhattan"), 0, 0);
         container.add(dManhattan, 1, 0);
         container.add(new Label("Algorithme Mouton"), 0, 1);
         container.add(algoSheep, 1, 1);
         container.add(new Label("Algorithme Loup"), 0, 2);
         container.add(algoWolf, 1, 2);
+        container.add(cb, 0, 3);
 
         super.getDialogPane().setContent(container);
 
@@ -51,7 +55,7 @@ public class PopupSettingAutoSimulation extends Dialog<SettingsAutoSimulation> {
             if(dialogButton == okButtonType) {
                 PathFinding sheepAlgo = STRING_ALGORITHM_HASHMAP.getOrDefault(algoSheep.getValue(), STRING_ALGORITHM_HASHMAP.get("Random"));
                 PathFinding wolfAlgo = STRING_ALGORITHM_HASHMAP.getOrDefault(algoWolf.getValue(), STRING_ALGORITHM_HASHMAP.get("Random"));
-                return new SettingsAutoSimulation(dManhattan.getValue(), sheepAlgo, wolfAlgo);
+                return new SettingsAutoSimulation(dManhattan.getValue(), sheepAlgo, wolfAlgo, cb.isSelected());
             }
             return null;
         });

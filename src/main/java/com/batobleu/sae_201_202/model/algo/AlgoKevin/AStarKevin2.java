@@ -44,7 +44,7 @@ public class AStarKevin2 extends DijkstraKevin {
         int x = element.getPos().getKey(), y = element.getPos().getValue();
         double heuristic = (Math.abs(x - this.target.getKey()) + Math.abs(y - this.target.getValue())) / this.weight;
 
-        System.out.println(x + " " + y + " " + super.mapCost[y][x] + " " + heuristic + " " + (super.mapCost[y][x] + heuristic));
+        //System.out.println(x + " " + y + " " + super.mapCost[y][x] + " " + heuristic + " " + (super.mapCost[y][x] + heuristic));
 
         element.setCurrCost(super.mapCost[y][x] + heuristic);
         q.add(element);

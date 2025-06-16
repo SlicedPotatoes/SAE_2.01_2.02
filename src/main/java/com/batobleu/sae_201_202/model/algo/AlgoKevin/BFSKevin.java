@@ -126,6 +126,7 @@ public class BFSKevin extends PathFinding {
                 // On ajoute le voisin à la file
                 if (this.needToBeAddedToQueue(_x, _y)) {
                     this.addElementToQueue(q, new BFSKevinQueueData(new Pair<>(_x, _y), this.getSpeed(_x, _y)));
+                    super.countTileExplored++;
                 }
             }
         }
@@ -133,6 +134,8 @@ public class BFSKevin extends PathFinding {
 
     @Override
     public List<Pair<Integer, Integer>> nextMove(Simulation s) {
+        super.countTileExplored = 0;
+
         super.s = s;
         this.init(s.getNx(), s.getNy());
         this.isSheep = s.getCurrEntityTurn() == SHEEP;
@@ -149,29 +152,23 @@ public class BFSKevin extends PathFinding {
             this.target = new Pair<>(s.getSheep().getX(), s.getSheep().getY());
         }
 
+        long startTimes = System.nanoTime();
         this.compute(new Pair<>(e.getX(), e.getY()));
+        long endTimes = System.nanoTime();
+        super.times = endTimes - startTimes;
 
-        // Debug
-        for(int y = 0; y < super.s.getNy(); y++) {
-            for(int x = 0; x < super.s.getNx(); x++) {
-                System.out.print((this.mapCost[y][x] == s.getNx()+s.getNy()+1 ? "#" : this.mapCost[y][x]) + "\t");
-            }
-            System.out.println();
-        }
-
+        startTimes = System.nanoTime();
         // Construction du chemin
         Pair<Integer, Integer> curr = new Pair<>(this.target.getKey(), this.target.getValue());
         List<Pair<Integer, Integer>> path = new ArrayList<>();
         while(curr.getKey() != e.getX() || curr.getValue() != e.getY()) {
             path.add(curr);
-            System.out.println("Path: " + curr);
 
             int[] c = this.mapPrev[curr.getValue()][curr.getKey()];
             curr = new Pair<>(c[0], c[1]);
         }
-
-        System.out.println("---------------");
-
+        endTimes = System.nanoTime();
+        super.times += endTimes - startTimes;
 
         return intermediateMovement.get(new Pair<>( curr, path.getLast() ));
     }
