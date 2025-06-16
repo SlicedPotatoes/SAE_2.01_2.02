@@ -32,12 +32,12 @@ public class SafeDijkstra1 extends DijkstraKevin {
 
         List<Pair<Integer, Integer>> a = super.nextMove(s);
 
-        for(int y = 0; y < s.getNy(); y++) {
+        /*for(int y = 0; y < s.getNy(); y++) {
             for(int x = 0; x < s.getNx(); x++) {
                 System.out.print(Math.round((this.mapCost[y][x] + this.dangersValues[y][x]) * 100) / 100 + "\t");
             }
             System.out.println();
-        }
+        }*/
 
         return a;
     }

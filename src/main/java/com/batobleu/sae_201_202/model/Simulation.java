@@ -399,16 +399,17 @@ public class Simulation {
 
             // Pour chaque mouvement
             for (Pair<Integer, Integer> move : moves) {
+                /*
                 System.out.println("Wolf: x:" + theWolf.getX() + " y:" + theWolf.getY());
                 System.out.println("Sheep: x:" + theSheep.getX() + " y:" + theSheep.getY());
                 System.out.println(currRound + " " + moveLeft);
                 System.out.println("----------------------");
-
+                */
                 e.move(move.getKey(), move.getValue()); // On effectue le mouvement
 
                 if(this.isChaseMod(dLimit, vision) && this.cd.isCycle(new CycleData(theWolf, theSheep, moveLeft, currEntityTurn), this.indexAutoMoves)) {
-                    System.out.println("Cycle");
-                    System.out.println(this.history.size());
+                    //System.out.println("Cycle");
+                    //System.out.println(this.history.size());*/
                     break;
                 }
 

@@ -39,6 +39,8 @@ public class StatisticsController extends Application {
 
     private List<Statistics> statistics;
 
+    private Button buttonConfirm;
+
     @Override
     public void start(Stage stage) {
         MainController.setupConstant();
@@ -115,9 +117,9 @@ public class StatisticsController extends Application {
         this.distanceManhattan = new Spinner<>(0, 999, 5);
         this.distanceManhattan.setEditable(true);
 
-        Button buttonConfirm = new Button("Valider");
+        this.buttonConfirm = new Button("Valider");
 
-        buttonConfirm.setOnAction(e -> {
+        this.buttonConfirm.setOnAction(e -> {
             this.startSimulation();
         });
 
@@ -129,7 +131,7 @@ public class StatisticsController extends Application {
         containerConfig.add(this.cb, 0, 2);
         containerConfig.add(new Label("Distance de Manhattan: "), 0, 3);
         containerConfig.add(this.distanceManhattan, 1, 3);
-        containerConfig.add(buttonConfirm, 0, 4);
+        containerConfig.add(this.buttonConfirm, 0, 4);
 
         VBox containerProgress = new VBox();
         containerProgress.setSpacing(5);
@@ -182,43 +184,48 @@ public class StatisticsController extends Application {
             @Override
             protected Void call() throws Exception {
                 int totalTask = algosWolf.size() * algosSheep.size() * fileListView.getItems().size() * nbIteration.getValue();
+                int curr = 0;
+                buttonConfirm.setDisable(true);
+
 
                 updateProgress(0, totalTask);
-                for(int i = 0; i < algosWolf.size(); i++) {
-                    PathFinding aw = STRING_ALGORITHM_HASHMAP.get(algosWolf.get(i));
-                    for(int j = 0; j < algosSheep.size(); j++) {
-                        PathFinding as = STRING_ALGORITHM_HASHMAP.get(algosSheep.get(j));
-                        for(int k = 0; k < fileListView.getItems().size(); k++) {
+                for (String string : algosWolf) {
+                    PathFinding aw = STRING_ALGORITHM_HASHMAP.get(string);
+                    for (String sheep : algosSheep) {
+                        PathFinding as = STRING_ALGORITHM_HASHMAP.get(sheep);
+                        for (int k = 0; k < fileListView.getItems().size(); k++) {
                             try {
                                 SettingsAutoSimulation settings = new SettingsAutoSimulation(distanceManhattan.getValue(), as, aw, cb.isSelected());
                                 Statistics s = new Statistics(fileListView.getItems().get(k), nbIteration.getValue(), settings);
 
-                                for(int l = 0; l < nbIteration.getValue(); l++) {
+                                for (int l = 0; l < nbIteration.getValue(); l++) {
                                     s.simulate();
-                                    updateProgress((long) i *j*k*l+1, totalTask);
+                                    updateProgress(++curr, totalTask);
                                 }
 
-                                System.out.println(algosSheep.get(j));
+                                System.out.println(sheep);
                                 System.out.println(fileListView.getItems());
                                 System.out.println("AvgNbTurn: " + s.getAvgNbTurn());
                                 System.out.println("Winrate: " + s.getWinRate() + "%");
+                                System.out.println("CycleRate: " + s.getCycleRate() + "%");
                                 System.out.println("AvgNbExpByGame: " + s.getAvgExplorationByGame());
                                 System.out.println("AvgTimeByGame: " + s.getAvgTimeByGame() + "ns");
                                 HashMap<MapTile, Double> avgHerbEat = s.getAvgHerbEat();
-                                for(MapTile mt : avgHerbEat.keySet()) {
+                                for (MapTile mt : avgHerbEat.keySet()) {
                                     System.out.println(mt.getLabel() + ": " + avgHerbEat.get(mt));
                                 }
                                 System.out.println("-----------------");
 
                                 statistics.add(s);
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 System.out.println("Erreur lors de la simulation : " + e.getMessage());
                                 e.printStackTrace();
                             }
                         }
                     }
                 }
+
+                buttonConfirm.setDisable(false);
                 return null;
             }
         };

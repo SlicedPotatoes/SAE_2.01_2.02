@@ -8,6 +8,8 @@ import java.io.File;
 // Classe permettant d'ouvrir une fenêtre contextuelle pour choisir un fichier
 // On peut facilement récupérer le chemin de ce fichier.
 public class PopupFileChooser {
+    private static File LAST;
+
     public enum Type {
         Import,
         Export
@@ -17,6 +19,9 @@ public class PopupFileChooser {
 
     public String getPath(String title, Stage s, Type t) {
         FileChooser fileChooser = new FileChooser();
+        if(LAST != null) {
+            fileChooser.setInitialDirectory(LAST);
+        }
 
         // Configuration de la fenêtre contextuelle
         fileChooser.setTitle(title);
@@ -30,6 +35,7 @@ public class PopupFileChooser {
 
         // Vérifie si la fenêtre n'a pas été fermée
         if(selectedFile != null) {
+            LAST = selectedFile.getParentFile();
             return selectedFile.getPath();
         }
 

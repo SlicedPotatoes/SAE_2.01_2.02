@@ -17,16 +17,24 @@ public class Statistics {
     private final int nbIteration;
     private final SettingsAutoSimulation settings;
 
-    private List<Integer> listExplorations;
-    private List<Long> listTimes;
+    private final List<Integer> listExplorations;
+    private final List<Long> listTimes;
     private int win;
-    private List<HashMap<MapTile, Integer>> listHerbsEat;
+    private final List<HashMap<MapTile, Integer>> listHerbsEat;
     private int nbTurn;
+    private int cycle;
 
     public Statistics(String scenario, int nbIteration, SettingsAutoSimulation settings) throws IOException {
         this.lineFiles = Files.readAllLines(Path.of(scenario));
         this.nbIteration = nbIteration;
         this.settings = settings;
+
+        this.listExplorations = new ArrayList<>();
+        this.listTimes = new ArrayList<>();
+        this.listHerbsEat = new ArrayList<>();
+        this.win = 0;
+        this.nbTurn = 0;
+        this.cycle = 0;
     }
 
     private Simulation setupSimulation() {
@@ -53,13 +61,8 @@ public class Statistics {
 
     public void simulate() {
         try {
-            this.listExplorations = new ArrayList<>();
-            this.listTimes = new ArrayList<>();
-            this.listHerbsEat = new ArrayList<>();
-            this.win = 0;
-            this.nbTurn = 0;
-
             Simulation s = setupSimulation();
+
             s.autoSimulation(
                     this.settings.getDManhattan(),
                     this.settings.getAlgoSheep(),
@@ -76,6 +79,9 @@ public class Statistics {
             if(s.getSheep().getIsSafe()) {
                 this.win++;
             }
+            else if(!s.getSheep().getIsEaten()) {
+                this.cycle++;
+            }
         }
         catch (Exception e) {
             System.out.println("Erreur lors de la simulation : " + e.getMessage());
@@ -84,7 +90,11 @@ public class Statistics {
     }
 
     public double getWinRate() {
-        return this.win / (double)this.nbIteration * 100;
+        return (this.win / (double)this.nbIteration) * 100;
+    }
+
+    public double getCycleRate() {
+        return (this.cycle / (double)this.nbIteration) * 100;
     }
 
     public HashMap<MapTile, Double> getAvgHerbEat() {
